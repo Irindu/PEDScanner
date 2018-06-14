@@ -1,0 +1,14 @@
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\bin\Debug\PEDScanner.exe.config
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\bin\Debug\PEDScanner.exe
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\bin\Debug\PEDScanner.pdb
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\bin\Debug\PEScannerLibrary.dll
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\bin\Debug\PEScannerLibrary.pdb
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\obj\Debug\PEDScannerGUI.csprojAssemblyReference.cache
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\obj\Debug\PEScanner.Form1.resources
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\obj\Debug\PEDScanner.Properties.Resources.resources
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\obj\Debug\PEDScannerGUI.csproj.GenerateResource.cache
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\obj\Debug\PEDScannerGUI.csproj.CoreCompileInputs.cache
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\obj\Debug\PEDScannerGUI.csproj.CopyComplete
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\obj\Debug\PEDScanner.exe
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\obj\Debug\PEDScanner.pdb
+E:\Final project\Irindu\PEDScanner\PEDScannerGUI\PEScanner\obj\Debug\PEScanner.MainWindow.resources

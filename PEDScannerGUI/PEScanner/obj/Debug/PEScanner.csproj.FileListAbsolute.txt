@@ -1,0 +1,13 @@
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\bin\Debug\PEScanner.exe.config
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\bin\Debug\PEScanner.exe
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\bin\Debug\PEScanner.pdb
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\obj\Debug\PEScanner.csprojAssemblyReference.cache
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\obj\Debug\PEScanner.Form1.resources
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\obj\Debug\PEScanner.Properties.Resources.resources
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\obj\Debug\PEScanner.csproj.GenerateResource.cache
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\obj\Debug\PEScanner.csproj.CoreCompileInputs.cache
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\obj\Debug\PEScanner.exe
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\obj\Debug\PEScanner.pdb
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\bin\Debug\PEScannerLibrary.dll
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\bin\Debug\PEScannerLibrary.pdb
+E:\Final project\TestGUIApp\PEScanner\PEScanner\PEScanner\obj\Debug\PEScanner.csproj.CopyComplete
