@@ -1,0 +1,5 @@
+E:\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.csproj.CoreCompileInputs.cache
+E:\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.dll
+E:\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.pdb
+E:\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.dll
+E:\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.pdb
