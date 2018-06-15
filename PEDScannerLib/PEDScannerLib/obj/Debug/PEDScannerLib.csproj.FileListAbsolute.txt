@@ -1,0 +1,6 @@
+E:\Final project\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.csprojAssemblyReference.cache
+E:\Final project\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.csproj.CoreCompileInputs.cache
+E:\Final project\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.dll
+E:\Final project\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.pdb
+E:\Final project\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.dll
+E:\Final project\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.pdb
