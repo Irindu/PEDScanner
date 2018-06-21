@@ -1290,6 +1290,7 @@ namespace PEDScannerLib.Core
                                                 UInt32 Address = pThunkOrg->Function;
                                                 ImportFunctions.Add(new ImportFunctionObject(sImportName, Address, name));
                                                 //TODO add it as a dependecny as well
+                                                Dependencies.Add(new PortableExecutable(name, GetModulePath(name)));
                                             }
                                             else
                                             {
@@ -1371,8 +1372,8 @@ namespace PEDScannerLib.Core
 
         public String GetModulePath(String moduleName)
         {
-
-            return null;
+            //Todo
+            return moduleName;
         }
     }
 

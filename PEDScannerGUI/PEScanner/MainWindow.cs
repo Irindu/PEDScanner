@@ -23,6 +23,8 @@ namespace PEScanner
             InitializeComponent();
             this.fileName = null;
             this.portableExecutable = null;
+            labelNoImports.Hide();
+            labelNoExports.Hide();
         }
 
         public MainWindow(String fileName)
@@ -44,31 +46,55 @@ namespace PEScanner
             dataGridViewHeaders.Columns[0].Name = "Property";
             dataGridViewHeaders.Columns[1].Name = "Value";
             dataGridViewHeaders.RowHeadersVisible = false;
+            dataGridViewDirectories.RowHeadersVisible = false;
+            dataGridViewSections.RowHeadersVisible = false;
 
         }
 
-       
+
 
         private void PopulateImports(List<ImportFunctionObject> imports)
         {
-            foreach (ImportFunctionObject import in imports)
+            treeViewImports.Nodes.Clear();
+
+            if (imports.Count == 0)
             {
-                string[] row = { import.function, import.baseAddress.ToString() };
-               TreeNode treeNode = treeViewImports.Nodes.Add(import.function);
-                treeNode.Nodes.Add(import.dependency);
+                listViewExports.Hide();
+                labelNoImports.Text = "No Imports";
+                labelNoImports.Show();
             }
+            else {
+                labelNoImports.Hide();
+                foreach (ImportFunctionObject import in imports)
+                {
+                    string[] row = { import.function, import.baseAddress.ToString() };
+                    TreeNode treeNode = treeViewImports.Nodes.Add(import.function);
+                    treeNode.Tag = import;
+                    treeNode.Nodes.Add(import.dependency);
+                }
+            }
+            
 
           }
 
         private void PopulateExports(List<FunctionObject> exports)
         {
-            foreach (FunctionObject export in exports)
-            {
-                listViewExports.Items.Add(export.function);
-                MessageBox.Show(export.function);
-
+            if (exports.Count == 0) {
+                listViewExports.Hide();
+                labelNoExports.Text = "No Exports";
+                labelNoExports.Show();
             }
+            else {
+                labelNoExports.Hide();
+                listViewExports.Show();
 
+                foreach (FunctionObject export in exports)
+                {
+                    listViewExports.Items.Add(export.function);
+                    MessageBox.Show(export.function);
+
+                }
+            }
         }
 
         private void PopulateHeaders(List<HeaderObject> headers)
@@ -164,6 +190,7 @@ namespace PEScanner
 
         void UpdateUI(String fileName)
         {
+            dataGridViewImportExamined.Hide();
             treeViewDependencies.Nodes.Clear();
             PortableExecutable pe = new PortableExecutable(fileName, fileName);
             pe.MakeDependencies();
@@ -172,6 +199,7 @@ namespace PEScanner
             RecursivelyPopulateTheTree(pe, tNodes);
             PopulateHeaders(pe.Headers);
             PopulateImports(pe.ImportFunctions);
+            PopulateExports(pe.ExportedFunctions);
             PopulateSections(pe.GetSections());
             PopulateDirectories(pe.GetDirectories());
             //  pe.MakeImports();
@@ -305,5 +333,21 @@ namespace PEScanner
         {
             Application.Exit();
         }
+
+        private void treeViewImports_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            ImportFunctionObject importFunctionObject = (ImportFunctionObject)e.Node.Tag;
+
+            if (importFunctionObject != null)
+            {
+                dataGridViewImportExamined.Rows.Clear();
+                dataGridViewImportExamined.Show();
+                string[] row = { importFunctionObject.function, importFunctionObject.baseAddress.ToString(), importFunctionObject.dependency };
+                dataGridViewImportExamined.Rows.Add(row);
+
+            }
+
+        }
+
     }
 }
