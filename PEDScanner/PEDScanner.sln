@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PEDScannerGUI", "..\PEDScannerGUI\PEScanner\PEDScannerGUI.csproj", "{61CA650B-280B-4799-9C4B-3B81CBA44835}"
+	ProjectSection(ProjectDependencies) = postProject
+		{51C9AE43-323A-44C0-A244-059D54F9FFCB} = {51C9AE43-323A-44C0-A244-059D54F9FFCB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PEDScannerLib", "..\PEDScannerLib\PEDScannerLib\PEDScannerLib.csproj", "{51C9AE43-323A-44C0-A244-059D54F9FFCB}"
 EndProject

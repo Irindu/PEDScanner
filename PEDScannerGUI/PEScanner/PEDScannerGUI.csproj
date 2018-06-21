@@ -91,5 +91,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PEDScannerLib\PEDScannerLib\PEDScannerLib.csproj">
+      <Project>{51C9AE43-323A-44C0-A244-059D54F9FFCB}</Project>
+      <Name>PEDScannerLib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

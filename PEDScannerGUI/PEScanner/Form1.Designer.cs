@@ -40,11 +40,6 @@
             this.ColumnValues = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageSections = new System.Windows.Forms.TabPage();
             this.dataGridViewSections = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageDirectories = new System.Windows.Forms.TabPage();
             this.dataGridViewDirectories = new System.Windows.Forms.DataGridView();
             this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -64,6 +59,11 @@
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.virtualAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.virtualsize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rawDataOffset = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rawDataSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabPageDependencies.SuspendLayout();
             this.tabPageHeaders.SuspendLayout();
@@ -188,40 +188,15 @@
             this.dataGridViewSections.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dataGridViewSections.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewSections.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2,
-            this.Column3,
-            this.Column4,
-            this.Column5});
+            this.name,
+            this.virtualAddress,
+            this.virtualsize,
+            this.rawDataOffset,
+            this.rawDataSize});
             this.dataGridViewSections.Location = new System.Drawing.Point(22, 33);
             this.dataGridViewSections.Name = "dataGridViewSections";
             this.dataGridViewSections.Size = new System.Drawing.Size(584, 259);
             this.dataGridViewSections.TabIndex = 0;
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Column3";
-            this.Column3.Name = "Column3";
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "Column4";
-            this.Column4.Name = "Column4";
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "Column5";
-            this.Column5.Name = "Column5";
             // 
             // tabPageDirectories
             // 
@@ -399,6 +374,31 @@
             this.toolStripButtonAbout.Text = "About";
             this.toolStripButtonAbout.Click += new System.EventHandler(this.toolStripButtontoolStripButtonAbout_Click);
             // 
+            // name
+            // 
+            this.name.HeaderText = "name";
+            this.name.Name = "name";
+            // 
+            // virtualAddress
+            // 
+            this.virtualAddress.HeaderText = "virtualAddress";
+            this.virtualAddress.Name = "virtualAddress";
+            // 
+            // virtualsize
+            // 
+            this.virtualsize.HeaderText = "virtualsize";
+            this.virtualsize.Name = "virtualsize";
+            // 
+            // rawDataOffset
+            // 
+            this.rawDataOffset.HeaderText = "rawDataOffset";
+            this.rawDataOffset.Name = "rawDataOffset";
+            // 
+            // rawDataSize
+            // 
+            this.rawDataSize.HeaderText = "rawDataSize";
+            this.rawDataSize.Name = "rawDataSize";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -450,11 +450,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSize;
         private System.Windows.Forms.TreeView treeViewDependencies;
         private System.Windows.Forms.DataGridView dataGridViewSections;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.Button buttonAddFile;
         private System.Windows.Forms.Button buttonExamine;
         private System.Windows.Forms.MenuStrip menuStrip1;
@@ -469,6 +464,11 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonOpen;
         private System.Windows.Forms.ToolStripButton toolStripButtonClose;
         private System.Windows.Forms.ToolStripButton toolStripButtonAbout;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn virtualAddress;
+        private System.Windows.Forms.DataGridViewTextBoxColumn virtualsize;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rawDataOffset;
+        private System.Windows.Forms.DataGridViewTextBoxColumn rawDataSize;
     }
 }
 

@@ -1042,11 +1042,11 @@ namespace PEDScannerLib.Core
 
     public class SectionObject
     {
-        string name;
-        UInt32 virtualAddress;
-        UInt32 virtualsize;
-        UInt32 rawDataOffset;
-        UInt32 rawDataSize;
+        public string name;
+        public UInt32 virtualAddress;
+        public UInt32 virtualsize;
+        public UInt32 rawDataOffset;
+        public UInt32 rawDataSize;
 
         public SectionObject(string name, UInt32 virtualAddress, UInt32 virtualsize, UInt32 rawDataOffset, UInt32 rawDataSize)
         {
@@ -1061,9 +1061,9 @@ namespace PEDScannerLib.Core
 
     public class DirectoryObject
     {
-        string name;
-        UInt32 RVA;
-        UInt32 Size;
+        public string name;
+        public UInt32 RVA;
+        public UInt32 Size;
         public DirectoryObject(string name, UInt32 RVA, UInt32 Size)
         {
             this.name = name;
@@ -1081,25 +1081,35 @@ namespace PEDScannerLib.Core
         static extern uint LoadLibraryEx(string fileName, uint notUsedMustBeZero, uint flags);
 
         string Name;
-        string FilePath;
+        public string FilePath;
         PeHeaderReader reader;
+        public List<PortableExecutable> Dependencies;
+        public List<FunctionObject> ExportedFunctions;
+        public List<ImportFunctionObject> ImportFunctions;
+        public List<HeaderObject> Headers;
+        public List<SectionObject> Sections;
+        public List<DirectoryObject> Directories;
+
         public PortableExecutable(string Name, string FilePath)
         {
             this.Name = Name;
             this.FilePath = FilePath;
             reader = new PeHeaderReader(FilePath);
+
+            Dependencies = new List<PortableExecutable>();
+            ExportedFunctions = new List<FunctionObject>();
+            ImportFunctions = new List<ImportFunctionObject>();
+            Headers = new List<HeaderObject>();
+            Sections = new List<SectionObject>();
+            Directories = new List<DirectoryObject>();
+
             LoadImports(FilePath, true);
             LoadExports(FilePath, true);
             GetHeader();
             MakeDependencies();
+
         }
 
-        static List<PortableExecutable> Dependencies = new List<PortableExecutable>();
-        static List<FunctionObject> ExportedFunctions = new List<FunctionObject>();
-        static List<ImportFunctionObject> ImportFunctions = new List<ImportFunctionObject>();
-        static List<HeaderObject> Headers = new List<HeaderObject>();
-        static List<SectionObject> Sections = new List<SectionObject>();
-        static List<DirectoryObject> Directories = new List<DirectoryObject>();
 
         public List<PortableExecutable> MakeDependencies()
         {
@@ -1358,7 +1368,12 @@ namespace PEDScannerLib.Core
             }
             return ExportedFunctions;
         }
-    }
 
+        public String GetModulePath(String moduleName)
+        {
+
+            return null;
+        }
+    }
 
 }

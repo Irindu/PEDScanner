@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using PEScannerLibrary;
+using PEDScannerLib.Core;
 
 
 namespace PEScanner
@@ -29,45 +29,106 @@ namespace PEScanner
         {
             InitializeComponent();
             this.fileName = fileName;
-            this.portableExecutable = new PortableExecutable(fileName);
+            this.portableExecutable = new PortableExecutable(fileName, fileName);
         }
 
         public MainWindow(PortableExecutable portableExecutable)
         {
             InitializeComponent();
-            this.fileName = portableExecutable.FileName;
+            this.fileName = portableExecutable.FilePath;
             this.portableExecutable = portableExecutable;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            dataGridViewHeaders.Columns[0].Name = "Release Date";
-            dataGridViewHeaders.Columns[1].Name = "Track";
-            PopulateDataGridView();
+            dataGridViewHeaders.Columns[0].Name = "Property";
+            dataGridViewHeaders.Columns[1].Name = "Value";
             dataGridViewHeaders.RowHeadersVisible = false;
 
         }
 
-        private void PopulateDataGridView()
+       
+
+        private void PopulateImports(List<ImportFunctionObject> imports)
+        {
+            foreach (ImportFunctionObject import in imports)
+            {
+                string[] row = { import.function, import.baseAddress.ToString() };
+               TreeNode treeNode = treeViewImports.Nodes.Add(import.function);
+                treeNode.Nodes.Add(import.dependency);
+            }
+
+          }
+
+        private void PopulateExports(List<FunctionObject> exports)
+        {
+            foreach (FunctionObject export in exports)
+            {
+                listViewExports.Items.Add(export.function);
+                MessageBox.Show(export.function);
+
+            }
+
+        }
+
+        private void PopulateHeaders(List<HeaderObject> headers)
         {
 
-            string[] row0 = { "11/22/1968", "29" };
-            string[] row1 = { "1960", "6"};
-            string[] row2 = { "11/11/1971", "1", };
-            string[] row3 = { "1988", "7"};
-            string[] row4 = { "5/1981", "9"};
-            string[] row5 = { "6/10/2003", "13"};
+            dataGridViewHeaders.Columns[0].Name = "Property";
+            dataGridViewHeaders.Columns[1].Name = "Value";
+            dataGridViewHeaders.RowHeadersVisible = false;
 
-            dataGridViewHeaders.Rows.Add(row0);
-            dataGridViewHeaders.Rows.Add(row1);
-            dataGridViewHeaders.Rows.Add(row2);
-            dataGridViewHeaders.Rows.Add(row3);
-            dataGridViewHeaders.Rows.Add(row4);
-            dataGridViewHeaders.Rows.Add(row5);
+            dataGridViewHeaders.Rows.Clear();
 
-            dataGridViewHeaders.Columns[0].DisplayIndex = 1;
-            dataGridViewHeaders.Columns[1].DisplayIndex = 0;
+            foreach (HeaderObject headerObject in headers)
+            {
+                string[] row = { headerObject.name, headerObject.value.ToString() };
+                dataGridViewHeaders.Rows.Add(row);
+            }
+
         }
+
+        private void PopulateSections(List<SectionObject> sections)
+        {
+
+            dataGridViewSections.Columns[0].Name = "name";
+            dataGridViewSections.Columns[1].Name = "virtualAddress";
+            dataGridViewSections.Columns[2].Name = "virtualsize";
+            dataGridViewSections.Columns[3].Name = "rawDataOffset";
+            dataGridViewSections.Columns[4].Name = "rawDataSize";
+
+            dataGridViewSections.RowHeadersVisible = false;
+
+            dataGridViewSections.Rows.Clear();
+
+            foreach (SectionObject sectionObject in sections)
+            {
+                string[] row = { sectionObject.name, sectionObject.virtualAddress.ToString(), sectionObject.virtualsize.ToString() , sectionObject.rawDataOffset.ToString()
+                ,sectionObject.rawDataSize.ToString()};
+                dataGridViewSections.Rows.Add(row);
+            }
+
+        }
+
+        private void PopulateDirectories(List<DirectoryObject> directories)
+        {
+
+            dataGridViewDirectories.Columns[0].Name = "name";
+            dataGridViewDirectories.Columns[1].Name = "RVA";
+            dataGridViewDirectories.Columns[2].Name = "Size";
+          
+            dataGridViewDirectories.RowHeadersVisible = false;
+
+            dataGridViewDirectories.Rows.Clear();
+
+            foreach (DirectoryObject directoryObject in directories)
+            {
+                string[] row = { directoryObject.name, directoryObject.RVA.ToString(), directoryObject.Size.ToString()};
+                dataGridViewDirectories.Rows.Add(row);
+            }
+
+             }
+
 
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
@@ -104,14 +165,17 @@ namespace PEScanner
         void UpdateUI(String fileName)
         {
             treeViewDependencies.Nodes.Clear();
-            PortableExecutable pe = new PortableExecutable(fileName);
+            PortableExecutable pe = new PortableExecutable(fileName, fileName);
             pe.MakeDependencies();
             TreeNodeCollection tNodes = treeViewDependencies.Nodes;
 
             RecursivelyPopulateTheTree(pe, tNodes);
-
-          //  pe.MakeImports();
-           //pe.MakeExports();
+            PopulateHeaders(pe.Headers);
+            PopulateImports(pe.ImportFunctions);
+            PopulateSections(pe.GetSections());
+            PopulateDirectories(pe.GetDirectories());
+            //  pe.MakeImports();
+            //pe.MakeExports();
 
             //listBox_Imports.Items.Clear();
             //foreach (object __o in pe.GetImports())
@@ -133,7 +197,7 @@ namespace PEScanner
         void RecursivelyPopulateTheTree(PortableExecutable portableExecutable, TreeNodeCollection tNodes)
         {
 
-            TreeNode treeNode = tNodes.Add(portableExecutable.FileName);
+            TreeNode treeNode = tNodes.Add(portableExecutable.FilePath);
              treeNode.Tag = portableExecutable;
 
             if (portableExecutable.Dependencies.Count == 0)
@@ -222,7 +286,7 @@ namespace PEScanner
                 string fileName;
                 fileName = dlg.FileName;
                 this.fileName = fileName;
-                this.portableExecutable = new PortableExecutable(fileName);
+                this.portableExecutable = new PortableExecutable(fileName, fileName);
                 UpdateUI(fileName);
 
                 ToolStripItem item = new ToolStripMenuItem();
