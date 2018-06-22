@@ -9,3 +9,9 @@ D:\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.dll
 D:\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.pdb
 D:\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.dll
 D:\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.pdb
+C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.dll
+C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.pdb
+C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.csprojAssemblyReference.cache
+C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.dll
+C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.pdb
