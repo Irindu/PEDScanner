@@ -59,11 +59,12 @@ namespace PEScanner
 
             if (imports.Count == 0)
             {
-                listViewExports.Hide();
+                treeViewImports.Hide();
                 labelNoImports.Text = "No Imports";
                 labelNoImports.Show();
             }
             else {
+                treeViewImports.Show();
                 labelNoImports.Hide();
                 foreach (ImportFunctionObject import in imports)
                 {
@@ -80,17 +81,17 @@ namespace PEScanner
         private void PopulateExports(List<FunctionObject> exports)
         {
             if (exports.Count == 0) {
-                listViewExports.Hide();
+                listBoxExports.Hide();
                 labelNoExports.Text = "No Exports";
                 labelNoExports.Show();
             }
             else {
                 labelNoExports.Hide();
-                listViewExports.Show();
+                listBoxExports.Show();
 
                 foreach (FunctionObject export in exports)
                 {
-                    listViewExports.Items.Add(export.function);
+                    listBoxExports.Items.Add(export.function);
                     MessageBox.Show(export.function);
 
                 }
@@ -192,6 +193,8 @@ namespace PEScanner
         {
             dataGridViewImportExamined.Hide();
             treeViewDependencies.Nodes.Clear();
+            treeViewImports.Nodes.Clear();
+            listBoxExports.Items.Clear();
             PortableExecutable pe = new PortableExecutable(fileName, fileName);
             pe.MakeDependencies();
             TreeNodeCollection tNodes = treeViewDependencies.Nodes;
@@ -276,12 +279,12 @@ namespace PEScanner
 
         private void toolStripButtontoolStripButtonAbout_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Portable Executable Scanner 2018!");
+            MessageBox.Show("Portable Executable Dependecy Scanner 2018! \n Source is available @ https://github.com/Irindu/PEDScanner", "About PED Scanner", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Portable Executable Scanner 2018!");
+            MessageBox.Show("Portable Executable Dependecy Scanner 2018!", "About PED Scanner", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void buttonExamine_Click(object sender, EventArgs e)
@@ -348,6 +351,5 @@ namespace PEScanner
             }
 
         }
-
     }
 }

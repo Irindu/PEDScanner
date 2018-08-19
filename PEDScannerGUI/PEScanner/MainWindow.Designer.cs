@@ -33,13 +33,26 @@
             this.tabPageDependencies = new System.Windows.Forms.TabPage();
             this.treeViewDependencies = new System.Windows.Forms.TreeView();
             this.tabPageImports = new System.Windows.Forms.TabPage();
+            this.dataGridViewImportExamined = new System.Windows.Forms.DataGridView();
+            this.ImportName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.BaseAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Dependency = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.labelNoImports = new System.Windows.Forms.Label();
+            this.treeViewImports = new System.Windows.Forms.TreeView();
             this.tabPageExport = new System.Windows.Forms.TabPage();
+            this.listBoxExports = new System.Windows.Forms.ListBox();
+            this.labelNoExports = new System.Windows.Forms.Label();
             this.tabPageHeaders = new System.Windows.Forms.TabPage();
             this.dataGridViewHeaders = new System.Windows.Forms.DataGridView();
             this.ColumnProperties = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnValues = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageSections = new System.Windows.Forms.TabPage();
             this.dataGridViewSections = new System.Windows.Forms.DataGridView();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.virtualAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.virtualsize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rawDataOffset = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rawDataSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageDirectories = new System.Windows.Forms.TabPage();
             this.dataGridViewDirectories = new System.Windows.Forms.DataGridView();
             this.ColumnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,22 +72,10 @@
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.virtualAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.virtualsize = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rawDataOffset = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.rawDataSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.treeViewImports = new System.Windows.Forms.TreeView();
-            this.listViewExports = new System.Windows.Forms.ListView();
-            this.labelNoImports = new System.Windows.Forms.Label();
-            this.labelNoExports = new System.Windows.Forms.Label();
-            this.dataGridViewImportExamined = new System.Windows.Forms.DataGridView();
-            this.ImportName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BaseAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Dependency = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.tabPageDependencies.SuspendLayout();
             this.tabPageImports.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewImportExamined)).BeginInit();
             this.tabPageExport.SuspendLayout();
             this.tabPageHeaders.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewHeaders)).BeginInit();
@@ -84,7 +85,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDirectories)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.toolStripQuickAccess.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewImportExamined)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -139,10 +139,57 @@
             this.tabPageImports.Text = "Imports ";
             this.tabPageImports.UseVisualStyleBackColor = true;
             // 
+            // dataGridViewImportExamined
+            // 
+            this.dataGridViewImportExamined.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.dataGridViewImportExamined.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewImportExamined.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ImportName,
+            this.BaseAddress,
+            this.Dependency});
+            this.dataGridViewImportExamined.Location = new System.Drawing.Point(433, 20);
+            this.dataGridViewImportExamined.Name = "dataGridViewImportExamined";
+            this.dataGridViewImportExamined.RowHeadersVisible = false;
+            this.dataGridViewImportExamined.Size = new System.Drawing.Size(313, 269);
+            this.dataGridViewImportExamined.TabIndex = 2;
+            this.dataGridViewImportExamined.Visible = false;
+            // 
+            // ImportName
+            // 
+            this.ImportName.HeaderText = "Name";
+            this.ImportName.Name = "ImportName";
+            // 
+            // BaseAddress
+            // 
+            this.BaseAddress.HeaderText = "BaseAddress";
+            this.BaseAddress.Name = "BaseAddress";
+            // 
+            // Dependency
+            // 
+            this.Dependency.HeaderText = "Dependency";
+            this.Dependency.Name = "Dependency";
+            // 
+            // labelNoImports
+            // 
+            this.labelNoImports.AutoSize = true;
+            this.labelNoImports.Location = new System.Drawing.Point(61, 54);
+            this.labelNoImports.Name = "labelNoImports";
+            this.labelNoImports.Size = new System.Drawing.Size(77, 13);
+            this.labelNoImports.TabIndex = 1;
+            this.labelNoImports.Text = "labelNoImports";
+            // 
+            // treeViewImports
+            // 
+            this.treeViewImports.Location = new System.Drawing.Point(18, 20);
+            this.treeViewImports.Name = "treeViewImports";
+            this.treeViewImports.Size = new System.Drawing.Size(409, 269);
+            this.treeViewImports.TabIndex = 0;
+            this.treeViewImports.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewImports_AfterSelect);
+            // 
             // tabPageExport
             // 
             this.tabPageExport.Controls.Add(this.labelNoExports);
-            this.tabPageExport.Controls.Add(this.listViewExports);
+            this.tabPageExport.Controls.Add(this.listBoxExports);
             this.tabPageExport.Location = new System.Drawing.Point(4, 25);
             this.tabPageExport.Name = "tabPageExport";
             this.tabPageExport.Padding = new System.Windows.Forms.Padding(3);
@@ -150,6 +197,23 @@
             this.tabPageExport.TabIndex = 2;
             this.tabPageExport.Text = "Exports ";
             this.tabPageExport.UseVisualStyleBackColor = true;
+            // 
+            // listBoxExports
+            // 
+            this.listBoxExports.FormattingEnabled = true;
+            this.listBoxExports.Location = new System.Drawing.Point(19, 16);
+            this.listBoxExports.Name = "listBoxExports";
+            this.listBoxExports.Size = new System.Drawing.Size(413, 251);
+            this.listBoxExports.TabIndex = 2;
+            // 
+            // labelNoExports
+            // 
+            this.labelNoExports.AutoSize = true;
+            this.labelNoExports.Location = new System.Drawing.Point(64, 60);
+            this.labelNoExports.Name = "labelNoExports";
+            this.labelNoExports.Size = new System.Drawing.Size(78, 13);
+            this.labelNoExports.TabIndex = 1;
+            this.labelNoExports.Text = "labelNoExports";
             // 
             // tabPageHeaders
             // 
@@ -214,6 +278,31 @@
             this.dataGridViewSections.Name = "dataGridViewSections";
             this.dataGridViewSections.Size = new System.Drawing.Size(584, 259);
             this.dataGridViewSections.TabIndex = 0;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "name";
+            this.name.Name = "name";
+            // 
+            // virtualAddress
+            // 
+            this.virtualAddress.HeaderText = "virtualAddress";
+            this.virtualAddress.Name = "virtualAddress";
+            // 
+            // virtualsize
+            // 
+            this.virtualsize.HeaderText = "virtualsize";
+            this.virtualsize.Name = "virtualsize";
+            // 
+            // rawDataOffset
+            // 
+            this.rawDataOffset.HeaderText = "rawDataOffset";
+            this.rawDataOffset.Name = "rawDataOffset";
+            // 
+            // rawDataSize
+            // 
+            this.rawDataSize.HeaderText = "rawDataSize";
+            this.rawDataSize.Name = "rawDataSize";
             // 
             // tabPageDirectories
             // 
@@ -393,95 +482,6 @@
             this.toolStripButtonAbout.Text = "About";
             this.toolStripButtonAbout.Click += new System.EventHandler(this.toolStripButtontoolStripButtonAbout_Click);
             // 
-            // name
-            // 
-            this.name.HeaderText = "name";
-            this.name.Name = "name";
-            // 
-            // virtualAddress
-            // 
-            this.virtualAddress.HeaderText = "virtualAddress";
-            this.virtualAddress.Name = "virtualAddress";
-            // 
-            // virtualsize
-            // 
-            this.virtualsize.HeaderText = "virtualsize";
-            this.virtualsize.Name = "virtualsize";
-            // 
-            // rawDataOffset
-            // 
-            this.rawDataOffset.HeaderText = "rawDataOffset";
-            this.rawDataOffset.Name = "rawDataOffset";
-            // 
-            // rawDataSize
-            // 
-            this.rawDataSize.HeaderText = "rawDataSize";
-            this.rawDataSize.Name = "rawDataSize";
-            // 
-            // treeViewImports
-            // 
-            this.treeViewImports.Location = new System.Drawing.Point(18, 20);
-            this.treeViewImports.Name = "treeViewImports";
-            this.treeViewImports.Size = new System.Drawing.Size(409, 269);
-            this.treeViewImports.TabIndex = 0;
-            this.treeViewImports.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewImports_AfterSelect);
-            // 
-            // listViewExports
-            // 
-            this.listViewExports.Location = new System.Drawing.Point(46, 30);
-            this.listViewExports.Name = "listViewExports";
-            this.listViewExports.Size = new System.Drawing.Size(404, 252);
-            this.listViewExports.TabIndex = 0;
-            this.listViewExports.UseCompatibleStateImageBehavior = false;
-            // 
-            // labelNoImports
-            // 
-            this.labelNoImports.AutoSize = true;
-            this.labelNoImports.Location = new System.Drawing.Point(61, 54);
-            this.labelNoImports.Name = "labelNoImports";
-            this.labelNoImports.Size = new System.Drawing.Size(77, 13);
-            this.labelNoImports.TabIndex = 1;
-            this.labelNoImports.Text = "labelNoImports";
-            // 
-            // labelNoExports
-            // 
-            this.labelNoExports.AutoSize = true;
-            this.labelNoExports.Location = new System.Drawing.Point(97, 73);
-            this.labelNoExports.Name = "labelNoExports";
-            this.labelNoExports.Size = new System.Drawing.Size(78, 13);
-            this.labelNoExports.TabIndex = 1;
-            this.labelNoExports.Text = "labelNoExports";
-            // 
-            // dataGridViewImportExamined
-            // 
-            this.dataGridViewImportExamined.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.dataGridViewImportExamined.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewImportExamined.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ImportName,
-            this.BaseAddress,
-            this.Dependency});
-            this.dataGridViewImportExamined.Location = new System.Drawing.Point(433, 20);
-            this.dataGridViewImportExamined.Name = "dataGridViewImportExamined";
-            this.dataGridViewImportExamined.RowHeadersVisible = false;
-            this.dataGridViewImportExamined.Size = new System.Drawing.Size(313, 269);
-            this.dataGridViewImportExamined.TabIndex = 2;
-            this.dataGridViewImportExamined.Visible = false;
-            // 
-            // ImportName
-            // 
-            this.ImportName.HeaderText = "Name";
-            this.ImportName.Name = "ImportName";
-            // 
-            // BaseAddress
-            // 
-            this.BaseAddress.HeaderText = "BaseAddress";
-            this.BaseAddress.Name = "BaseAddress";
-            // 
-            // Dependency
-            // 
-            this.Dependency.HeaderText = "Dependency";
-            this.Dependency.Name = "Dependency";
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -501,6 +501,7 @@
             this.tabPageDependencies.ResumeLayout(false);
             this.tabPageImports.ResumeLayout(false);
             this.tabPageImports.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewImportExamined)).EndInit();
             this.tabPageExport.ResumeLayout(false);
             this.tabPageExport.PerformLayout();
             this.tabPageHeaders.ResumeLayout(false);
@@ -513,7 +514,6 @@
             this.menuStrip1.PerformLayout();
             this.toolStripQuickAccess.ResumeLayout(false);
             this.toolStripQuickAccess.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewImportExamined)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -557,13 +557,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn rawDataOffset;
         private System.Windows.Forms.DataGridViewTextBoxColumn rawDataSize;
         private System.Windows.Forms.TreeView treeViewImports;
-        private System.Windows.Forms.ListView listViewExports;
+        private System.Windows.Forms.ListBox listBoxExports;
         private System.Windows.Forms.Label labelNoImports;
         private System.Windows.Forms.Label labelNoExports;
         private System.Windows.Forms.DataGridView dataGridViewImportExamined;
         private System.Windows.Forms.DataGridViewTextBoxColumn ImportName;
         private System.Windows.Forms.DataGridViewTextBoxColumn BaseAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn Dependency;
+
     }
 }
 
