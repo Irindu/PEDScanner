@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Security;
 
+
 namespace PEDScannerLib.Core
 {
 
@@ -529,6 +530,7 @@ namespace PEDScannerLib.Core
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
+
         public struct IMAGE_OPTIONAL_HEADER64
         {
             public UInt16 Magic;
@@ -846,39 +848,40 @@ namespace PEDScannerLib.Core
 
         public PeHeaderReader(string filePath)
         {
-            // Read in the DLL or EXE and get the timestamp
-            using (FileStream stream = new FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+            if (filePath != null)
             {
-                BinaryReader reader = new BinaryReader(stream);
-                dosHeader = FromBinaryReader<IMAGE_DOS_HEADER>(reader);
-
-                // Add 4 bytes to the offset
-                stream.Seek(dosHeader.e_lfanew, SeekOrigin.Begin);
-
-                UInt32 ntHeadersSignature = reader.ReadUInt32();
-                fileHeader = FromBinaryReader<IMAGE_FILE_HEADER>(reader);
-                if (this.Is32BitHeader)
+                // Read in the DLL or EXE and get the timestamp
+                using (FileStream stream = new FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read))
                 {
-                    optionalHeader32 = FromBinaryReader<IMAGE_OPTIONAL_HEADER32>(reader);
-                }
-                else
-                {
-                    optionalHeader64 = FromBinaryReader<IMAGE_OPTIONAL_HEADER64>(reader);
-                }
-                // imageNTHeader64 = FromBinaryReader<PeHeaderReader.IMAGE_NT_HEADERS64>(reader);
-                imageSectionHeaders = new IMAGE_SECTION_HEADER[fileHeader.NumberOfSections];
-                for (int headerNo = 0; headerNo < imageSectionHeaders.Length; ++headerNo)
-                {
-                    imageSectionHeaders[headerNo] = FromBinaryReader<IMAGE_SECTION_HEADER>(reader);
-                }
+                    BinaryReader reader = new BinaryReader(stream);
+                    dosHeader = FromBinaryReader<IMAGE_DOS_HEADER>(reader);
 
+                    // Add 4 bytes to the offset
+                    stream.Seek(dosHeader.e_lfanew, SeekOrigin.Begin);
+
+                    UInt32 ntHeadersSignature = reader.ReadUInt32();
+                    fileHeader = FromBinaryReader<IMAGE_FILE_HEADER>(reader);
+                    if (this.Is32BitHeader)
+                    {
+                        optionalHeader32 = FromBinaryReader<IMAGE_OPTIONAL_HEADER32>(reader);
+                    }
+                    else
+                    {
+                        optionalHeader64 = FromBinaryReader<IMAGE_OPTIONAL_HEADER64>(reader);
+                    }
+                    // imageNTHeader64 = FromBinaryReader<PeHeaderReader.IMAGE_NT_HEADERS64>(reader);
+                    imageSectionHeaders = new IMAGE_SECTION_HEADER[fileHeader.NumberOfSections];
+                    for (int headerNo = 0; headerNo < imageSectionHeaders.Length; ++headerNo)
+                    {
+                        imageSectionHeaders[headerNo] = FromBinaryReader<IMAGE_SECTION_HEADER>(reader);
+                    }
+
+                }
             }
         }
 
-        /// <summary>
-        /// Gets the header of the .NET assembly that called this function
-        /// </summary>
-        /// <returns></returns>
+
+
         //public static PeHeaderReader GetCallingAssemblyHeader()
         //{
         //    // Get the path to the calling assembly, which is the path to the
@@ -1080,39 +1083,52 @@ namespace PEDScannerLib.Core
         [DllImport("kernel32.dll"), SuppressUnmanagedCodeSecurity]
         static extern uint LoadLibraryEx(string fileName, uint notUsedMustBeZero, uint flags);
 
-        string Name;
+        public string Name;
         public string FilePath;
-        PeHeaderReader reader;
+        public PeHeaderReader reader;
+
         public List<PortableExecutable> Dependencies;
         public List<FunctionObject> ExportedFunctions;
         public List<ImportFunctionObject> ImportFunctions;
         public List<HeaderObject> Headers;
         public List<SectionObject> Sections;
         public List<DirectoryObject> Directories;
-
+        public List<string> ImportNames;
+        // UInt16 SafeDllSearchMode =1;
+        public string directoryPath = Directory.GetCurrentDirectory();
         public PortableExecutable(string Name, string FilePath)
         {
             this.Name = Name;
             this.FilePath = FilePath;
             reader = new PeHeaderReader(FilePath);
 
-            Dependencies = new List<PortableExecutable>();
+
             ExportedFunctions = new List<FunctionObject>();
             ImportFunctions = new List<ImportFunctionObject>();
             Headers = new List<HeaderObject>();
             Sections = new List<SectionObject>();
             Directories = new List<DirectoryObject>();
-
+            ImportNames = new List<string>();
+            Dependencies = new List<PortableExecutable>();
             LoadImports(FilePath, true);
             LoadExports(FilePath, true);
             GetHeader();
-            MakeDependencies();
-
+            // MakeDependencies();
+            GetDirectories();
         }
+
+
 
 
         public List<PortableExecutable> MakeDependencies()
         {
+            PortableExecutable PE;
+            foreach (string name in ImportNames)
+            {
+                string filePath = GetModulePath(name, directoryPath);
+                PE = new PortableExecutable(name, filePath);
+                Dependencies.Add(PE);
+            }
             return Dependencies;
         }
 
@@ -1135,8 +1151,6 @@ namespace PEDScannerLib.Core
             Headers.Add(new HeaderObject("Characteristics", characteristics));
             return Headers;
         }
-
-
 
         public List<SectionObject> GetSections()
         {
@@ -1165,7 +1179,6 @@ namespace PEDScannerLib.Core
             return Sections;
         }
 
-
         public List<DirectoryObject> GetDirectories()
         {
             unsafe
@@ -1174,8 +1187,6 @@ namespace PEDScannerLib.Core
                 {
                     PeHeaderReader.IMAGE_OPTIONAL_HEADER32 header32 = reader.OptionalHeader32;
                     UInt32 sizeOfHeaders = header32.SizeOfHeaders;
-
-                    System.Diagnostics.Debug.WriteLine(" CheckSum {0}", header32.CheckSum);
 
                     PeHeaderReader.IMAGE_DATA_DIRECTORY ImportTable = header32.ImportTable;
                     PeHeaderReader.IMAGE_DATA_DIRECTORY ExportTable = header32.ExportTable;
@@ -1238,7 +1249,6 @@ namespace PEDScannerLib.Core
 
                     uint size = 0;
                     uint BaseAddress = (uint)hMod;
-                    //System.Diagnostics.Debug.WriteLine(BaseAddress);
 
                     if (hMod != null)
                     {
@@ -1246,23 +1256,17 @@ namespace PEDScannerLib.Core
                         IMAGE_IMPORT_DESCRIPTOR* pIID = (IMAGE_IMPORT_DESCRIPTOR*)Interop.ImageDirectoryEntryToData((void*)hMod, mappedAsImage, Interop.IMAGE_DIRECTORY_ENTRY_IMPORT, out size);
                         if (pIID != null)
                         {
-                            //  uint pIID1 = (uint)pIID;
-                            // System.Diagnostics.Debug.WriteLine("Got Image Import Descriptor");
-                            // Console.WriteLine("RVA={0}", pIID1);
-                            // System.Diagnostics.Debug.WriteLine("RVA1={0}", (pIID->FirstThunk));
-
                             //walk the array until find the end of the array
                             while (pIID->OriginalFirstThunk != 0)
                             {
-
                                 try
                                 {
                                     //Name contains the RVA to the name of the dll. 
-                                    //Thus convert it to a virtual address first
-
+                                    //Thus convert it to a virtual address first.
                                     char* szName = (char*)(BaseAddress + pIID->Name);
                                     string name = Marshal.PtrToStringAnsi((IntPtr)szName);
-                                    System.Diagnostics.Debug.WriteLine("pIID->Name = {0} BaseAddress - {1}", name, (uint)BaseAddress);
+                                    ImportNames.Add(name);
+                                    // System.Diagnostics.Debug.WriteLine("pIID->Name = {0} BaseAddress - {1}", name, (uint)BaseAddress);
                                     // value in OriginalFirstThunk is an RVA. 
                                     // convert it to virtual address.
                                     THUNK_DATA* pThunkOrg = (THUNK_DATA*)(BaseAddress + pIID->OriginalFirstThunk);
@@ -1290,7 +1294,6 @@ namespace PEDScannerLib.Core
                                                 UInt32 Address = pThunkOrg->Function;
                                                 ImportFunctions.Add(new ImportFunctionObject(sImportName, Address, name));
                                                 //TODO add it as a dependecny as well
-                                                Dependencies.Add(new PortableExecutable(name, GetModulePath(name)));
                                             }
                                             else
                                             {
@@ -1370,11 +1373,157 @@ namespace PEDScannerLib.Core
             return ExportedFunctions;
         }
 
-        public String GetModulePath(String moduleName)
+        public String GetModulePath(String moduleName, String currentDirectory)
         {
-            //Todo
-            return moduleName;
+            // 0. Look in well-known dlls list
+
+            // 1. Look in application folder
+            string applicationFolder = Path.GetDirectoryName(FilePath);
+            List<string> files = GetFiles(applicationFolder, moduleName);
+
+            if (files.Count > 0)
+            {
+                return files.First();
+            }
+
+            //try 32-bit,64-bit 
+            Environment.SpecialFolder WindowsSystemFolder;
+            if (Is32bitFile())
+            {
+                WindowsSystemFolder = Environment.SpecialFolder.System;
+            }
+            else
+            {
+                WindowsSystemFolder = Environment.SpecialFolder.SystemX86;
+            }
+            String WindowsSystemFolderPath = Environment.GetFolderPath(WindowsSystemFolder);
+            //  String WindowsSystemFolderPath = "C:/Windows";
+
+            files = GetFiles(WindowsSystemFolderPath, moduleName);
+
+            if (files.Count > 0)
+            {
+                return files.First();
+            }
+
+
+            //try 64-bit
+            // WindowsSystemFolder = Environment.SpecialFolder.System;
+            //WindowsSystemFolderPath = Environment.GetFolderPath(WindowsSystemFolder);
+            //files = GetFiles(WindowsSystemFolderPath, moduleName);
+
+            //if (files.Count > 0)
+            //{
+            //    return files.First();
+            //}
+
+
+            //try windows folder
+            WindowsSystemFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
+            files = GetFiles(WindowsSystemFolderPath, moduleName);
+
+            if (files.Count > 0)
+            {
+                return files.First();
+            }
+
+
+            //check system PATH
+            string PATH = Environment.GetEnvironmentVariable("PATH");
+            List<String> PATHFolders = new List<string>(PATH.Split(';'));
+
+            foreach (String SystePath in PATHFolders)
+            {
+
+                if (SystePath != "" && !SystePath.Contains(WindowsSystemFolderPath))
+                {
+
+                    files = GetFiles(SystePath, moduleName);
+                    if (files.Count > 0)
+                    {
+                        return files.First();
+                    }
+                }
+
+            }
+
+            //check in current directory
+            files = GetFiles(currentDirectory, moduleName);
+
+            if (files.Count > 0)
+            {
+                return files.First();
+            }
+
+
+
+            return null;
         }
+
+
+        public List<string> GetFiles(string path, string pattern)
+        {
+            List<string> files = new List<string>();
+
+            try
+            {
+                try
+                {
+                    files.AddRange(Directory.GetFiles(path, pattern, SearchOption.TopDirectoryOnly));
+                }
+                catch (DirectoryNotFoundException)
+                {
+
+                }
+                if (files.Count >= 1)
+                {
+                    return files;
+                }
+
+                foreach (var directory in Directory.GetDirectories(path))
+                    files.AddRange(GetFiles(directory, pattern));
+            }
+            catch (UnauthorizedAccessException) { }
+
+            return files;
+        }
+
+        public bool Is32bitFile()
+        {
+            if (GetMachineType() == "Intel 386")
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public string GetMachineType()
+        {
+            IMAGE_FILE_HEADER fileHeader = reader.FileHeader;
+            UInt16 machine = fileHeader.Machine;
+            //string hexValue = machine.ToString("X");
+            switch (machine)
+            {
+                case 332:
+                    return "Intel 386";
+                    break;
+                case 512:
+                    return "Intel 64";
+                    break;
+                case 34404:
+                    return "AMD 64";
+                    break;
+                default:
+                    return "Machine type Unknown";
+                    break;
+            }
+
+
+        }
+
+
     }
+
 
 }
