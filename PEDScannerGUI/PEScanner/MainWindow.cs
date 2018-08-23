@@ -14,31 +14,32 @@ namespace PEScanner
 {
     public partial class MainWindow : Form
     {
-        String fileName;
         PortableExecutable portableExecutable;
         PortableExecutable SelectedPortableExecutable;
 
         public MainWindow()
         {
             InitializeComponent();
-            this.fileName = null;
             this.portableExecutable = null;
             labelNoImports.Hide();
             labelNoExports.Hide();
         }
 
-        public MainWindow(String fileName)
+        public MainWindow(String filePath)
         {
             InitializeComponent();
-            this.fileName = fileName;
-            this.portableExecutable = new PortableExecutable(fileName, fileName);
+            this.UpdateState(filePath);
         }
 
         public MainWindow(PortableExecutable portableExecutable)
         {
             InitializeComponent();
-            this.fileName = portableExecutable.FilePath;
             this.portableExecutable = portableExecutable;
+
+            if (portableExecutable != null)
+            {
+                UpdateUI(this.portableExecutable);
+            }
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -63,7 +64,8 @@ namespace PEScanner
                 labelNoImports.Text = "No Imports";
                 labelNoImports.Show();
             }
-            else {
+            else
+            {
                 treeViewImports.Show();
                 labelNoImports.Hide();
                 foreach (ImportFunctionObject import in imports)
@@ -74,26 +76,26 @@ namespace PEScanner
                     treeNode.Nodes.Add(import.dependency);
                 }
             }
-            
 
-          }
+
+        }
 
         private void PopulateExports(List<FunctionObject> exports)
         {
-            if (exports.Count == 0) {
+            if (exports.Count == 0)
+            {
                 listBoxExports.Hide();
                 labelNoExports.Text = "No Exports";
                 labelNoExports.Show();
             }
-            else {
+            else
+            {
                 labelNoExports.Hide();
                 listBoxExports.Show();
 
                 foreach (FunctionObject export in exports)
                 {
                     listBoxExports.Items.Add(export.function);
-                    MessageBox.Show(export.function);
-
                 }
             }
         }
@@ -143,18 +145,18 @@ namespace PEScanner
             dataGridViewDirectories.Columns[0].Name = "name";
             dataGridViewDirectories.Columns[1].Name = "RVA";
             dataGridViewDirectories.Columns[2].Name = "Size";
-          
+
             dataGridViewDirectories.RowHeadersVisible = false;
 
             dataGridViewDirectories.Rows.Clear();
 
             foreach (DirectoryObject directoryObject in directories)
             {
-                string[] row = { directoryObject.name, directoryObject.RVA.ToString(), directoryObject.Size.ToString()};
+                string[] row = { directoryObject.name, directoryObject.RVA.ToString(), directoryObject.Size.ToString() };
                 dataGridViewDirectories.Rows.Add(row);
             }
 
-             }
+        }
 
 
         private void buttonAddFile_Click(object sender, EventArgs e)
@@ -164,72 +166,36 @@ namespace PEScanner
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                string fileName;
-                fileName = dlg.FileName;
-               // CurrentPE = fileName;
-                UpdateUI(fileName);
+                string filePath;
+                filePath = dlg.FileName;
+
+                this.UpdateState(filePath);
 
                 ToolStripItem item = new ToolStripMenuItem();
                 //Name that will apear on the menu
-                item.Text = fileName;
+                item.Text = filePath;
                 //Put in the Name property whatever neccessery to retrive your data on click event
-                item.Name = fileName;
+                /*  item.Name = this.ExtractFileNameFromPath(filePath); */
+                item.Name = filePath;
                 //On-Click event
                 item.Click += new EventHandler(item_Click);
                 //Add the submenu to the parent menu
-              //  fileToolStripMenuItemRecent.DropDownItems.Add(item);
+                //  fileToolStripMenuItemRecent.DropDownItems.Add(item);
             }
         }
 
         void item_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
-            String fileName = item.Text;
-          //  CurrentPE = fileName;
-            UpdateUI(fileName);
-        }
-
-        void UpdateUI(String fileName)
-        {
-            dataGridViewImportExamined.Hide();
-            treeViewDependencies.Nodes.Clear();
-            treeViewImports.Nodes.Clear();
-            listBoxExports.Items.Clear();
-            PortableExecutable pe = new PortableExecutable(fileName, fileName);
-            pe.MakeDependencies();
-            TreeNodeCollection tNodes = treeViewDependencies.Nodes;
-
-            RecursivelyPopulateTheTree(pe, tNodes);
-            PopulateHeaders(pe.Headers);
-            PopulateImports(pe.ImportFunctions);
-            PopulateExports(pe.ExportedFunctions);
-            PopulateSections(pe.GetSections());
-            PopulateDirectories(pe.GetDirectories());
-            //  pe.MakeImports();
-            //pe.MakeExports();
-
-            //listBox_Imports.Items.Clear();
-            //foreach (object __o in pe.GetImports())
-            //{
-            //    String import = (String)__o;
-            //    // loop body
-            //    listBox_Imports.Items.Add(import);
-            //}
-
-            //listBox_Exports.Items.Clear();
-            //foreach (object __o in pe.GetExports())
-            //{
-            //    String import = (String)__o;
-            //    // loop body
-            //    listBox_Exports.Items.Add(import);
-            //}
+            String filePath = item.Name;
+            this.UpdateState(filePath);
         }
 
         void RecursivelyPopulateTheTree(PortableExecutable portableExecutable, TreeNodeCollection tNodes)
         {
 
-            TreeNode treeNode = tNodes.Add(portableExecutable.FilePath);
-             treeNode.Tag = portableExecutable;
+            TreeNode treeNode = tNodes.Add(this.ExtractFileNameFromPath(portableExecutable.FilePath));
+            treeNode.Tag = portableExecutable;
 
             if (portableExecutable.Dependencies.Count == 0)
             {
@@ -254,16 +220,14 @@ namespace PEScanner
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                string fileName;
-                fileName = dlg.FileName;
-                // CurrentPE = fileName;
-                UpdateUI(fileName);
-
+                string filePath;
+                filePath = dlg.FileName;
+                this.UpdateState(filePath);
                 ToolStripItem item = new ToolStripMenuItem();
                 //Name that will apear on the menu
-                item.Text = fileName;
+                item.Text = filePath;
                 //Put in the Name property whatever neccessery to retrive your data on click event
-                item.Name = fileName;
+                item.Name = filePath;
                 //On-Click event
                 // item.Click += new EventHandler(item_Click);
                 //Add the submenu to the parent menu
@@ -291,19 +255,40 @@ namespace PEScanner
         {
             if (SelectedPortableExecutable != null)
             {
-                Application.Run(new MainWindow(portableExecutable));
+                // Application.Run(new MainWindow(SelectedPortableExecutable));
+
+                /*   Thread thread = new Thread(() =>
+                   {
+                       Application.Run(new MainWindow(SelectedPortableExecutable));
+                   });
+                   //  thread.ApartmentState = ApartmentState.STA;
+                   thread.Start();
+
+                   Thread newThread = new Thread(new ThreadStart(ThreadProc));
+                   newThread.Start(); */
+                //  this.Hide();
+                MainWindow newMainWindowForm = new MainWindow(SelectedPortableExecutable);
+                newMainWindowForm.Closed += (s, args) => { newMainWindowForm.Close(); };
+                newMainWindowForm.ShowDialog();
+
+
             }
         }
 
+        private void ThreadProc(PortableExecutable SelectedPortableExecutable)
+        {
+            var frm = new MainWindow(SelectedPortableExecutable);
+            frm.ShowDialog();
+        }
+
+
         protected void treeViewDependencies_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
-            this.fileName = e.Node.Text;
-            this.SelectedPortableExecutable =(PortableExecutable)e.Node.Tag;
+            this.SelectedPortableExecutable = (PortableExecutable)e.Node.Tag;
         }
 
         private void treeViewDependencies_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            String fileName = e.Node.Text;
             PortableExecutable portableExecutable = (PortableExecutable)e.Node.Tag;
             Application.Run(new MainWindow(portableExecutable));
         }
@@ -314,17 +299,15 @@ namespace PEScanner
             //dlg.ShowDialog();
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                string fileName;
-                fileName = dlg.FileName;
-                this.fileName = fileName;
-                this.portableExecutable = new PortableExecutable(fileName, fileName);
-                UpdateUI(fileName);
+                string filePath;
+                filePath = dlg.FileName;
+                this.UpdateState(filePath);
 
                 ToolStripItem item = new ToolStripMenuItem();
                 //Name that will apear on the menu
-                item.Text = fileName;
+                item.Text = filePath;
                 //Put in the Name property whatever neccessery to retrive your data on click event
-                item.Name = fileName;
+                item.Name = filePath;
                 //On-Click event
                 item.Click += new EventHandler(item_Click);
                 //Add the submenu to the parent menu
@@ -351,5 +334,93 @@ namespace PEScanner
             }
 
         }
+
+        //update the state of the UI window
+        void UpdateState(String filePath)
+        {
+            try
+            {
+                this.portableExecutable = new PortableExecutable(this.ExtractFileNameFromPath(filePath), filePath);
+                this.UpdateUI(this.portableExecutable);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                Application.Exit();
+            }
+
+        }
+
+        void UpdateUI(PortableExecutable portableExecutable)
+        {
+            dataGridViewImportExamined.Hide();
+            treeViewDependencies.Nodes.Clear();
+            treeViewImports.Nodes.Clear();
+            listBoxExports.Items.Clear();
+
+            TreeNodeCollection tNodes = treeViewDependencies.Nodes;
+
+            if (portableExecutable != null)
+            {
+                RecursivelyPopulateTheTree(portableExecutable, tNodes);
+                PopulateHeaders(portableExecutable.Headers);
+                PopulateImports(portableExecutable.ImportFunctions);
+                PopulateExports(portableExecutable.ExportedFunctions);
+                PopulateSections(portableExecutable.GetSections());
+                PopulateDirectories(portableExecutable.GetDirectories());
+            }
+
+            //  pe.MakeImports();
+            //pe.MakeExports();
+
+            //listBox_Imports.Items.Clear();
+            //foreach (object __o in pe.GetImports())
+            //{
+            //    String import = (String)__o;
+            //    // loop body
+            //    listBox_Imports.Items.Add(import);
+            //}
+
+            //listBox_Exports.Items.Clear();
+            //foreach (object __o in pe.GetExports())
+            //{
+            //    String import = (String)__o;
+            //    // loop body
+            //    listBox_Exports.Items.Add(import);
+            //}
+        }
+
+        private void treeViewDependencies_MouseHover(object sender, EventArgs e)
+        {
+            // Get the node at the current mouse pointer location.
+            TreeNode theNode = this.treeViewDependencies.GetNodeAt(treeViewDependencies.PointToClient(Cursor.Position));
+
+            // Set a ToolTip only if the mouse pointer is actually paused on a node.
+            if ((theNode != null))
+            {
+                // Verify that the tag property is not "null".
+                if (theNode.Tag != null)
+                {
+                    PortableExecutable portableExecutable = (PortableExecutable)theNode.Tag;
+                    this.toolTipDependencies.SetToolTip(this.treeViewDependencies, portableExecutable.FilePath);
+                }
+                else
+                {
+                    this.toolTipDependencies.SetToolTip(this.treeViewDependencies, "");
+                }
+            }
+            else     // Pointer is not over a node so clear the ToolTip.
+            {
+                this.toolTipDependencies.SetToolTip(this.treeViewDependencies, "");
+            }
+        }
+
+        //utility function to extract file name given the file path
+        private String ExtractFileNameFromPath(String FilePath)
+        {
+            String[] arrayofNames = FilePath.Split('\\');
+            return arrayofNames[arrayofNames.Length - 1];
+        }
+
     }
 }

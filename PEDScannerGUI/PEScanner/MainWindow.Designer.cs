@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageDependencies = new System.Windows.Forms.TabPage();
@@ -40,8 +41,8 @@
             this.labelNoImports = new System.Windows.Forms.Label();
             this.treeViewImports = new System.Windows.Forms.TreeView();
             this.tabPageExport = new System.Windows.Forms.TabPage();
-            this.listBoxExports = new System.Windows.Forms.ListBox();
             this.labelNoExports = new System.Windows.Forms.Label();
+            this.listBoxExports = new System.Windows.Forms.ListBox();
             this.tabPageHeaders = new System.Windows.Forms.TabPage();
             this.dataGridViewHeaders = new System.Windows.Forms.DataGridView();
             this.ColumnProperties = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,6 +73,7 @@
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
+            this.toolTipDependencies = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPageDependencies.SuspendLayout();
             this.tabPageImports.SuspendLayout();
@@ -125,6 +127,7 @@
             this.treeViewDependencies.Size = new System.Drawing.Size(589, 276);
             this.treeViewDependencies.TabIndex = 0;
             this.treeViewDependencies.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewDependencies_AfterSelect);
+            this.treeViewDependencies.MouseHover += new System.EventHandler(this.treeViewDependencies_MouseHover);
             // 
             // tabPageImports
             // 
@@ -198,14 +201,6 @@
             this.tabPageExport.Text = "Exports ";
             this.tabPageExport.UseVisualStyleBackColor = true;
             // 
-            // listBoxExports
-            // 
-            this.listBoxExports.FormattingEnabled = true;
-            this.listBoxExports.Location = new System.Drawing.Point(19, 16);
-            this.listBoxExports.Name = "listBoxExports";
-            this.listBoxExports.Size = new System.Drawing.Size(413, 251);
-            this.listBoxExports.TabIndex = 2;
-            // 
             // labelNoExports
             // 
             this.labelNoExports.AutoSize = true;
@@ -214,6 +209,14 @@
             this.labelNoExports.Size = new System.Drawing.Size(78, 13);
             this.labelNoExports.TabIndex = 1;
             this.labelNoExports.Text = "labelNoExports";
+            // 
+            // listBoxExports
+            // 
+            this.listBoxExports.FormattingEnabled = true;
+            this.listBoxExports.Location = new System.Drawing.Point(19, 16);
+            this.listBoxExports.Name = "listBoxExports";
+            this.listBoxExports.Size = new System.Drawing.Size(413, 251);
+            this.listBoxExports.TabIndex = 2;
             // 
             // tabPageHeaders
             // 
@@ -564,7 +567,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ImportName;
         private System.Windows.Forms.DataGridViewTextBoxColumn BaseAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn Dependency;
-
+        private System.Windows.Forms.ToolTip toolTipDependencies;
     }
 }
 

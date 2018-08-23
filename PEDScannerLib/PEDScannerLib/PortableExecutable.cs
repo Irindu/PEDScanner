@@ -1088,6 +1088,7 @@ namespace PEDScannerLib.Core
         public PeHeaderReader reader;
 
         public List<PortableExecutable> Dependencies;
+        public List<string> MissingDependencies;
         public List<FunctionObject> ExportedFunctions;
         public List<ImportFunctionObject> ImportFunctions;
         public List<HeaderObject> Headers;
@@ -1104,6 +1105,7 @@ namespace PEDScannerLib.Core
 
 
             ExportedFunctions = new List<FunctionObject>();
+            MissingDependencies = new List<string>();
             ImportFunctions = new List<ImportFunctionObject>();
             Headers = new List<HeaderObject>();
             Sections = new List<SectionObject>();
@@ -1125,9 +1127,15 @@ namespace PEDScannerLib.Core
             PortableExecutable PE;
             foreach (string name in ImportNames)
             {
+                try{
                 string filePath = GetModulePath(name, directoryPath);
                 PE = new PortableExecutable(name, filePath);
                 Dependencies.Add(PE);
+                    }
+                catch(Exception e){
+                    this.MissingDependencies.Add(name);
+                    }
+               
             }
             return Dependencies;
         }
