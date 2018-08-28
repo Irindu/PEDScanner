@@ -15,3 +15,9 @@ C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug
 C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.csproj.CoreCompileInputs.cache
 C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.dll
 C:\Users\user\Desktop\FinalRepo\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.pdb
+C:\Users\user\Desktop\PEDScaneer27_08\PEDScanner\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.dll
+C:\Users\user\Desktop\PEDScaneer27_08\PEDScanner\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.pdb
+C:\Users\user\Desktop\PEDScaneer27_08\PEDScanner\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.csprojAssemblyReference.cache
+C:\Users\user\Desktop\PEDScaneer27_08\PEDScanner\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\PEDScaneer27_08\PEDScanner\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.dll
+C:\Users\user\Desktop\PEDScaneer27_08\PEDScanner\PEDScanner\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.pdb
