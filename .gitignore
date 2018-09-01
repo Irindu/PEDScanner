@@ -11,3 +11,6 @@ bin/
 *.pdb
 *.pch
 *.dll
+TestDataGeneratingProgram/x64/
+*.opendb
+*.idb
