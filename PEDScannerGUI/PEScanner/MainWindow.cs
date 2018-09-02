@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PEDScannerLib.Core;
 
-
 namespace PEScanner
 {
     public partial class MainWindow : Form
