@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PEDScannerGUI", "..\PEDScan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PEDScannerLib", "..\PEDScannerLib\PEDScannerLib\PEDScannerLib.csproj", "{51C9AE43-323A-44C0-A244-059D54F9FFCB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppTest", "ConsoleAppTest\ConsoleAppTest.csproj", "{B21B3C38-ACC5-42CA-9856-D7C0904CA06A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{51C9AE43-323A-44C0-A244-059D54F9FFCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51C9AE43-323A-44C0-A244-059D54F9FFCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51C9AE43-323A-44C0-A244-059D54F9FFCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B21B3C38-ACC5-42CA-9856-D7C0904CA06A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B21B3C38-ACC5-42CA-9856-D7C0904CA06A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B21B3C38-ACC5-42CA-9856-D7C0904CA06A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B21B3C38-ACC5-42CA-9856-D7C0904CA06A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
