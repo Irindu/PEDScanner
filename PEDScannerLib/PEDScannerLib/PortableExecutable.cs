@@ -1045,7 +1045,7 @@ namespace PEDScannerLib.Core
         public string Name;
         public string FilePath;
         public PeHeaderReader reader;
-        public bool isLoaded;
+        public bool IsLoadable;
         public List<PortableExecutable> Dependencies;
         public List<DependeciesObject> DependencyNames;
         public List<FunctionObject> ExportedFunctions;
@@ -1056,10 +1056,11 @@ namespace PEDScannerLib.Core
         public List<string> ImportNames;
         // UInt16 SafeDllSearchMode =1;
         public string directoryPath = Directory.GetCurrentDirectory();
-        public PortableExecutable(string Name, string FilePath)
+        public PortableExecutable(string Name, string FilePath, bool IsLoadable)
         {
             this.Name = Name;
             this.FilePath = FilePath;
+            this.IsLoadable = IsLoadable;
             reader = new PeHeaderReader(FilePath);
 
             ExportedFunctions = new List<FunctionObject>();
@@ -1073,68 +1074,79 @@ namespace PEDScannerLib.Core
             LoadImports(FilePath, true);
             LoadExports(FilePath, true);
             GetHeader();
-            FindDependencies();
-            //MakeDependencies();
+            //FindDependencies();
+            MakeDependencies();
             GetDirectories();
         }
 
-         public List<PortableExecutable> MakeDependencies()
+        public List<PortableExecutable> MakeDependencies()
         {
             PortableExecutable PE;
-            foreach (string name in ImportNames)
-            {
-                string filePath = GetModulePath(name, directoryPath);
-                if (FilePath != null)
-                {
-
-                    PE = new PortableExecutable(name, filePath);
-                    Dependencies.Add(PE);
-                }
-            }
-            return Dependencies;
-        }
-
-        public List<DependeciesObject> FindDependencies()
-        {
             unsafe
             {
-                List<string> dependencies = new List<string>();
-                dependencies.AddRange(ImportNames);
-                foreach (string name in dependencies)
+                foreach (string name in ImportNames)
                 {
-                    string filePath;
-                    var hLib2 = LoadLibraryEx(name, 0,
-                               DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
+                    string filePath = GetModulePath(name, directoryPath);
+
+                    var hLib2 = LoadLibraryEx(filePath, 0,
+                                          DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
                     void* hMod2 = (void*)hLib2;
 
                     if (hMod2 != null)
                     {
-                        DependencyNames.Add(new DependeciesObject(name, true));
+                        PE = new PortableExecutable(name, filePath, true);
                     }
                     else
                     {
-                        filePath = GetModulePath(name, directoryPath);
-                        if (filePath != null)
-                        {
-                            var hLib3 = LoadLibraryEx(filePath, 0,
-                              DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
-                            void* hMod3 = (void*)hLib3;
-                            if (hMod3 != null)
-                            {
-                                DependencyNames.Add(new DependeciesObject(name, true));
-                            }
-                            else
-                            {
-                                DependencyNames.Add(new DependeciesObject(name, false));
-                            }
-
-                        }
-
+                        PE = new PortableExecutable(name, filePath, false);
                     }
+                    Dependencies.Add(PE);
+
                 }
-                return DependencyNames;
+                return Dependencies;
             }
         }
+        //public List<DependeciesObject> FindDependencies()
+        //{
+        //    unsafe
+        //    {
+        //        List<string> dependencies = new List<string>();
+        //        dependencies.AddRange(ImportNames);
+        //        foreach (string name in dependencies)
+        //        {
+        //            string filePath;
+        //            var hLib2 = LoadLibraryEx(name, 0,
+        //                       DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
+        //            void* hMod2 = (void*)hLib2;
+
+        //            if (hMod2 != null)
+        //            {
+        //                DependencyNames.Add(new DependeciesObject(name, true));
+        //            }
+        //            else
+        //            {
+        //                filePath = GetModulePath(name, directoryPath);
+        //                if (filePath != null)
+        //                {
+        //                    var hLib3 = LoadLibraryEx(filePath, 0,
+        //                      DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
+        //                    void* hMod3 = (void*)hLib3;
+        //                    if (hMod3 != null)
+        //                    {
+        //                        DependencyNames.Add(new DependeciesObject(name, true));
+        //                    }
+        //                    else
+        //                    {
+        //                        DependencyNames.Add(new DependeciesObject(name, false));
+        //                    }
+
+        //                }
+
+        //            }
+        //        }
+        //        return DependencyNames;
+        //    }
+        //}
 
         public List<HeaderObject> GetHeader()
         {
