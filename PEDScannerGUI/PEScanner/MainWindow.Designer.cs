@@ -75,6 +75,7 @@
             this.toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
             this.toolTipDependencies = new System.Windows.Forms.ToolTip(this.components);
+            this.labelDependecyPath = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPageDependencies.SuspendLayout();
             this.tabPageImports.SuspendLayout();
@@ -112,6 +113,7 @@
             // 
             // tabPageDependencies
             // 
+            this.tabPageDependencies.Controls.Add(this.labelDependecyPath);
             this.tabPageDependencies.Controls.Add(this.treeViewDependencies);
             this.tabPageDependencies.Location = new System.Drawing.Point(4, 25);
             this.tabPageDependencies.Name = "tabPageDependencies";
@@ -125,10 +127,10 @@
             // 
             this.treeViewDependencies.ImageIndex = 0;
             this.treeViewDependencies.ImageList = this.imageListDependencies;
-            this.treeViewDependencies.Location = new System.Drawing.Point(22, 27);
+            this.treeViewDependencies.Location = new System.Drawing.Point(22, 11);
             this.treeViewDependencies.Name = "treeViewDependencies";
             this.treeViewDependencies.SelectedImageIndex = 0;
-            this.treeViewDependencies.Size = new System.Drawing.Size(589, 276);
+            this.treeViewDependencies.Size = new System.Drawing.Size(589, 263);
             this.treeViewDependencies.TabIndex = 0;
             this.treeViewDependencies.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewDependencies_AfterSelect);
             this.treeViewDependencies.MouseHover += new System.EventHandler(this.treeViewDependencies_MouseHover);
@@ -497,6 +499,14 @@
             this.toolStripButtonAbout.Text = "About";
             this.toolStripButtonAbout.Click += new System.EventHandler(this.toolStripButtontoolStripButtonAbout_Click);
             // 
+            // labelDependecyPath
+            // 
+            this.labelDependecyPath.AutoSize = true;
+            this.labelDependecyPath.Location = new System.Drawing.Point(26, 280);
+            this.labelDependecyPath.Name = "labelDependecyPath";
+            this.labelDependecyPath.Size = new System.Drawing.Size(0, 13);
+            this.labelDependecyPath.TabIndex = 1;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -514,6 +524,7 @@
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPageDependencies.ResumeLayout(false);
+            this.tabPageDependencies.PerformLayout();
             this.tabPageImports.ResumeLayout(false);
             this.tabPageImports.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewImportExamined)).EndInit();
@@ -581,6 +592,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Dependency;
         private System.Windows.Forms.ToolTip toolTipDependencies;
         private System.Windows.Forms.ImageList imageListDependencies;
+        private System.Windows.Forms.Label labelDependecyPath;
     }
 }
 
