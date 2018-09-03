@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing;
 using PEDScannerLib.Core;
 
 namespace PEScanner
@@ -274,6 +275,15 @@ namespace PEScanner
         protected void treeViewDependencies_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
             this.SelectedPortableExecutable = (PortableExecutable)e.Node.Tag;
+            if (SelectedPortableExecutable.FilePath != null)
+            {
+                this.labelDependecyPath.Text = "File Path : " + ((PortableExecutable)e.Node.Tag).FilePath;
+            }
+            else {
+                this.labelDependecyPath.Text = "This Dependecy Named " + SelectedPortableExecutable.Name + "is Missing";
+            }
+
+            this.labelDependecyPath.Font = new Font(this.labelDependecyPath.Font, FontStyle.Bold);
         }
 
         private void treeViewDependencies_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -410,6 +420,5 @@ namespace PEScanner
             String[] arrayofNames = FilePath.Split('\\');
             return arrayofNames[arrayofNames.Length - 1];
         }
-
     }
 }
