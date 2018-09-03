@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Security;
+using System.Reflection;
 
 
 namespace PEDScannerLib.Core
@@ -14,6 +15,8 @@ namespace PEDScannerLib.Core
     /// Reads in the header information of the Portable Executable format.
     /// </summary>
     /// 
+
+
     [StructLayout(LayoutKind.Explicit)]
     public unsafe struct IMAGE_IMPORT_BY_NAME
     {
@@ -59,6 +62,7 @@ namespace PEDScannerLib.Core
         [FieldOffset(0)]
         public uint AddressOfData;        // PIMAGE_IMPORT_BY_NAME
     }
+
 
     [StructLayout(LayoutKind.Explicit)]
     public unsafe struct IMAGE_SECTION_HEADER
@@ -377,6 +381,7 @@ namespace PEDScannerLib.Core
 
 
     }
+
 
     public class PeHeaderReader
     {
@@ -874,40 +879,6 @@ namespace PEDScannerLib.Core
                 }
             }
         }
-
-
-
-        //public static PeHeaderReader GetCallingAssemblyHeader()
-        //{
-        //    // Get the path to the calling assembly, which is the path to the
-        //    // DLL or EXE that we want the time of
-        //    string filePath = System.Reflection.Assembly.GetCallingAssembly().Location;
-
-        //    // Get and return the timestamp
-        //    return new PeHeaderReader(filePath);
-        //}
-
-        /// <summary>
-        /// Gets the header of the .NET assembly that called this function
-        /// </summary>
-        /// <returns></returns>
-        //public static PeHeaderReader GetAssemblyHeader()
-        //{
-        //    // Get the path to the calling assembly, which is the path to the
-        //    // DLL or EXE that we want the time of
-        //    string filePath = System.Reflection.Assembly.GetAssembly(typeof(PeHeaderReader)).Location;
-
-        //    // Get and return the timestamp
-        //    return new PeHeaderReader(filePath);
-        //}
-
-        /// <summary>
-        /// Reads in a block from a file and converts it to the struct
-        /// type specified by the template parameter
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="reader"></param>
-        /// <returns></returns>
         public static T FromBinaryReader<T>(BinaryReader reader)
         {
             // Read in a byte array
@@ -986,25 +957,6 @@ namespace PEDScannerLib.Core
             }
         }
 
-        /// <summary>
-        /// Gets the timestamp from the file header
-        /// </summary>
-        //public DateTime TimeStamp
-        //{
-        //    get
-        //    {
-        //        // Timestamp is a date offset from 1970
-        //        DateTime returnValue = new DateTime(1970, 1, 1, 0, 0, 0);
-
-        //        // Add in the number of seconds since 1970/1/1
-        //        returnValue = returnValue.AddSeconds(fileHeader.TimeDateStamp);
-        //        // Adjust to local timezone
-        //        returnValue += TimeZone.CurrentTimeZone.GetUtcOffset(returnValue);
-
-        //        return returnValue;
-        //    }
-        //}
-
         #endregion Properties
     }
     public class HeaderObject
@@ -1043,13 +995,11 @@ namespace PEDScannerLib.Core
     public class DependeciesObject
     {
         public string dependencyName;
-        public bool isLoaded;
-        public bool isMissed;
-        public DependeciesObject(string dependencyName, bool isLoaded, bool isMissed)
+        public bool isLoadable;
+        public DependeciesObject(string dependencyName, bool isLoaded)
         {
             this.dependencyName = dependencyName;
-            this.isLoaded = isLoaded;
-            this.isMissed = isMissed;
+            this.isLoadable = isLoaded;
         }
     }
     public class SectionObject
@@ -1095,6 +1045,7 @@ namespace PEDScannerLib.Core
         public string Name;
         public string FilePath;
         public PeHeaderReader reader;
+        public bool isLoaded;
         public List<PortableExecutable> Dependencies;
         public List<DependeciesObject> DependencyNames;
         public List<FunctionObject> ExportedFunctions;
@@ -1111,7 +1062,6 @@ namespace PEDScannerLib.Core
             this.FilePath = FilePath;
             reader = new PeHeaderReader(FilePath);
 
-
             ExportedFunctions = new List<FunctionObject>();
             ImportFunctions = new List<ImportFunctionObject>();
             Headers = new List<HeaderObject>();
@@ -1124,14 +1074,11 @@ namespace PEDScannerLib.Core
             LoadExports(FilePath, true);
             GetHeader();
             FindDependencies();
-            // MakeDependencies();
+            //MakeDependencies();
             GetDirectories();
         }
 
-
-
-
-        public List<PortableExecutable> MakeDependencies()
+         public List<PortableExecutable> MakeDependencies()
         {
             PortableExecutable PE;
             foreach (string name in ImportNames)
@@ -1158,11 +1105,11 @@ namespace PEDScannerLib.Core
                     string filePath;
                     var hLib2 = LoadLibraryEx(name, 0,
                                DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
-                    void* hMod = (void*)hLib2;
+                    void* hMod2 = (void*)hLib2;
 
-                    if (hMod != null)
+                    if (hMod2 != null)
                     {
-                        DependencyNames.Add(new DependeciesObject(name, true, false));
+                        DependencyNames.Add(new DependeciesObject(name, true));
                     }
                     else
                     {
@@ -1174,16 +1121,15 @@ namespace PEDScannerLib.Core
                             void* hMod3 = (void*)hLib3;
                             if (hMod3 != null)
                             {
-                                DependencyNames.Add(new DependeciesObject(name, true, false));
+                                DependencyNames.Add(new DependeciesObject(name, true));
                             }
                             else
                             {
-                                DependencyNames.Add(new DependeciesObject(name, false, false));
+                                DependencyNames.Add(new DependeciesObject(name, false));
                             }
 
                         }
-                        else
-                            DependencyNames.Add(new DependeciesObject(name, false, true));
+
                     }
                 }
                 return DependencyNames;
@@ -1300,17 +1246,12 @@ namespace PEDScannerLib.Core
                                DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
             unsafe
             {
-
                 {
-
                     void* hMod = (void*)hLib;
-
                     uint size = 0;
                     uint BaseAddress = (uint)hMod;
-
                     if (hMod != null)
                     {
-
                         IMAGE_IMPORT_DESCRIPTOR* pIID = (IMAGE_IMPORT_DESCRIPTOR*)Interop.ImageDirectoryEntryToData((void*)hMod, mappedAsImage, Interop.IMAGE_DIRECTORY_ENTRY_IMPORT, out size);
                         if (pIID != null)
                         {
@@ -1431,10 +1372,10 @@ namespace PEDScannerLib.Core
             return ExportedFunctions;
         }
 
-        List<string> iteratedDirectoryPath = new List<string>();
+        //List<string> iteratedDirectoryPath = new List<string>();
         public String GetModulePath(String moduleName, String currentDirectory)
         {
-            iteratedDirectoryPath.Clear();
+            // iteratedDirectoryPath.Clear();
             // 0. Look in well-known dlls list
 
             // 1. Look in application folder
@@ -1445,21 +1386,24 @@ namespace PEDScannerLib.Core
             {
                 return files.First();
             }
-            iteratedDirectoryPath.Add(applicationFolder);
+
+
+            Environment.SpecialFolder WindowsSystemFolder;
 
             //try 32-bit,64-bit 
-            Environment.SpecialFolder WindowsSystemFolder;
+
 
             if (Is32bitFile())
             {
-                WindowsSystemFolder = Environment.SpecialFolder.System;
+                WindowsSystemFolder = Environment.SpecialFolder.SystemX86;
+
             }
             else
             {
-                WindowsSystemFolder = Environment.SpecialFolder.SystemX86;
+                WindowsSystemFolder = Environment.SpecialFolder.System;
+
             }
-            String WindowsSystemFolderPath = Environment.GetFolderPath(WindowsSystemFolder);
-            //  String WindowsSystemFolderPath = "C:/Windows";
+            string WindowsSystemFolderPath = Environment.GetFolderPath(WindowsSystemFolder);
 
             files = GetFiles(WindowsSystemFolderPath, moduleName);
 
@@ -1467,18 +1411,6 @@ namespace PEDScannerLib.Core
             {
                 return files.First();
             }
-            iteratedDirectoryPath.Add(Environment.GetFolderPath(Environment.SpecialFolder.System));
-            iteratedDirectoryPath.Add(Environment.GetFolderPath(Environment.SpecialFolder.SystemX86));
-
-            //try 64-bit
-            // WindowsSystemFolder = Environment.SpecialFolder.System;
-            //WindowsSystemFolderPath = Environment.GetFolderPath(WindowsSystemFolder);
-            //files = GetFiles(WindowsSystemFolderPath, moduleName);
-
-            //if (files.Count > 0)
-            //{
-            //    return files.First();
-            //}
 
 
             //try windows folder
@@ -1490,9 +1422,6 @@ namespace PEDScannerLib.Core
             {
                 return files.First();
             }
-
-            iteratedDirectoryPath.Add(Environment.GetFolderPath(Environment.SpecialFolder.Windows));
-            //check system PATH
 
             string PATH = Environment.GetEnvironmentVariable("PATH");
             List<String> PATHFolders = new List<string>(PATH.Split(';'));
@@ -1509,7 +1438,6 @@ namespace PEDScannerLib.Core
                         return files.First();
                     }
                 }
-                iteratedDirectoryPath.Add(SystePath);
             }
 
             //check in current directory
@@ -1519,9 +1447,6 @@ namespace PEDScannerLib.Core
             {
                 return files.First();
             }
-
-
-
             return null;
         }
 
@@ -1529,38 +1454,28 @@ namespace PEDScannerLib.Core
         public List<string> GetFiles(string path, string pattern)
         {
             List<string> files = new List<string>();
-            // iteratedDirectoryPath.Add(path);
 
-            if (iteratedDirectoryPath == null || !iteratedDirectoryPath.Contains(path, StringComparer.OrdinalIgnoreCase))
+            try
             {
                 try
                 {
-                    try
-                    {
-                        files.AddRange(Directory.GetFiles(path, pattern, SearchOption.TopDirectoryOnly));
-                    }
-                    catch (DirectoryNotFoundException)
-                    {
-
-                    }
-                    if (files.Count >= 1)
-                    {
-                        return files;
-                    }
-
-                    foreach (var directory in Directory.GetDirectories(path))
-                    {
-                        files.AddRange(GetFiles(directory, pattern));
-                        if (files.Count >= 1)
-                        {
-                            return files;
-                        }
-                    }
+                    files.AddRange(Directory.GetFiles(path, pattern, SearchOption.TopDirectoryOnly));
                 }
-                catch (UnauthorizedAccessException) { }
+                catch (DirectoryNotFoundException)
+                {
+
+                }
+                if (files.Count >= 1)
+                {
+                    return files;
+                }
 
 
             }
+            catch (UnauthorizedAccessException) { }
+
+
+
 
             return files;
         }
