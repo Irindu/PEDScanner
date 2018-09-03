@@ -187,9 +187,12 @@ namespace PEScanner
         void RecursivelyPopulateTheTree(PortableExecutable portableExecutable, TreeNodeCollection tNodes)
         {
 
-            TreeNode treeNode = tNodes.Add(this.ExtractFileNameFromPath(portableExecutable.FilePath));
+            TreeNode treeNode = tNodes.Add(portableExecutable.Name);
+            treeNode.Name = portableExecutable.FilePath;
             treeNode.Tag = portableExecutable;
-
+            treeNode.ImageIndex = (portableExecutable.IsLoadable) ? 1 : 0;
+            treeNode.SelectedImageIndex = 2;
+           // MessageBox.Show(treeNode.ImageIndex + "tree" + treeNode.Name);
             if (portableExecutable.Dependencies.Count == 0)
             {
                 return;
@@ -268,13 +271,6 @@ namespace PEScanner
             }
         }
 
-        private void ThreadProc(PortableExecutable SelectedPortableExecutable)
-        {
-            var frm = new MainWindow(SelectedPortableExecutable);
-            frm.ShowDialog();
-        }
-
-
         protected void treeViewDependencies_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
             this.SelectedPortableExecutable = (PortableExecutable)e.Node.Tag;
@@ -333,13 +329,13 @@ namespace PEScanner
         {
             try
             {
-                this.portableExecutable = new PortableExecutable(this.ExtractFileNameFromPath(filePath), filePath);
+                this.portableExecutable = new PortableExecutable(this.ExtractFileNameFromPath(filePath), filePath , true);
                 this.UpdateUI(this.portableExecutable);
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-                Application.Exit();
+           //     Application.Exit();
             }
 
         }

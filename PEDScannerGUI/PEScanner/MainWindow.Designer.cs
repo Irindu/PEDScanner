@@ -33,6 +33,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageDependencies = new System.Windows.Forms.TabPage();
             this.treeViewDependencies = new System.Windows.Forms.TreeView();
+            this.imageListDependencies = new System.Windows.Forms.ImageList(this.components);
             this.tabPageImports = new System.Windows.Forms.TabPage();
             this.dataGridViewImportExamined = new System.Windows.Forms.DataGridView();
             this.ImportName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -122,12 +123,23 @@
             // 
             // treeViewDependencies
             // 
+            this.treeViewDependencies.ImageIndex = 0;
+            this.treeViewDependencies.ImageList = this.imageListDependencies;
             this.treeViewDependencies.Location = new System.Drawing.Point(22, 27);
             this.treeViewDependencies.Name = "treeViewDependencies";
+            this.treeViewDependencies.SelectedImageIndex = 0;
             this.treeViewDependencies.Size = new System.Drawing.Size(589, 276);
             this.treeViewDependencies.TabIndex = 0;
             this.treeViewDependencies.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewDependencies_AfterSelect);
             this.treeViewDependencies.MouseHover += new System.EventHandler(this.treeViewDependencies_MouseHover);
+            // 
+            // imageListDependencies
+            // 
+            this.imageListDependencies.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListDependencies.ImageStream")));
+            this.imageListDependencies.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListDependencies.Images.SetKeyName(0, "Missing.png");
+            this.imageListDependencies.Images.SetKeyName(1, "Loadable.png");
+            this.imageListDependencies.Images.SetKeyName(2, "Current.png");
             // 
             // tabPageImports
             // 
@@ -568,6 +580,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn BaseAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn Dependency;
         private System.Windows.Forms.ToolTip toolTipDependencies;
+        private System.Windows.Forms.ImageList imageListDependencies;
     }
 }
 
