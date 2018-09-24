@@ -280,7 +280,11 @@ namespace PEScanner
                 this.labelDependecyPath.Text = "File Path : " + ((PortableExecutable)e.Node.Tag).FilePath;
             }
             else {
+<<<<<<< HEAD
                 this.labelDependecyPath.Text = "This Dependecy Named " + SelectedPortableExecutable.Name + " is Missing";
+=======
+                this.labelDependecyPath.Text = "This Dependecy Named " + SelectedPortableExecutable.Name + "is Missing";
+>>>>>>> daa3a621950a7d02859ac85c913a159b47cd1c16
             }
 
             this.labelDependecyPath.Font = new Font(this.labelDependecyPath.Font, FontStyle.Bold);
@@ -419,11 +423,6 @@ namespace PEScanner
         {
             String[] arrayofNames = FilePath.Split('\\');
             return arrayofNames[arrayofNames.Length - 1];
-        }
-
-        private void tabPageDependencies_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

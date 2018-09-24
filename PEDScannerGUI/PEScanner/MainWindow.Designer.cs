@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageDependencies = new System.Windows.Forms.TabPage();
+            this.labelDependecyPath = new System.Windows.Forms.Label();
             this.treeViewDependencies = new System.Windows.Forms.TreeView();
             this.imageListDependencies = new System.Windows.Forms.ImageList(this.components);
             this.tabPageImports = new System.Windows.Forms.TabPage();
@@ -75,7 +76,6 @@
             this.toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
             this.toolTipDependencies = new System.Windows.Forms.ToolTip(this.components);
-            this.labelDependecyPath = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPageDependencies.SuspendLayout();
             this.tabPageImports.SuspendLayout();
@@ -93,6 +93,9 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPageDependencies);
             this.tabControl1.Controls.Add(this.tabPageImports);
             this.tabControl1.Controls.Add(this.tabPageExport);
@@ -122,9 +125,22 @@
             this.tabPageDependencies.TabIndex = 0;
             this.tabPageDependencies.Text = "Dependencies";
             this.tabPageDependencies.UseVisualStyleBackColor = true;
+            this.tabPageDependencies.Click += new System.EventHandler(this.tabPageDependencies_Click);
+            // 
+            // labelDependecyPath
+            // 
+            this.labelDependecyPath.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelDependecyPath.AutoSize = true;
+            this.labelDependecyPath.Location = new System.Drawing.Point(26, 280);
+            this.labelDependecyPath.Name = "labelDependecyPath";
+            this.labelDependecyPath.Size = new System.Drawing.Size(0, 13);
+            this.labelDependecyPath.TabIndex = 1;
             // 
             // treeViewDependencies
             // 
+            this.treeViewDependencies.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewDependencies.ImageIndex = 0;
             this.treeViewDependencies.ImageList = this.imageListDependencies;
             this.treeViewDependencies.Location = new System.Drawing.Point(22, 11);
@@ -158,6 +174,10 @@
             // 
             // dataGridViewImportExamined
             // 
+            this.dataGridViewImportExamined.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridViewImportExamined.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewImportExamined.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dataGridViewImportExamined.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewImportExamined.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -197,6 +217,9 @@
             // 
             // treeViewImports
             // 
+            this.treeViewImports.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewImports.Location = new System.Drawing.Point(18, 20);
             this.treeViewImports.Name = "treeViewImports";
             this.treeViewImports.Size = new System.Drawing.Size(409, 269);
@@ -226,6 +249,9 @@
             // 
             // listBoxExports
             // 
+            this.listBoxExports.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listBoxExports.FormattingEnabled = true;
             this.listBoxExports.Location = new System.Drawing.Point(19, 16);
             this.listBoxExports.Name = "listBoxExports";
@@ -245,6 +271,9 @@
             // 
             // dataGridViewHeaders
             // 
+            this.dataGridViewHeaders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewHeaders.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewHeaders.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewHeaders.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
@@ -282,6 +311,9 @@
             // 
             // dataGridViewSections
             // 
+            this.dataGridViewSections.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewSections.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewSections.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dataGridViewSections.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -334,6 +366,9 @@
             // 
             // dataGridViewDirectories
             // 
+            this.dataGridViewDirectories.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewDirectories.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewDirectories.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.dataGridViewDirectories.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
@@ -364,6 +399,8 @@
             // 
             // buttonAddFile
             // 
+            this.buttonAddFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonAddFile.AutoSize = true;
             this.buttonAddFile.Location = new System.Drawing.Point(628, 410);
             this.buttonAddFile.Name = "buttonAddFile";
             this.buttonAddFile.Size = new System.Drawing.Size(139, 31);
@@ -374,6 +411,7 @@
             // 
             // buttonExamine
             // 
+            this.buttonExamine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonExamine.Location = new System.Drawing.Point(466, 410);
             this.buttonExamine.Name = "buttonExamine";
             this.buttonExamine.Size = new System.Drawing.Size(139, 31);
@@ -447,8 +485,10 @@
             // 
             // toolStripQuickAccess
             // 
-            this.toolStripQuickAccess.AutoSize = false;
+            this.toolStripQuickAccess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.toolStripQuickAccess.CanOverflow = false;
+            this.toolStripQuickAccess.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStripQuickAccess.GripMargin = new System.Windows.Forms.Padding(4);
             this.toolStripQuickAccess.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonOpen,
@@ -459,7 +499,7 @@
             this.toolStripQuickAccess.MaximumSize = new System.Drawing.Size(500, 45);
             this.toolStripQuickAccess.MinimumSize = new System.Drawing.Size(100, 40);
             this.toolStripQuickAccess.Name = "toolStripQuickAccess";
-            this.toolStripQuickAccess.Size = new System.Drawing.Size(500, 40);
+            this.toolStripQuickAccess.Size = new System.Drawing.Size(121, 40);
             this.toolStripQuickAccess.Stretch = true;
             this.toolStripQuickAccess.TabIndex = 4;
             this.toolStripQuickAccess.Text = "Quick Access";
@@ -498,14 +538,6 @@
             this.toolStripButtonAbout.Size = new System.Drawing.Size(40, 35);
             this.toolStripButtonAbout.Text = "About";
             this.toolStripButtonAbout.Click += new System.EventHandler(this.toolStripButtontoolStripButtonAbout_Click);
-            // 
-            // labelDependecyPath
-            // 
-            this.labelDependecyPath.AutoSize = true;
-            this.labelDependecyPath.Location = new System.Drawing.Point(26, 280);
-            this.labelDependecyPath.Name = "labelDependecyPath";
-            this.labelDependecyPath.Size = new System.Drawing.Size(0, 13);
-            this.labelDependecyPath.TabIndex = 1;
             // 
             // MainWindow
             // 
