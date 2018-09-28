@@ -1,0 +1,77 @@
+﻿using System;
+
+namespace PEDScannerLib.Objects
+{
+    public class HeaderObject
+    {
+        public string name;
+        public UInt32 value;
+        public HeaderObject(string headerNames, UInt32 value)
+        {
+            this.name = headerNames;
+            this.value = value;
+        }
+    }
+
+    public class FunctionObject
+    {
+        public string function;
+        public FunctionObject(string functionName)
+        {
+            this.function = functionName;
+        }
+    }
+
+    public class ImportFunctionObject : FunctionObject
+    {
+        public UInt32 baseAddress;
+        public string dependency;
+        public ImportFunctionObject(string functionName, UInt32 baseAddress, string dependency) : base(functionName)
+        {
+            this.baseAddress = baseAddress;
+            this.dependency = dependency;
+        }
+    }
+
+    public class DependeciesObject
+    {
+        public string dependencyName;
+        public bool isLoadable;
+        public DependeciesObject(string dependencyName, bool isLoaded)
+        {
+            this.dependencyName = dependencyName;
+            this.isLoadable = isLoaded;
+        }
+    }
+    public class SectionObject
+    {
+        public string name;
+        public UInt32 virtualAddress;
+        public UInt32 virtualsize;
+        public UInt32 rawDataOffset;
+        public UInt32 rawDataSize;
+
+        public SectionObject(string name, UInt32 virtualAddress, UInt32 virtualsize, UInt32 rawDataOffset, UInt32 rawDataSize)
+        {
+            this.name = name;
+            this.virtualAddress = virtualAddress;
+            this.virtualsize = virtualsize;
+            this.rawDataOffset = rawDataOffset;
+            this.rawDataSize = rawDataSize;
+        }
+
+    }
+
+    public class DirectoryObject
+    {
+        public string name;
+        public UInt32 RVA;
+        public UInt32 Size;
+        public DirectoryObject(string name, UInt32 RVA, UInt32 Size)
+        {
+            this.name = name;
+            this.RVA = RVA;
+            this.Size = Size;
+        }
+    }
+}

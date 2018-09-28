@@ -41,6 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NativeDllStructs.cs" />
+    <Compile Include="PEObjects.cs" />
     <Compile Include="PortableExecutable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

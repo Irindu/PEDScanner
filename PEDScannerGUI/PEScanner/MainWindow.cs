@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 using PEDScannerLib.Core;
+using PEDScannerLib.Objects;
 
 namespace PEScanner
 {

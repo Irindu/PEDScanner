@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using PEDScannerLib.Core;
 using System.IO;
 using PEDScannerLib;
+using PEDScannerLib.Objects;
 
 
 
