@@ -253,22 +253,17 @@ namespace PEScanner
         {
             if (SelectedPortableExecutable != null)
             {
-                // Application.Run(new MainWindow(SelectedPortableExecutable));
 
-                /*   Thread thread = new Thread(() =>
-                   {
-                       Application.Run(new MainWindow(SelectedPortableExecutable));
-                   });
-                   //  thread.ApartmentState = ApartmentState.STA;
-                   thread.Start();
-
-                   Thread newThread = new Thread(new ThreadStart(ThreadProc));
-                   newThread.Start(); */
-                //  this.Hide();
-                MainWindow newMainWindowForm = new MainWindow(SelectedPortableExecutable);
-                newMainWindowForm.Closed += (s, args) => { newMainWindowForm.Close(); };
-                newMainWindowForm.ShowDialog();
-
+                if (SelectedPortableExecutable.FilePath == null)
+                {
+                    MessageBox.Show("The Selected Dependecy " + SelectedPortableExecutable.Name +
+                    " cannot be eamined because it is missing!");
+                }
+                else {
+                    MainWindow newMainWindowForm = new MainWindow(SelectedPortableExecutable);
+                    newMainWindowForm.Closed += (s, args) => { newMainWindowForm.Close(); };
+                    newMainWindowForm.ShowDialog();
+                }
 
             }
         }
