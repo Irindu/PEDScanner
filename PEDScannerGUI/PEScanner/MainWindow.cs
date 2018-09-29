@@ -227,7 +227,7 @@ namespace PEScanner
                 //Put in the Name property whatever neccessery to retrive your data on click event
                 item.Name = filePath;
                 //On-Click event
-                // item.Click += new EventHandler(item_Click);
+                 item.Click += new EventHandler(item_Click);
                 //Add the submenu to the parent menu
                 recentToolStripMenuItem.DropDownItems.Add(item);
             }
