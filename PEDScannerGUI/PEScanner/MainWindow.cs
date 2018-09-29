@@ -352,6 +352,7 @@ namespace PEScanner
             treeViewDependencies.Nodes.Clear();
             treeViewImports.Nodes.Clear();
             listBoxExports.Items.Clear();
+            labelDependecyPath.Text = "";
 
             TreeNodeCollection tNodes = treeViewDependencies.Nodes;
 
