@@ -201,7 +201,7 @@ namespace PEScanner
             }
             else
             {
-                TreeNodeCollection tNodesNextLevel = tNodes[0].Nodes;
+                TreeNodeCollection tNodesNextLevel = treeNode.Nodes;
                 foreach (object __o in portableExecutable.Dependencies)
                 {
                     PortableExecutable pe = (PortableExecutable)__o;
