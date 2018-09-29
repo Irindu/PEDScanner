@@ -192,7 +192,7 @@ namespace PEScanner
             TreeNode treeNode = tNodes.Add(portableExecutable.Name);
             treeNode.Name = portableExecutable.FilePath;
             treeNode.Tag = portableExecutable;
-            treeNode.ImageIndex = (portableExecutable.IsLoadable) ? 1 : 0;
+            treeNode.ImageIndex = (portableExecutable.FilePath != null) ? 1 : 0;
             treeNode.SelectedImageIndex = 2;
            // MessageBox.Show(treeNode.ImageIndex + "tree" + treeNode.Name);
             if (portableExecutable.Dependencies.Count == 0)
@@ -257,7 +257,7 @@ namespace PEScanner
                 if (SelectedPortableExecutable.FilePath == null)
                 {
                     MessageBox.Show("The Selected Dependecy " + SelectedPortableExecutable.Name +
-                    " cannot be eamined because it is missing!");
+                    " cannot be examined because it is missing!");
                 }
                 else {
                     MainWindow newMainWindowForm = new MainWindow(SelectedPortableExecutable);
