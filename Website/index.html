@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PED Scanner</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Favicons -->
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png">
+  <link rel="icon" type="image/x-icon" href="img/Capture.PNG">
+
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="fonts/font-awesome/css/font-awesome.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/prettyPhoto.css">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800,600,300' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" src="js/modernizr.custom.js"></script>
+
+</head>
+
+<body>
+  <div class="fh5co-loader">
+    <!-- <p style="text-align:center; margin: 415px; position: fixed;">WAITING FOR CONTENT</p> -->
+  </div>
+  <!-- Navigation-->
+  <nav id="menu" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only"> </span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+          <span class="icon-bar"></span> </button>
+        <a class="navbar-brand" href="index.html">PED Scanner</a> </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#about-section" class="page-scroll">About</a></li>
+          <li><a href="#services-section" class="page-scroll">Services</a></li>
+          <li><a href="#example-section" class="page-scroll">Implementation</a></li>
+          <li><a href="#team-section" class="page-scroll">Team</a></li>
+          <li><a href="#contact-section" class="page-scroll">Contact</a></li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+  </nav>
+
+  <!-- Header -->
+  <header class="text-center" name="home">
+    <div class="intro-text">
+      <h2><span class="color">Portable Executable Scanner</span></h2>
+      <p>An Open Source DLL Scanner</p>
+      <div class="clearfix"></div>
+  </header>
+  <!-- About Section -->
+  <div id="about-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>About PED Scanner</h2>
+        <hr>
+      </div>
+      <div class="text-justify">
+        <h4>What is PED Scanner?</h4>
+        <p>Portable Executable Scanner’s job basically is to read a DLL/EXE file and extract the information inside
+          that
+          compiled code. Currently, there are many situations when a program or an application fails when trying to run
+          them
+          because they are becoming more complex with using shared libraries and dynamic mechanisms. Therefore,
+          developers
+          need a tool to analyze these programs and find what the dependencies are, what is missing and what the
+          problem
+          with a program is.
+        </p>
+      </div>
+      <div class="text-justify">
+        <h4>Why PED Scanner?</h4>
+        <p>The purpose is to implement a software, capable of supporting in resolving issues with binaries
+          (dependencies
+          of binaries) which share Portable Executable File Format and also to be used as an inspection tool to view
+          information contained in such a file. Most of the software in the market is not that user-friendly.
+          For a better user experience, it is expected to be packed with a user interface that shows the dependency
+          graph that shows the overall picture. Although there are lots of alternative tools present in this domain
+          neither of them provides all the essential features which should be needed to inspect and resolve dependency
+          issues.
+        </p>
+      </div>
+      <div class="animate-box">
+        <a style="font-size:16px; border-radius:3px; " class="btn btn-success" href="https://github.com/Irindu/Dependencies/archive/master.zip">Download</a>
+        <a style="font-size:16px; border-radius:3px; " class="btn btn-default" href="Doxygen/index.html">API Documentation</a>
+        <a style="font-size:16px; border-radius:3px; " class="btn btn-primary" href="https://github.com/stanislous/PEDScanner">Github Repo</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Services Section -->
+  <div id="services-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Main Features</h2>
+        <hr>
+      </div>
+      <div class="space"></div>
+      <div class="row">
+        <div class="col-md-3 col-sm-6 service"> <i class="fa fa-desktop"></i>
+          <h4>Support 32-bit and 64 bit windows module</h4>
+          <p>Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.</p>
+        </div>
+        <div class="col-md-3 col-sm-6 service"> <i class="fa fa-gears"></i>
+          <h4>Detect the missing dependencies</h4>
+          <p>Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque.</p>
+        </div>
+        <div class="col-md-3 col-sm-6 service"> <i class="fa fa-times"></i>
+          <h4>Detects invalid files</h4>
+          <p>Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.</p>
+        </div>
+        <div class="col-md-3 col-sm-6 service"> <i class="fa fa-line-chart"></i>
+          <h4>.Net dll support</h4>
+          <p>Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque.</p>
+        </div>
+      </div>
+      <div class="space"></div>
+      <div class="row">
+        <div class="col-md-3 col-sm-6 service"> <i class="fa fa-file-text-o"></i>
+          <h4>Detects exceptions</h4>
+          <p>Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.</p>
+        </div>
+        <div class="col-md-3 col-sm-6 service"> <i class="fa fa-gears"></i>
+          <h4>Detects reverse dependencies </h4>
+          <p>Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque.</p>
+        </div>
+        <div class="col-md-3 col-sm-6 service"> <i class="fa fa-rocket"></i>
+          <h4>Detects Import/Export mismatches</h4>
+          <p>Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.</p>
+        </div>
+        <div class="col-md-3 col-sm-6 service"> <i class="fa fa-tree"></i>
+          <h4>Display a dependency tree</h4>
+          <p>Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Example Section -->
+  <div id="example-section">
+    <div class="container">
+      <!-- <div class="section-title"> -->
+        <!-- <h2>Doxygen implementation of The project</h2>
+        <hr>
+      </div>
+      <div class="text-justify">
+        <p>Doxygen a tool for writing software reference documentation. The documentation is written within code, and
+          is thus
+          relatively easy to keep up to date. Doxygen can cross reference documentation and code, so that the reader
+          of a document can easily refer to the actual code. Click Here to visit our project implementation.</p>
+      </div>
+      <a style="font-size:16px; border-radius:3px; " class="btn btn-default" href="Doxygen/index.html">Click Here</a> -->
+    </div>
+  </div>
+
+  <!-- Team Section -->
+  <div id="team-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Meet Our Team</h2>
+        <hr>
+      </div>
+      <div id="row">
+        <div class="col-md-3 col-sm-6 team">
+          <div class="thumbnail"> <img src="img/team/01.jpg" alt="..." class="team-img">
+            <div class="caption">
+              <h3>Keerthana R.</h3>
+              <p>Programmer</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 team">
+          <div class="thumbnail"> <img src="img/team/02.jpg" alt="..." class="team-img">
+            <div class="caption">
+              <h3>Irindu Nugawela</h3>
+              <p>Programmer</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 team">
+          <div class="thumbnail"> <img src="img/team/03.jpg" alt="..." class="team-img">
+            <div class="caption">
+              <h3>Shehan Vanderputt</h3>
+              <p>Programmer</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 team">
+          <div class="thumbnail"> <img src="img/team/04.jpg" alt="..." class="team-img">
+            <div class="caption">
+              <h3>Himesh Karunarathna</h3>
+              <p>Mentor</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Contact Section -->
+  <div id="contact-section">
+    <div class="container">
+      <div class="section-title center">
+        <h2>Contact Us</h2>
+        <hr>
+      </div>
+      <div class="col-md-4">
+        <h4>Contact info</h4>
+        <div class="space"></div>
+        <p><i class="fa fa-map-marker"></i>University of Peradeniya,<br>Faculty of Engineering,<br>Sri Lanka.</p>
+        <div class="space"></div>
+        <p><i class="fa fa-envelope-o"></i>stanislousvanderputt@gmail.com</p>
+        <div class="space"></div>
+        <p><i class="fa fa-phone"></i>+94 77 308 2022</p>
+      </div>
+      <div class="col-md-8">
+        <h4>Leave us a message</h4>
+        <form name="sentMessage" id="contactForm" novalidate>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="text" id="name" class="form-control" placeholder="Name" required="required">
+                <p class="help-block text-danger"></p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <input type="email" id="email" class="form-control" placeholder="Email" required="required">
+                <p class="help-block text-danger"></p>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea name="message" id="message" class="form-control" rows="4" placeholder="Message" required></textarea>
+            <p class="help-block text-danger"></p>
+          </div>
+          <div id="success"></div>
+          <button type="submit" class="btn btn-default">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="social-section">
+    <div class="container">
+      <div class="social">
+        <ul>
+          <li><a href="https://github.com/stanislous/PEDScanner"><i class="fa fa-github"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="footer">
+    <div class="container">
+      <p>Copyright &copy; PED Scanner. Designed by Shehan Vanderputt</p>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" src="js/jquery.1.11.1.js"></script>
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+  <script type="text/javascript" src="js/SmoothScroll.js"></script>
+  <script type="text/javascript" src="js/jquery.prettyPhoto.js"></script>
+  <script type="text/javascript" src="js/jquery.isotope.js"></script>
+  <script type="text/javascript" src="js/jqBootstrapValidation.js"></script>
+  <script type="text/javascript" src="js/contact_me.js"></script>
+
+  <!-- Javascripts -->
+  <script type="text/javascript" src="js/main.js"></script>
+</body>
+
+</html>
