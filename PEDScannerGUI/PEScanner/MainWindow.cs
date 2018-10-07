@@ -65,13 +65,43 @@ namespace PEScanner
             {
                 treeViewImports.Show();
                 labelNoImports.Hide();
+
+                Dictionary<string, List<ImportFunctionObject>> ImportsDependecyMap = new Dictionary<string, List<ImportFunctionObject>>();
+
                 foreach (ImportFunctionObject import in imports)
                 {
-                    string[] row = { import.function, import.baseAddress.ToString() };
+                    String nameOfDependecy = import.dependency;
+                    List<ImportFunctionObject> ImportsList;
+                    if (ImportsDependecyMap.ContainsKey(nameOfDependecy))
+                    {
+                        ImportsList = ImportsDependecyMap[nameOfDependecy];
+                    }
+                    else {
+                        ImportsList = new List<ImportFunctionObject>();
+                        ImportsDependecyMap[nameOfDependecy] = ImportsList;
+                    }
+                    ImportsList.Add(import);
+                }
+
+                foreach (string Dependecy in ImportsDependecyMap.Keys)
+                {
+                    TreeNode treeNode = treeViewImports.Nodes.Add(Dependecy);
+                    List<ImportFunctionObject> ImportsList = ImportsDependecyMap[Dependecy];
+
+                    foreach (ImportFunctionObject import in ImportsList) {
+                        TreeNode ChildNode = treeNode.Nodes.Add(import.function);
+                        ChildNode.Tag = import;
+                    }
+                }
+                
+                /*    foreach (ImportFunctionObject import in imports)
+                {
+                  //  string[] row = { import.function, import.baseAddress.ToString() };
                     TreeNode treeNode = treeViewImports.Nodes.Add(import.function);
                     treeNode.Tag = import;
                     treeNode.Nodes.Add(import.dependency);
                 }
+                */
             }
         }
 
@@ -334,16 +364,20 @@ namespace PEScanner
         // the event handler for imports tree it is used to display information about the import node clicked
         private void treeViewImports_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            ImportFunctionObject importFunctionObject = (ImportFunctionObject)e.Node.Tag;
-
-            if (importFunctionObject != null)
+            if (e.Node.Tag != null)
             {
-                dataGridViewImportExamined.Rows.Clear();
-                dataGridViewImportExamined.Show();
-                string[] row = { importFunctionObject.function, importFunctionObject.baseAddress.ToString(), importFunctionObject.dependency };
-                dataGridViewImportExamined.Rows.Add(row);
+                ImportFunctionObject importFunctionObject = (ImportFunctionObject)e.Node.Tag;
 
+                if (importFunctionObject != null)
+                {
+                    dataGridViewImportExamined.Rows.Clear();
+                    dataGridViewImportExamined.Show();
+                    string[] row = { importFunctionObject.function, importFunctionObject.baseAddress.ToString(), importFunctionObject.dependency };
+                    dataGridViewImportExamined.Rows.Add(row);
+
+                }
             }
+            
 
         }
 
