@@ -9,7 +9,9 @@ namespace PEScanner
 {
     public partial class MainWindow : Form
     {
+        //the portable executable file that is currently loaded into the program and displayed in the UI
         PortableExecutable portableExecutable;
+        //the portable executable selected by the user from the UI
         PortableExecutable SelectedPortableExecutable;
 
         public MainWindow()
@@ -37,6 +39,7 @@ namespace PEScanner
             }
         }
 
+        // the Main Window Load Event
         private void MainWindow_Load(object sender, EventArgs e)
         {
             dataGridViewHeaders.Columns[0].Name = "Property";
@@ -47,8 +50,7 @@ namespace PEScanner
 
         }
 
-
-
+        // populate the Import Functions tab given the list of Imports 
         private void PopulateImports(List<ImportFunctionObject> imports)
         {
             treeViewImports.Nodes.Clear();
@@ -71,10 +73,9 @@ namespace PEScanner
                     treeNode.Nodes.Add(import.dependency);
                 }
             }
-
-
         }
 
+        // populate the Export Functions tab given the list of Exports 
         private void PopulateExports(List<FunctionObject> exports)
         {
             if (exports.Count == 0)
@@ -95,6 +96,7 @@ namespace PEScanner
             }
         }
 
+        // populate the Headers tab given the list of Headers 
         private void PopulateHeaders(List<HeaderObject> headers)
         {
 
@@ -112,6 +114,7 @@ namespace PEScanner
 
         }
 
+        // populate the Sections tab given the list of Sections 
         private void PopulateSections(List<SectionObject> sections)
         {
 
@@ -134,6 +137,7 @@ namespace PEScanner
 
         }
 
+        // populate the Directories tab given the list of Directories 
         private void PopulateDirectories(List<DirectoryObject> directories)
         {
 
@@ -153,7 +157,7 @@ namespace PEScanner
 
         }
 
-
+        // handle the "Add File" button click event
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -173,12 +177,14 @@ namespace PEScanner
                 /*  item.Name = this.ExtractFileNameFromPath(filePath); */
                 item.Name = filePath;
                 //On-Click event
+                //Attaching and Event handler for each of the recent items on menu
                 item.Click += new EventHandler(item_Click);
                 //Add the submenu to the parent menu
                 //  fileToolStripMenuItemRecent.DropDownItems.Add(item);
             }
         }
 
+        // the event handler for recent item click event 
         void item_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem item = sender as ToolStripMenuItem;
@@ -186,6 +192,7 @@ namespace PEScanner
             this.UpdateState(filePath);
         }
 
+        // recursively update the dependecy tree on Dependecies tab using the dependecy information of the PE provided
         void RecursivelyPopulateTheTree(PortableExecutable portableExecutable, TreeNodeCollection tNodes)
         {
 
@@ -211,6 +218,7 @@ namespace PEScanner
             }
         }
 
+        // handle the the open button click event from the Open button in tool bar
         private void toolStripButtonOpen_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -234,21 +242,25 @@ namespace PEScanner
 
         }
 
+        // handle the the close button click event from the Close button in tool bar
         private void toolStripButtonClose_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
+        // handle the the about button click event from the About button in tool bar
         private void toolStripButtontoolStripButtonAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Portable Executable Dependecy Scanner 2018! \n Source is available @ https://github.com/Irindu/PEDScanner", "About PED Scanner", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        // handle the the about button click event from the About button in Help Menu
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Portable Executable Dependecy Scanner 2018!", "About PED Scanner", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        //handle "Examine button" click event the selectedPortableExecutable stored in the form class is used here
         private void buttonExamine_Click(object sender, EventArgs e)
         {
             if (SelectedPortableExecutable != null)
@@ -268,6 +280,7 @@ namespace PEScanner
             }
         }
 
+        // the even fired after selecting a certain dependecy from the dependecy tree is handled here 
         protected void treeViewDependencies_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
             this.SelectedPortableExecutable = (PortableExecutable)e.Node.Tag;
@@ -282,12 +295,14 @@ namespace PEScanner
             this.labelDependecyPath.Font = new Font(this.labelDependecyPath.Font, FontStyle.Bold);
         }
 
+        // double click event of a certain dependecy node in the dependecy tree is handled here 
         private void treeViewDependencies_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             PortableExecutable portableExecutable = (PortableExecutable)e.Node.Tag;
             Application.Run(new MainWindow(portableExecutable));
         }
 
+        // the open button click event fired clicking the Open button from file Menu is handled here
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -310,11 +325,13 @@ namespace PEScanner
             }
         }
 
+        // the Exit button click event fired clicking the Exit button from file Menu is handled here
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
+        // the event handler for imports tree it is used to display information about the import node clicked
         private void treeViewImports_AfterSelect(object sender, TreeViewEventArgs e)
         {
             ImportFunctionObject importFunctionObject = (ImportFunctionObject)e.Node.Tag;
@@ -386,6 +403,7 @@ namespace PEScanner
             //}
         }
 
+        // mouse hover event of dependecy tree node used to display a tooltip text to 
         private void treeViewDependencies_MouseHover(object sender, EventArgs e)
         {
             // Get the node at the current mouse pointer location.
