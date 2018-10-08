@@ -59,12 +59,12 @@ namespace PEDScannerLib.Core
             DependencyNames = new List<DependeciesObject>();
             Dependencies = new List<PortableExecutable>();
 
+            LoadImports(FilePath, true);
             LoadExports(FilePath, true);
             GetHeader();
-            LoadImports(FilePath, true);
             GetAssemblyDependencies(FilePath);
-            MakeDependencies();
             GetDirectories();
+            LoadDependencies();
         }
         /// <summary>
         /// Check whether the library is loaded succefully or not.
@@ -80,7 +80,7 @@ namespace PEDScannerLib.Core
         /// Load each of the dependencies as a Portable Executable Object
         /// </summary>
         /// <returns> The Dependencies in a Portable Executable File Format </returns>
-        public List<PortableExecutable> MakeDependencies()
+        private List<PortableExecutable> LoadDependencies()
         {
             PortableExecutable PE;
             unsafe
@@ -112,7 +112,7 @@ namespace PEDScannerLib.Core
         /// </summary>
         /// <param name="FilePath"></param>
         /// <returns></returns>
-        public List<ImportFunctionObject> GetAssemblyDependencies(string FilePath)
+        private List<ImportFunctionObject> GetAssemblyDependencies(string FilePath)
         {
             if (FilePath != null)
             {
@@ -153,7 +153,7 @@ namespace PEDScannerLib.Core
         /// find the header information
         /// </summary>
         /// <returns></returns>
-        public List<HeaderObject> GetHeader()
+        private List<HeaderObject> GetHeader()
         {
             IMAGE_FILE_HEADER fileHeader = reader.FileHeader;
             UInt16 machine = fileHeader.Machine;
@@ -177,7 +177,7 @@ namespace PEDScannerLib.Core
         /// find the section information for a given file
         /// </summary>
         /// <returns></returns>
-        public List<SectionObject> GetSections()
+        private List<SectionObject> GetSections()
         {
             PeHeaderReader.IMAGE_SECTION_HEADER[] sections = reader.ImageSectionHeaders;
             IMAGE_FILE_HEADER fileheader = reader.FileHeader;
@@ -208,7 +208,7 @@ namespace PEDScannerLib.Core
         /// find the directories
         /// </summary>
         /// <returns></returns>
-        public List<DirectoryObject> GetDirectories()
+        private List<DirectoryObject> GetDirectories()
         {
             unsafe
             {
@@ -258,7 +258,7 @@ namespace PEDScannerLib.Core
         /// <param name="filePath"></param>
         /// <param name="mappedAsImage"></param>
         /// <returns></returns>
-        public List<ImportFunctionObject> LoadImports(string filePath, bool mappedAsImage)
+        private List<ImportFunctionObject> LoadImports(string filePath, bool mappedAsImage)
         {
             var hLib = LoadLibraryEx(filePath, 0,
                                DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
@@ -338,7 +338,7 @@ namespace PEDScannerLib.Core
         /// <param name="filePath"></param>
         /// <param name="mappedAsImage"></param>
         /// <returns></returns>
-        public List<FunctionObject> LoadExports(string filePath, bool mappedAsImage)
+        private List<FunctionObject> LoadExports(string filePath, bool mappedAsImage)
         {
             var hLib = LoadLibraryEx(filePath, 0,
                                DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
@@ -376,7 +376,7 @@ namespace PEDScannerLib.Core
         /// <param name="moduleName"></param>
         /// <param name="currentDirectory"></param>
         /// <returns></returns>
-        public String GetModulePath(String moduleName, String currentDirectory)
+        private String GetModulePath(String moduleName, String currentDirectory)
         {
             // iteratedDirectoryPath.Clear();
             // 0. Look in well-known dlls list
@@ -443,7 +443,7 @@ namespace PEDScannerLib.Core
         /// <param name="path"></param>
         /// <param name="pattern"></param>
         /// <returns></returns>
-        public List<string> GetFiles(string path, string pattern)
+        private List<string> GetFiles(string path, string pattern)
         {
             List<string> files = new List<string>();
             try
