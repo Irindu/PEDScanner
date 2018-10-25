@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using PEDScannerLib.Core;
 using PEDScannerLib.Objects;
+using System.Collections;
 
 namespace PEScanner
 {
@@ -382,11 +383,14 @@ namespace PEScanner
         }
 
         //update the state of the UI window
+        public List<string> listOfBranch;
         void UpdateState(String filePath)
         {
             try
             {
-                this.portableExecutable = new PortableExecutable(this.ExtractFileNameFromPath(filePath), filePath , true);
+                listOfBranch = new List<string>();
+                listOfBranch.Add(this.ExtractFileNameFromPath(filePath));
+                this.portableExecutable = new PortableExecutable(this.ExtractFileNameFromPath(filePath), filePath , true, listOfBranch);
                 this.UpdateUI(this.portableExecutable);
             }
             catch (Exception e)
@@ -413,8 +417,8 @@ namespace PEScanner
                 PopulateHeaders(portableExecutable.Headers);
                 PopulateImports(portableExecutable.ImportFunctions);
                 PopulateExports(portableExecutable.ExportedFunctions);
-                PopulateSections(portableExecutable.GetSections());
-                PopulateDirectories(portableExecutable.GetDirectories());
+                PopulateSections(portableExecutable.Sections);
+                PopulateDirectories(portableExecutable.Directories);
             }
 
             //  pe.MakeImports();

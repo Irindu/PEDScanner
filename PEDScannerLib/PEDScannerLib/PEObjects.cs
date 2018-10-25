@@ -5,8 +5,8 @@ namespace PEDScannerLib.Objects
     public class HeaderObject
     {
         public string name;
-        public UInt32 value;
-        public HeaderObject(string headerNames, UInt32 value)
+        public string value;
+        public HeaderObject(string headerNames, string value)
         {
             this.name = headerNames;
             this.value = value;

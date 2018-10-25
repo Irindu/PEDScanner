@@ -16,43 +16,43 @@ namespace PEDScannerConsoleApp
 {
     class Program
     {
-    static void Main(string[] args)
+        static void Main(string[] args)
         {
             string path = @"E://Project1.exe";
 
             string fileName = Path.GetFileName(path);
             Console.WriteLine("Hello World!");
+            List<string> listWithRoot = new List<string>
+            {
+                fileName
+            };
             PortableExecutable PE;
             
-            PE = new PortableExecutable(fileName, path,true);
-            
+            PE = new PortableExecutable(fileName, path,true, listWithRoot);
+
             unsafe
             {
-            
-                List<PortableExecutable> pe = PE.MakeDependencies();
+
+                List<PortableExecutable> pe = PE.Dependencies;
                 foreach (PortableExecutable porte in pe)
                 {
                     Console.WriteLine("dependency Path={0}, dependency name={1}, is loaded={2}", porte.FilePath, porte.Name, porte.IsLoadable);
                 }
-                //List<DependeciesObject> dependencies2 = PE.FindDependencies();
-                //foreach (DependeciesObject dependencyobject in dependencies2)
-                //{
-                //    Console.WriteLine("Name = {0},Isloaded={1}", dependencyobject.dependencyName, dependencyobject.isLoadable);
-                //}
+                
 
-                List<ImportFunctionObject> importFunctions = PE.LoadImports(path, true);
+                List<ImportFunctionObject> importFunctions = PE.ImportFunctions;
                 foreach (ImportFunctionObject import in importFunctions)
                 {
                     Console.WriteLine("import function= {0}, Address ={1}, dependency = {2}", import.function, import.baseAddress, import.dependency);
                 }
 
 
-                List<FunctionObject> exportedFunctions = PE.LoadExports(path, true);
+                List<FunctionObject> exportedFunctions = PE.ExportedFunctions;
                 foreach (FunctionObject export in exportedFunctions)
                 {
                     Console.WriteLine("exports={0}", export.function);
                 }
-                List<HeaderObject> headers = PE.GetHeader();
+                List<HeaderObject> headers = PE.Headers;
 
                 foreach (HeaderObject header in headers)
                 {
@@ -60,12 +60,12 @@ namespace PEDScannerConsoleApp
                 }
 
                 // List<SectionObject> sections = PE.GetSections();
-                List<DirectoryObject> directories = PE.GetDirectories();
+                List<DirectoryObject> directories = PE.Directories;
                 foreach (DirectoryObject directory in directories)
                 {
                     Console.WriteLine("name={0}, virtual ={1}, length={2}", directory.name, directory.RVA, directory.Size);
                 }
-                List<SectionObject> sections = PE.GetSections();
+                List<SectionObject> sections = PE.Sections;
                 foreach (SectionObject section in sections)
                 {
                     Console.WriteLine("nameOfSection={0}, virtualAddress={1}, virtualSize={2}, pointerToRawData={3}, sizeOFrawData={4}", section.name, section.virtualAddress, section.virtualsize, section.rawDataOffset, section.rawDataSize);
@@ -73,7 +73,7 @@ namespace PEDScannerConsoleApp
                 }
 
             }
-           
+
             Console.ReadKey();
         }
 

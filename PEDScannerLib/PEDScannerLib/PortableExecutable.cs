@@ -9,7 +9,7 @@ using System.Security;
 using System.Reflection;
 using PEDScannerLib.Struct;
 using PEDScannerLib.Objects;
-
+using System.Collections;
 
 namespace PEDScannerLib.Core
 {
@@ -41,15 +41,21 @@ namespace PEDScannerLib.Core
         public List<SectionObject> Sections;
         public List<DirectoryObject> Directories;
         public List<string> ImportNames;
+        public List<string> listOfBranch; 
         public Assembly assembly;
+        static Hashtable filePathsTable = new Hashtable();
+       // static Hashtable peObjects = new Hashtable();
+      //  public List<string> listOfBranch = new List<string>();
+      
         public string directoryPath = Directory.GetCurrentDirectory();
-        public PortableExecutable(string Name, string FilePath, bool IsLoadable)
+        public PortableExecutable(string Name, string FilePath, bool IsLoadable, List<string> listOfBranches)
         {
             this.Name = Name;
             this.FilePath = FilePath;
             this.IsLoadable = IsLoadable;
-            reader = new PeHeaderReader(FilePath);
+            this.listOfBranch = listOfBranches;
 
+            reader = new PeHeaderReader(FilePath);
             ExportedFunctions = new List<FunctionObject>();
             ImportFunctions = new List<ImportFunctionObject>();
             Headers = new List<HeaderObject>();
@@ -58,14 +64,16 @@ namespace PEDScannerLib.Core
             ImportNames = new List<string>();
             DependencyNames = new List<DependeciesObject>();
             Dependencies = new List<PortableExecutable>();
-
+            GetDirectories();
+           //GetSections();
             LoadImports(FilePath, true);
             LoadExports(FilePath, true);
             GetHeader();
             GetAssemblyDependencies(FilePath);
-            GetDirectories();
             LoadDependencies();
         }
+
+       
         /// <summary>
         /// Check whether the library is loaded succefully or not.
         /// </summary>
@@ -76,6 +84,7 @@ namespace PEDScannerLib.Core
             return LoadLibrary(fileName) == IntPtr.Zero;
         }
 
+
         /// <summary>
         /// Load each of the dependencies as a Portable Executable Object
         /// </summary>
@@ -83,24 +92,46 @@ namespace PEDScannerLib.Core
         private List<PortableExecutable> LoadDependencies()
         {
             PortableExecutable PE;
+            string filePath;
             unsafe
             {
+                ImportNames = ImportNames.Distinct().ToList();
                 foreach (string name in ImportNames)
                 {
-                    string filePath = GetModulePath(name, directoryPath);
-
-                    var hLib2 = LoadLibraryEx(filePath, 0,
-                                          DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
-                    if (!CheckLibrary(name))
+                    if (!filePathsTable.ContainsKey(name))
                     {
-                        PE = new PortableExecutable(name, filePath, true);
+                        filePath = GetModulePath(name, directoryPath);
+                        if (filePath != null)
+                        {
+                            filePathsTable.Add(name, filePath);
+                        }
                     }
                     else
                     {
-                        PE = new PortableExecutable(name, filePath, false);
+                        filePath = filePathsTable[name].ToString();
                     }
-                    Dependencies.Add(PE);
-
+                   
+                    var hLib2 = LoadLibraryEx(filePath, 0,
+                                          DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
+                    if (listOfBranch.Contains(name))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        List<string> newBranchList = listOfBranch.ToList();
+                        newBranchList.Add(name);
+                            if (!CheckLibrary(name))
+                            {
+                                PE = new PortableExecutable(name, filePath, true, newBranchList);
+                            }
+                            else
+                            {
+                                PE = new PortableExecutable(name, filePath, false, newBranchList);
+                            }
+                            Dependencies.Add(PE);
+                    }
+                    
                 }
                 return Dependencies;
             }
@@ -132,20 +163,36 @@ namespace PEDScannerLib.Core
                         {
 
                             DllImportAttribute attr = method.GetCustomAttributes(typeof(DllImportAttribute), false)[0] as DllImportAttribute;
-
-                            ImportFunctions.Add(new ImportFunctionObject(method.Name, 0, attr.Value));
-                            ImportNames.Add(attr.Value);
+                            if (!attr.Value.Contains("api-ms-win"))
+                            {
+                                ImportFunctions.Add(new ImportFunctionObject(method.Name, 0, attr.Value));
+                                ImportNames.Add(attr.Value);
+                            }
                         }
                     }
 
                     // Find the set of assemblies our assemblies reference
                     foreach (AssemblyName an in assembly.GetReferencedAssemblies())
                     {
-                        ImportNames.Add((an.Name + ".dll"));
+                        if (!an.Name.Contains("api-ms-win"))
+                        {
+                            ImportNames.Add((an.Name + ".dll"));
+                        }
+                    }
+                    //find file path for assembly dependencies
+                    foreach (Assembly b in AppDomain.CurrentDomain.GetAssemblies())
+                    {
+                        string codeBase = b.CodeBase;
+                        UriBuilder uri = new UriBuilder(codeBase);
+                        string pathOfAssembly = Uri.UnescapeDataString(uri.Path);
+                        string assemblyName = Path.GetFileName(pathOfAssembly);
+                        if (!filePathsTable.ContainsKey(assemblyName))
+                        {
+                            filePathsTable.Add(assemblyName, pathOfAssembly);
+                        }
                     }
                 }
             }
-
             return ImportFunctions;
         }
 
@@ -163,13 +210,15 @@ namespace PEDScannerLib.Core
             UInt32 numberOfSymbols = fileHeader.NumberOfSymbols;
             UInt16 sizeOfOptionalHeader = fileHeader.SizeOfOptionalHeader;
             UInt16 characteristics = fileHeader.Characteristics;
-            Headers.Add(new HeaderObject("Machine", machine));
-            Headers.Add(new HeaderObject("Number of sections", numberOfSections));
-            Headers.Add(new HeaderObject("Timestamp", timeDateStamp));
-            Headers.Add(new HeaderObject("Pointer to symbol table", pointerToSymbolTable));
-            Headers.Add(new HeaderObject("Number of symbols", numberOfSymbols));
-            Headers.Add(new HeaderObject("Size of optional header", sizeOfOptionalHeader));
-            Headers.Add(new HeaderObject("Characteristics", characteristics));
+            string MachineType = GetMachineType();
+            string character = GetCharacterInformation(characteristics);
+            Headers.Add(new HeaderObject("Machine", MachineType));
+            Headers.Add(new HeaderObject("Number of sections", numberOfSections.ToString()));
+            Headers.Add(new HeaderObject("Timestamp", timeDateStamp.ToString()));
+            Headers.Add(new HeaderObject("Pointer to symbol table", pointerToSymbolTable.ToString()));
+            Headers.Add(new HeaderObject("Number of symbols", numberOfSymbols.ToString()));
+            Headers.Add(new HeaderObject("Size of optional header", sizeOfOptionalHeader.ToString()));
+            Headers.Add(new HeaderObject("Characteristics", character));
             return Headers;
         }
 
@@ -182,9 +231,6 @@ namespace PEDScannerLib.Core
             PeHeaderReader.IMAGE_SECTION_HEADER[] sections = reader.ImageSectionHeaders;
             IMAGE_FILE_HEADER fileheader = reader.FileHeader;
             UInt32 numberofSection = fileheader.NumberOfSections;
-
-            System.Diagnostics.Debug.WriteLine("number={0}", numberofSection);
-
             foreach (PeHeaderReader.IMAGE_SECTION_HEADER section in sections)
             {
                 char[] name = section.Name;
@@ -198,7 +244,7 @@ namespace PEDScannerLib.Core
                 UInt16 NumberOfLineNumbers = section.NumberOfLinenumbers;
                 PeHeaderReader.DataSectionFlags dataSectionFlags = section.Characteristics;
                 string nameOfSection = section.Section;
-                //System.Diagnostics.Debug.WriteLine(section.Section);
+                System.Diagnostics.Debug.WriteLine(section.Section);
                 Sections.Add(new SectionObject(nameOfSection, virtualAddress, virtualSize, pointerToRawData, sizeOFrawData));
             }
             return Sections;
@@ -282,39 +328,42 @@ namespace PEDScannerLib.Core
                                     //Thus convert it to a virtual address first.
                                     char* szName = (char*)(BaseAddress + pIID->Name);
                                     string name = Marshal.PtrToStringAnsi((IntPtr)szName);
-                                    ImportNames.Add(name);
-                                    // value in OriginalFirstThunk is an RVA. 
-                                    // convert it to virtual address.
-                                    THUNK_DATA* pThunkOrg = (THUNK_DATA*)(BaseAddress + pIID->OriginalFirstThunk);
-                                    while (pThunkOrg->AddressOfData != 0)
+                                    if (!name.Contains("api-ms-win"))
                                     {
-                                        char* szImportName;
-                                        uint Ord;
-
-                                        if ((pThunkOrg->Ordinal & 0x80000000) > 0)
+                                        ImportNames.Add(name);
+                                        // value in OriginalFirstThunk is an RVA. 
+                                        // convert it to virtual address.
+                                        THUNK_DATA* pThunkOrg = (THUNK_DATA*)(BaseAddress + pIID->OriginalFirstThunk);
+                                        while (pThunkOrg->AddressOfData != 0)
                                         {
-                                            Ord = pThunkOrg->Ordinal & 0xffff;
-                                            // System.Diagnostics.Debug.WriteLine("imports ({0}).Ordinal{1} - Address: {2}", name, Ord, pThunkOrg->Function);
-                                        }
-                                        else
-                                        {
-                                            IMAGE_IMPORT_BY_NAME* pIBN = (IMAGE_IMPORT_BY_NAME*)(BaseAddress + pThunkOrg->AddressOfData);
+                                            char* szImportName;
+                                            uint Ord;
 
-                                            if (!Interop.IsBadReadPtr((void*)pIBN, (uint)sizeof(IMAGE_IMPORT_BY_NAME)))
+                                            if ((pThunkOrg->Ordinal & 0x80000000) > 0)
                                             {
-                                                Ord = pIBN->Hint;
-                                                szImportName = (char*)pIBN->Name;
-                                                string sImportName = Marshal.PtrToStringAnsi((IntPtr)szImportName);
-                                                // System.Diagnostics.Debug.WriteLine("imports ({0}).{1}@{2} - Address: {3}", name, sImportName, Ord, pThunkOrg->Function);
-                                                UInt32 Address = pThunkOrg->Function;
-                                                ImportFunctions.Add(new ImportFunctionObject(sImportName, Address, name));
+                                                Ord = pThunkOrg->Ordinal & 0xffff;
                                             }
                                             else
                                             {
-                                                break;
+                                                IMAGE_IMPORT_BY_NAME* pIBN = (IMAGE_IMPORT_BY_NAME*)(BaseAddress + pThunkOrg->AddressOfData);
+
+                                                if (!Interop.IsBadReadPtr((void*)pIBN, (uint)sizeof(IMAGE_IMPORT_BY_NAME)))
+                                                {
+                                                    Ord = pIBN->Hint;
+                                                    szImportName = (char*)pIBN->Name;
+                                                    string sImportName = Marshal.PtrToStringAnsi((IntPtr)szImportName);
+
+                                                    UInt32 Address = pThunkOrg->Function;
+
+                                                    ImportFunctions.Add(new ImportFunctionObject(sImportName, Address, name));
+                                                }
+                                                else
+                                                {
+                                                    break;
+                                                }
                                             }
+                                            pThunkOrg++;
                                         }
-                                        pThunkOrg++;
                                     }
                                 }
                                 catch (Exception e)
@@ -571,6 +620,85 @@ namespace PEDScannerLib.Core
 
                 return true;
             }
+        }
+
+        public static string GetCharacterInformation(UInt32 characterValue)
+        {
+            int i = 0, j, temp = 0;
+            char[] hexadecimalNumber = new char[100];
+            char temp1;
+            string assemblyInformation = null;
+            while (characterValue != 0)
+            {
+                
+                temp = (int)characterValue % 16;
+                if (temp < 10)
+                    temp = temp + 48;
+                else
+                    temp = temp + 55;
+                temp1 = Convert.ToChar(temp);
+                hexadecimalNumber[i++] = temp1;
+                characterValue = characterValue / 16;
+            }
+        
+            switch (hexadecimalNumber[0])
+            {
+                case '1':
+                    assemblyInformation = assemblyInformation + "Relocation information was stripped from the file. " + Environment.NewLine ;
+                    break;
+                case '2':
+                    assemblyInformation = assemblyInformation + "The file is executable" + Environment.NewLine;
+                    break;
+                case '4':
+                    assemblyInformation= assemblyInformation + "PE line numbers were stripped from the file." + Environment.NewLine;
+                    break;
+                case '8':
+                    assemblyInformation = assemblyInformation + "PE symbol table entries were stripped from file." + Environment.NewLine;
+                    break;
+            }
+            switch (hexadecimalNumber[1])
+            {
+                case '1':
+                    assemblyInformation = assemblyInformation + "Aggressively trim the working set.  " + Environment.NewLine;
+                    break;
+                case '2':
+                    assemblyInformation = assemblyInformation + "The application can handle addresses larger than 2 GB." + Environment.NewLine;
+                    break;
+                case '8':
+                    assemblyInformation = assemblyInformation + "The bytes of the word are reversed. " + Environment.NewLine;
+                    break;
+            }
+            switch (hexadecimalNumber[2])
+            {
+                case '1':
+                    assemblyInformation = assemblyInformation + "The computer supports 32-bit words. " + Environment.NewLine;
+                    break;
+                case '2':
+                    assemblyInformation = assemblyInformation + "Debugging information was removed and stored separately in another file." + Environment.NewLine;
+                    break;
+                case '4':
+                    assemblyInformation = assemblyInformation + "If the image is on removable media, copy it to and run it from the swap file." + Environment.NewLine;
+                    break;
+                case '8':
+                    assemblyInformation = assemblyInformation + "If the image is on the network, copy it to and run it from the swap file." + Environment.NewLine;
+                    break;
+            }
+            switch (hexadecimalNumber[3])
+            {
+                case '1':
+                    assemblyInformation = assemblyInformation + "The image is a system file. " + Environment.NewLine;
+                    break;
+                case '2':
+                    assemblyInformation = assemblyInformation + "The image is a DLL file. " + Environment.NewLine;
+                    break;
+                case '4':
+                    assemblyInformation = assemblyInformation + "The file should be run only on a uniprocessor computer." + Environment.NewLine;
+                    break;
+                case '8':
+                    assemblyInformation = assemblyInformation + "The bytes of the word are reversed. This flag is obsolete." + Environment.NewLine;
+                    break;
+            }
+            return assemblyInformation;
         }
     }
 }
