@@ -62,13 +62,9 @@ namespace PEDScannerLib.Core
             ImportNames = new List<string>();
             DependencyNames = new List<DependeciesObject>();
             Dependencies = new List<PortableExecutable>();
-
-            PortableExecutableLoader portableExecutableLoader = new PortableExecutableLoader();
-            portableExecutableLoader.Load(this);
-
         }
     }
-        class PortableExecutableLoader
+        public class PortableExecutableLoader
         {
 
             const uint DONT_RESOLVE_DLL_REFERENCES = 0x00000001;
@@ -108,7 +104,7 @@ namespace PEDScannerLib.Core
                 GetHeader(Headers, reader);
                 GetAssemblyDependencies(FilePath, ImportFunctions, ImportNames);
                 GetDirectories(Directories, reader);
-                LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader,listOfBranch);
+                LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader,listOfBranch,this);
 
             }
 
@@ -127,7 +123,7 @@ namespace PEDScannerLib.Core
         /// Load each of the dependencies as a Portable Executable Object
         /// </summary>
         /// <returns> The Dependencies in a Portable Executable File Format </returns>
-        private void LoadDependencies(List<string> ImportNames, List<PortableExecutable> Dependencies, String currentDirectory, String FilePath, PeHeaderReader reader, List<string> listOfBranch)
+        private void LoadDependencies(List<string> ImportNames, List<PortableExecutable> Dependencies, String currentDirectory, String FilePath, PeHeaderReader reader, List<string> listOfBranch, PortableExecutableLoader portableExecutableLoader)
         {
             PortableExecutable PE;
             string filePath;
@@ -166,7 +162,9 @@ namespace PEDScannerLib.Core
                         else
                         {
                             PE = new PortableExecutable(name, filePath, false, newBranchList);
+
                         }
+                        portableExecutableLoader.Load(PE);
                         Dependencies.Add(PE);
                     }
 

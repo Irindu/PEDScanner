@@ -413,6 +413,8 @@ namespace PEScanner
 
             if (portableExecutable != null)
             {
+                PortableExecutableLoader portableExecutableLoader = new PortableExecutableLoader();
+                portableExecutableLoader.Load(portableExecutable);
                 RecursivelyPopulateTheTree(portableExecutable, tNodes);
                 PopulateHeaders(portableExecutable.Headers);
                 PopulateImports(portableExecutable.ImportFunctions);
