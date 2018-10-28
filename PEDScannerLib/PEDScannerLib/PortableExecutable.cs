@@ -41,11 +41,9 @@ namespace PEDScannerLib.Core
         public List<SectionObject> Sections;
         public List<DirectoryObject> Directories;
         public List<string> ImportNames;
-        public List<string> listOfBranch; 
+        public List<string> listOfBranch;
         public Assembly assembly;
         static Hashtable filePathsTable = new Hashtable();
-       // static Hashtable peObjects = new Hashtable();
-      //  public List<string> listOfBranch = new List<string>();
       
         public string directoryPath = Directory.GetCurrentDirectory();
         public PortableExecutable(string Name, string FilePath, bool IsLoadable, List<string> listOfBranches)
@@ -55,7 +53,7 @@ namespace PEDScannerLib.Core
             this.IsLoadable = IsLoadable;
             this.listOfBranch = listOfBranches;
 
-            reader = new PeHeaderReader(FilePath);
+            // reader = new PeHeaderReader(FilePath);
             ExportedFunctions = new List<FunctionObject>();
             ImportFunctions = new List<ImportFunctionObject>();
             Headers = new List<HeaderObject>();
@@ -64,32 +62,72 @@ namespace PEDScannerLib.Core
             ImportNames = new List<string>();
             DependencyNames = new List<DependeciesObject>();
             Dependencies = new List<PortableExecutable>();
-            GetDirectories();
-           //GetSections();
-            LoadImports(FilePath, true);
-            LoadExports(FilePath, true);
-            GetHeader();
-            GetAssemblyDependencies(FilePath);
-            LoadDependencies();
-        }
 
-       
-        /// <summary>
-        /// Check whether the library is loaded succefully or not.
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns></returns>
-        static bool CheckLibrary(string fileName)
-        {
-            return LoadLibrary(fileName) == IntPtr.Zero;
+            PortableExecutableLoader portableExecutableLoader = new PortableExecutableLoader();
+            portableExecutableLoader.Load(this);
+
         }
+    }
+        class PortableExecutableLoader
+        {
+
+            const uint DONT_RESOLVE_DLL_REFERENCES = 0x00000001;
+            const uint LOAD_IGNORE_CODE_AUTHZ_LEVEL = 0x00000010;
+             static Hashtable filePathsTable = new Hashtable();
+        [DllImport("kernel32.dll"), SuppressUnmanagedCodeSecurity]
+            static extern uint LoadLibraryEx(string fileName, uint notUsedMustBeZero, uint flags);
+
+            [DllImport("kernel32", SetLastError = true)]
+            static extern IntPtr LoadLibrary(string lpFileName);
+
+            public PortableExecutableLoader()
+            {
+            }
+
+
+            public void Load(PortableExecutable portableExecutable)
+            {
+                //references to properties of the portableExecutable we are going to load
+                String FilePath = portableExecutable.FilePath;
+                String currentDirectory = portableExecutable.directoryPath;
+                List<string> listOfBranch = portableExecutable.listOfBranch;
+                List<PortableExecutable> Dependencies = portableExecutable.Dependencies;
+                List<DependeciesObject> DependencyNames = portableExecutable.DependencyNames;
+                List<FunctionObject> ExportedFunctions = portableExecutable.ExportedFunctions;
+                List<ImportFunctionObject> ImportFunctions = portableExecutable.ImportFunctions;
+                List<HeaderObject> Headers = portableExecutable.Headers;
+                List<SectionObject> Sections = portableExecutable.Sections;
+                List<DirectoryObject> Directories = portableExecutable.Directories;
+                List<string> ImportNames = portableExecutable.ImportNames;
+
+                //the PE Header reader to be used 
+                PeHeaderReader reader = new PeHeaderReader(FilePath);
+
+                LoadImports(FilePath, true, ImportFunctions, ImportNames);
+                LoadExports(FilePath, true, ExportedFunctions);
+                GetHeader(Headers, reader);
+                GetAssemblyDependencies(FilePath, ImportFunctions, ImportNames);
+                GetDirectories(Directories, reader);
+                LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader,listOfBranch);
+
+            }
+
+            /// <summary>
+            /// Check whether the library is loaded succefully or not.
+            /// </summary>
+            /// <param name="fileName"></param>
+            /// <returns></returns>
+             static bool CheckLibrary(string fileName)
+                {
+                return LoadLibrary(fileName) == IntPtr.Zero;
+                 }
 
 
         /// <summary>
         /// Load each of the dependencies as a Portable Executable Object
         /// </summary>
         /// <returns> The Dependencies in a Portable Executable File Format </returns>
-        private List<PortableExecutable> LoadDependencies()
+        private void LoadDependencies(List<string> ImportNames, List<PortableExecutable> Dependencies, String currentDirectory, String FilePath, PeHeaderReader reader, List<string> listOfBranch)
         {
             PortableExecutable PE;
             string filePath;
@@ -100,7 +138,7 @@ namespace PEDScannerLib.Core
                 {
                     if (!filePathsTable.ContainsKey(name))
                     {
-                        filePath = GetModulePath(name, directoryPath);
+                        filePath = GetModulePath(name, currentDirectory, FilePath, reader);
                         if (filePath != null)
                         {
                             filePathsTable.Add(name, filePath);
@@ -110,7 +148,7 @@ namespace PEDScannerLib.Core
                     {
                         filePath = filePathsTable[name].ToString();
                     }
-                   
+
                     var hLib2 = LoadLibraryEx(filePath, 0,
                                           DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
                     if (listOfBranch.Contains(name))
@@ -121,19 +159,19 @@ namespace PEDScannerLib.Core
                     {
                         List<string> newBranchList = listOfBranch.ToList();
                         newBranchList.Add(name);
-                            if (!CheckLibrary(name))
-                            {
-                                PE = new PortableExecutable(name, filePath, true, newBranchList);
-                            }
-                            else
-                            {
-                                PE = new PortableExecutable(name, filePath, false, newBranchList);
-                            }
-                            Dependencies.Add(PE);
+                        if (!CheckLibrary(name))
+                        {
+                            PE = new PortableExecutable(name, filePath, true, newBranchList);
+                        }
+                        else
+                        {
+                            PE = new PortableExecutable(name, filePath, false, newBranchList);
+                        }
+                        Dependencies.Add(PE);
                     }
-                    
+
                 }
-                return Dependencies;
+                return;
             }
         }
 
@@ -143,8 +181,9 @@ namespace PEDScannerLib.Core
         /// </summary>
         /// <param name="FilePath"></param>
         /// <returns></returns>
-        private List<ImportFunctionObject> GetAssemblyDependencies(string FilePath)
+        private void GetAssemblyDependencies(string FilePath, List<ImportFunctionObject> ImportFunctions, List<string> ImportNames)
         {
+            Assembly assembly;
             if (FilePath != null)
             {
                 if (IsManagedAssembly(FilePath))
@@ -193,14 +232,14 @@ namespace PEDScannerLib.Core
                     }
                 }
             }
-            return ImportFunctions;
+            return;
         }
 
         /// <summary>
         /// find the header information
         /// </summary>
         /// <returns></returns>
-        private List<HeaderObject> GetHeader()
+        private void GetHeader(List<HeaderObject> Headers, PeHeaderReader reader)
         {
             IMAGE_FILE_HEADER fileHeader = reader.FileHeader;
             UInt16 machine = fileHeader.Machine;
@@ -210,7 +249,7 @@ namespace PEDScannerLib.Core
             UInt32 numberOfSymbols = fileHeader.NumberOfSymbols;
             UInt16 sizeOfOptionalHeader = fileHeader.SizeOfOptionalHeader;
             UInt16 characteristics = fileHeader.Characteristics;
-            string MachineType = GetMachineType();
+            string MachineType = GetMachineType(reader);
             string character = GetCharacterInformation(characteristics);
             Headers.Add(new HeaderObject("Machine", MachineType));
             Headers.Add(new HeaderObject("Number of sections", numberOfSections.ToString()));
@@ -219,14 +258,14 @@ namespace PEDScannerLib.Core
             Headers.Add(new HeaderObject("Number of symbols", numberOfSymbols.ToString()));
             Headers.Add(new HeaderObject("Size of optional header", sizeOfOptionalHeader.ToString()));
             Headers.Add(new HeaderObject("Characteristics", character));
-            return Headers;
+            return;
         }
 
         /// <summary>
         /// find the section information for a given file
         /// </summary>
         /// <returns></returns>
-        private List<SectionObject> GetSections()
+        private List<SectionObject> GetSections(List<SectionObject> Sections, PeHeaderReader reader)
         {
             PeHeaderReader.IMAGE_SECTION_HEADER[] sections = reader.ImageSectionHeaders;
             IMAGE_FILE_HEADER fileheader = reader.FileHeader;
@@ -254,7 +293,7 @@ namespace PEDScannerLib.Core
         /// find the directories
         /// </summary>
         /// <returns></returns>
-        private List<DirectoryObject> GetDirectories()
+        private void GetDirectories(List<DirectoryObject> Directories, PeHeaderReader reader)
         {
             unsafe
             {
@@ -292,7 +331,7 @@ namespace PEDScannerLib.Core
                     Directories.Add(new DirectoryObject("Delay Load Import", delayLoadImport.VirtualAddress, delayLoadImport.Size));
                 }
             }
-            return Directories;
+            return;
         }
 
         // using mscoree.dll as an example as it doesnt export any thing
@@ -304,7 +343,7 @@ namespace PEDScannerLib.Core
         /// <param name="filePath"></param>
         /// <param name="mappedAsImage"></param>
         /// <returns></returns>
-        private List<ImportFunctionObject> LoadImports(string filePath, bool mappedAsImage)
+        private void LoadImports(string filePath, bool mappedAsImage, List<ImportFunctionObject> ImportFunctions, List<String> ImportNames)
         {
             var hLib = LoadLibraryEx(filePath, 0,
                                DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
@@ -378,7 +417,7 @@ namespace PEDScannerLib.Core
                     }
                 }
             }
-            return ImportFunctions;
+            return;
         }
 
         /// <summary>
@@ -387,7 +426,7 @@ namespace PEDScannerLib.Core
         /// <param name="filePath"></param>
         /// <param name="mappedAsImage"></param>
         /// <returns></returns>
-        private List<FunctionObject> LoadExports(string filePath, bool mappedAsImage)
+        private void LoadExports(string filePath, bool mappedAsImage, List<FunctionObject> ExportedFunctions)
         {
             var hLib = LoadLibraryEx(filePath, 0,
                                DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
@@ -415,7 +454,7 @@ namespace PEDScannerLib.Core
                     }
                 }
             }
-            return ExportedFunctions;
+            return;
         }
 
         /// <summary>
@@ -425,7 +464,7 @@ namespace PEDScannerLib.Core
         /// <param name="moduleName"></param>
         /// <param name="currentDirectory"></param>
         /// <returns></returns>
-        private String GetModulePath(String moduleName, String currentDirectory)
+        private String GetModulePath(String moduleName, String currentDirectory, String FilePath, PeHeaderReader reader)
         {
             // iteratedDirectoryPath.Clear();
             // 0. Look in well-known dlls list
@@ -440,7 +479,7 @@ namespace PEDScannerLib.Core
             Environment.SpecialFolder WindowsSystemFolder;
 
             //try 32-bit,64-bit 
-            if (Is32bitFile())
+            if (Is32bitFile(reader))
             {
                 WindowsSystemFolder = Environment.SpecialFolder.SystemX86;
             }
@@ -518,9 +557,9 @@ namespace PEDScannerLib.Core
         /// check whether the file is 32 bit or not
         /// </summary>
         /// <returns></returns>
-        public bool Is32bitFile()
+        public bool Is32bitFile(PeHeaderReader reader)
         {
-            if (GetMachineType() == "Intel 386")
+            if (GetMachineType(reader) == "Intel 386")
             {
                 return true;
             }
@@ -531,7 +570,7 @@ namespace PEDScannerLib.Core
         /// return the machine type
         /// </summary>
         /// <returns></returns>
-        public string GetMachineType()
+        public string GetMachineType(PeHeaderReader reader)
         {
             IMAGE_FILE_HEADER fileHeader = reader.FileHeader;
             UInt16 machine = fileHeader.Machine;
@@ -630,7 +669,7 @@ namespace PEDScannerLib.Core
             string assemblyInformation = null;
             while (characterValue != 0)
             {
-                
+
                 temp = (int)characterValue % 16;
                 if (temp < 10)
                     temp = temp + 48;
@@ -640,17 +679,17 @@ namespace PEDScannerLib.Core
                 hexadecimalNumber[i++] = temp1;
                 characterValue = characterValue / 16;
             }
-        
+
             switch (hexadecimalNumber[0])
             {
                 case '1':
-                    assemblyInformation = assemblyInformation + "Relocation information was stripped from the file. " + Environment.NewLine ;
+                    assemblyInformation = assemblyInformation + "Relocation information was stripped from the file. " + Environment.NewLine;
                     break;
                 case '2':
                     assemblyInformation = assemblyInformation + "The file is executable" + Environment.NewLine;
                     break;
                 case '4':
-                    assemblyInformation= assemblyInformation + "PE line numbers were stripped from the file." + Environment.NewLine;
+                    assemblyInformation = assemblyInformation + "PE line numbers were stripped from the file." + Environment.NewLine;
                     break;
                 case '8':
                     assemblyInformation = assemblyInformation + "PE symbol table entries were stripped from file." + Environment.NewLine;
