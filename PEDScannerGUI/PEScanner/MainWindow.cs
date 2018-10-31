@@ -272,13 +272,7 @@ namespace PEScanner
             }
 
         }
-
-        // handle the the close button click event from the Close button in tool bar
-        private void toolStripButtonClose_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
+        
         // handle the the about button click event from the About button in tool bar
         private void toolStripButtontoolStripButtonAbout_Click(object sender, EventArgs e)
         {

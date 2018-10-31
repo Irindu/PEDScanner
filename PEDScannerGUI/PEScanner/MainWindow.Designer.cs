@@ -73,7 +73,6 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripQuickAccess = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonOpen = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAbout = new System.Windows.Forms.ToolStripButton();
             this.toolTipDependencies = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
@@ -145,7 +144,7 @@
             this.treeViewDependencies.Location = new System.Drawing.Point(22, 11);
             this.treeViewDependencies.Name = "treeViewDependencies";
             this.treeViewDependencies.SelectedImageIndex = 0;
-            this.treeViewDependencies.Size = new System.Drawing.Size(589, 263);
+            this.treeViewDependencies.Size = new System.Drawing.Size(691, 263);
             this.treeViewDependencies.TabIndex = 0;
             this.treeViewDependencies.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeViewDependencies_AfterSelect);
             this.treeViewDependencies.MouseHover += new System.EventHandler(this.treeViewDependencies_MouseHover);
@@ -254,7 +253,7 @@
             this.listBoxExports.FormattingEnabled = true;
             this.listBoxExports.Location = new System.Drawing.Point(19, 16);
             this.listBoxExports.Name = "listBoxExports";
-            this.listBoxExports.Size = new System.Drawing.Size(413, 251);
+            this.listBoxExports.Size = new System.Drawing.Size(673, 251);
             this.listBoxExports.TabIndex = 2;
             // 
             // tabPageHeaders
@@ -282,7 +281,7 @@
             this.ColumnValues});
             this.dataGridViewHeaders.Location = new System.Drawing.Point(6, 16);
             this.dataGridViewHeaders.Name = "dataGridViewHeaders";
-            this.dataGridViewHeaders.Size = new System.Drawing.Size(596, 272);
+            this.dataGridViewHeaders.Size = new System.Drawing.Size(699, 272);
             this.dataGridViewHeaders.TabIndex = 0;
             // 
             // ColumnProperties
@@ -324,7 +323,7 @@
             this.rawDataSize});
             this.dataGridViewSections.Location = new System.Drawing.Point(22, 33);
             this.dataGridViewSections.Name = "dataGridViewSections";
-            this.dataGridViewSections.Size = new System.Drawing.Size(584, 259);
+            this.dataGridViewSections.Size = new System.Drawing.Size(709, 259);
             this.dataGridViewSections.TabIndex = 0;
             // 
             // name
@@ -378,7 +377,7 @@
             this.ColumnSize});
             this.dataGridViewDirectories.Location = new System.Drawing.Point(16, 38);
             this.dataGridViewDirectories.Name = "dataGridViewDirectories";
-            this.dataGridViewDirectories.Size = new System.Drawing.Size(550, 244);
+            this.dataGridViewDirectories.Size = new System.Drawing.Size(710, 244);
             this.dataGridViewDirectories.TabIndex = 0;
             // 
             // ColumnName
@@ -491,14 +490,13 @@
             this.toolStripQuickAccess.GripMargin = new System.Windows.Forms.Padding(4);
             this.toolStripQuickAccess.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonOpen,
-            this.toolStripButtonClose,
             this.toolStripButtonAbout});
             this.toolStripQuickAccess.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             this.toolStripQuickAccess.Location = new System.Drawing.Point(0, 24);
             this.toolStripQuickAccess.MaximumSize = new System.Drawing.Size(500, 45);
             this.toolStripQuickAccess.MinimumSize = new System.Drawing.Size(100, 40);
             this.toolStripQuickAccess.Name = "toolStripQuickAccess";
-            this.toolStripQuickAccess.Size = new System.Drawing.Size(121, 40);
+            this.toolStripQuickAccess.Size = new System.Drawing.Size(100, 40);
             this.toolStripQuickAccess.Stretch = true;
             this.toolStripQuickAccess.TabIndex = 4;
             this.toolStripQuickAccess.Text = "Quick Access";
@@ -514,18 +512,6 @@
             this.toolStripButtonOpen.Size = new System.Drawing.Size(40, 35);
             this.toolStripButtonOpen.Text = "Open";
             this.toolStripButtonOpen.Click += new System.EventHandler(this.toolStripButtonOpen_Click);
-            // 
-            // toolStripButtonClose
-            // 
-            this.toolStripButtonClose.AutoSize = false;
-            this.toolStripButtonClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonClose.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonClose.Image")));
-            this.toolStripButtonClose.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonClose.Name = "toolStripButtonClose";
-            this.toolStripButtonClose.Size = new System.Drawing.Size(40, 35);
-            this.toolStripButtonClose.Text = "Close File";
-            this.toolStripButtonClose.ToolTipText = "Close File";
-            this.toolStripButtonClose.Click += new System.EventHandler(this.toolStripButtonClose_Click);
             // 
             // toolStripButtonAbout
             // 
@@ -606,7 +592,6 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStripQuickAccess;
         private System.Windows.Forms.ToolStripButton toolStripButtonOpen;
-        private System.Windows.Forms.ToolStripButton toolStripButtonClose;
         private System.Windows.Forms.ToolStripButton toolStripButtonAbout;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn virtualAddress;
