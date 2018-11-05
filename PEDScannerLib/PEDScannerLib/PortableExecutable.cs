@@ -62,6 +62,7 @@ namespace PEDScannerLib.Core
             ImportNames = new List<string>();
             DependencyNames = new List<DependeciesObject>();
             Dependencies = new List<PortableExecutable>();
+            
         }
     }
         public class PortableExecutableLoader
@@ -75,10 +76,12 @@ namespace PEDScannerLib.Core
 
             [DllImport("kernel32", SetLastError = true)]
             static extern IntPtr LoadLibrary(string lpFileName);
+        public SmartSuggestionEngine smartSuggestionEngine;
 
-            public PortableExecutableLoader()
+        public PortableExecutableLoader()
             {
-            }
+            smartSuggestionEngine = new SmartSuggestionEngine();
+        }
 
 
             public void Load(PortableExecutable portableExecutable)
@@ -547,7 +550,9 @@ namespace PEDScannerLib.Core
                     return files;
                 }
             }
-            catch (UnauthorizedAccessException) { }
+            catch (UnauthorizedAccessException) {
+                smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+            }
             return files;
         }
 
