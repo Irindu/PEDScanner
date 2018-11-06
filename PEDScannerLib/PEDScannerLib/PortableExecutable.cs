@@ -108,18 +108,20 @@ namespace PEDScannerLib.Core
                 GetAssemblyDependencies(FilePath, ImportFunctions, ImportNames);
                 GetDirectories(Directories, reader);
                 LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader,listOfBranch,this);
+                smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
 
-            }
 
-            /// <summary>
-            /// Check whether the library is loaded succefully or not.
-            /// </summary>
-            /// <param name="fileName"></param>
-            /// <returns></returns>
-             static bool CheckLibrary(string fileName)
-                {
-                return LoadLibrary(fileName) == IntPtr.Zero;
-                 }
+        }
+
+        /// <summary>
+        /// Check whether the library is loaded succefully or not.
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        static bool CheckLibrary(string fileName)
+        {
+            return LoadLibrary(fileName) == IntPtr.Zero;
+        }
 
 
         /// <summary>
@@ -132,45 +134,52 @@ namespace PEDScannerLib.Core
             string filePath;
             unsafe
             {
-                ImportNames = ImportNames.Distinct().ToList();
-                foreach (string name in ImportNames)
+                try
                 {
-                    if (!filePathsTable.ContainsKey(name))
+                    ImportNames = ImportNames.Distinct().ToList();
+                    foreach (string name in ImportNames)
                     {
-                        filePath = GetModulePath(name, currentDirectory, FilePath, reader);
-                        if (filePath != null)
+                        if (!filePathsTable.ContainsKey(name))
                         {
-                            filePathsTable.Add(name, filePath);
-                        }
-                    }
-                    else
-                    {
-                        filePath = filePathsTable[name].ToString();
-                    }
-
-                    var hLib2 = LoadLibraryEx(filePath, 0,
-                                          DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
-                    if (listOfBranch.Contains(name))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        List<string> newBranchList = listOfBranch.ToList();
-                        newBranchList.Add(name);
-                        if (!CheckLibrary(name))
-                        {
-                            PE = new PortableExecutable(name, filePath, true, newBranchList);
+                            filePath = GetModulePath(name, currentDirectory, FilePath, reader);
+                            if (filePath != null)
+                            {
+                                filePathsTable.Add(name, filePath);
+                            }
                         }
                         else
                         {
-                            PE = new PortableExecutable(name, filePath, false, newBranchList);
-
+                            filePath = filePathsTable[name].ToString();
                         }
-                        portableExecutableLoader.Load(PE);
-                        Dependencies.Add(PE);
-                    }
 
+                        var hLib2 = LoadLibraryEx(filePath, 0,
+                                              DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
+                        if (listOfBranch.Contains(name))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            List<string> newBranchList = listOfBranch.ToList();
+                            newBranchList.Add(name);
+                            if (!CheckLibrary(name))
+                            {
+                                PE = new PortableExecutable(name, filePath, true, newBranchList);
+                            }
+                            else
+                            {
+                                PE = new PortableExecutable(name, filePath, false, newBranchList);
+
+                            }
+                            portableExecutableLoader.Load(PE);
+                            Dependencies.Add(PE);
+                        }
+
+                    }
+                }
+                //To catch error in dependencies
+                catch (Exception) { 
+                    smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
                 }
                 return;
             }
@@ -566,6 +575,7 @@ namespace PEDScannerLib.Core
             {
                 return true;
             }
+            smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
             return false;
         }
 
