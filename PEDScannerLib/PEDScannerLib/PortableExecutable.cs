@@ -241,6 +241,14 @@ namespace PEDScannerLib.Core
                         }
                     }
                 }
+                else
+                {
+                    smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+                }
+            }
+            else
+            {
+                smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
             }
             return;
         }
@@ -417,6 +425,7 @@ namespace PEDScannerLib.Core
                                 }
                                 catch (Exception e)
                                 {
+                                    smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
                                     System.Diagnostics.Debug.WriteLine("An Access violation occured\n" +
                                                       "this seems to suggest the end of the imports section\n");
                                     System.Diagnostics.Debug.WriteLine(e);
@@ -462,6 +471,10 @@ namespace PEDScannerLib.Core
                             }
                         }
                     }
+                }
+                else
+                {
+                    smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
                 }
             }
             return;
@@ -575,7 +588,7 @@ namespace PEDScannerLib.Core
             {
                 return true;
             }
-            smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+            //smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
             return false;
         }
 
