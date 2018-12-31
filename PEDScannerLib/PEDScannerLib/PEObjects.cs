@@ -13,25 +13,7 @@ namespace PEDScannerLib.Objects
         }
     }
 
-    public class FunctionObject
-    {
-        public string function;
-        public FunctionObject(string functionName)
-        {
-            this.function = functionName;
-        }
-    }
-
-    public class ImportFunctionObject : FunctionObject
-    {
-        public UInt32 baseAddress;
-        public string dependency;
-        public ImportFunctionObject(string functionName, UInt32 baseAddress, string dependency) : base(functionName)
-        {
-            this.baseAddress = baseAddress;
-            this.dependency = dependency;
-        }
-    }
+  
 
     public class DependeciesObject
     {

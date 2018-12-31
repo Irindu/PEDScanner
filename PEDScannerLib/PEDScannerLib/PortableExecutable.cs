@@ -10,7 +10,7 @@ using System.Reflection;
 using PEDScannerLib.Struct;
 using PEDScannerLib.Objects;
 using System.Collections;
-
+using Objects;
 namespace PEDScannerLib.Core
 {
     /// <summary>
@@ -43,7 +43,7 @@ namespace PEDScannerLib.Core
         public List<string> ImportNames;
         public List<string> listOfBranch;
         public Assembly assembly;
-        static Hashtable filePathsTable = new Hashtable();
+      //  static Hashtable filePathsTable = new Hashtable();
       
         public string directoryPath = Directory.GetCurrentDirectory();
         public PortableExecutable(string Name, string FilePath, bool IsLoadable, List<string> listOfBranches)
@@ -62,7 +62,7 @@ namespace PEDScannerLib.Core
             ImportNames = new List<string>();
             DependencyNames = new List<DependeciesObject>();
             Dependencies = new List<PortableExecutable>();
-            
+           
         }
     }
         public class PortableExecutableLoader
@@ -71,17 +71,23 @@ namespace PEDScannerLib.Core
             const uint DONT_RESOLVE_DLL_REFERENCES = 0x00000001;
             const uint LOAD_IGNORE_CODE_AUTHZ_LEVEL = 0x00000010;
              static Hashtable filePathsTable = new Hashtable();
-        [DllImport("kernel32.dll"), SuppressUnmanagedCodeSecurity]
+            [DllImport("kernel32.dll"), SuppressUnmanagedCodeSecurity]
             static extern uint LoadLibraryEx(string fileName, uint notUsedMustBeZero, uint flags);
 
             [DllImport("kernel32", SetLastError = true)]
             static extern IntPtr LoadLibrary(string lpFileName);
-        public SmartSuggestionEngine smartSuggestionEngine;
 
-        public PortableExecutableLoader()
+             [DllImport("kernel32.dll")]
+                static extern uint GetLastError();
+
+            [DllImport("kernel32.dll", SetLastError = true)]
+             static extern bool SetVolumeLabel(string lpRootPathName, string lpVolumeName);
+             public SmartSuggestionEngine smartSuggestionEngine;
+
+            public PortableExecutableLoader()
             {
             smartSuggestionEngine = new SmartSuggestionEngine();
-        }
+            }
 
 
             public void Load(PortableExecutable portableExecutable)
@@ -101,12 +107,32 @@ namespace PEDScannerLib.Core
 
                 //the PE Header reader to be used 
                 PeHeaderReader reader = new PeHeaderReader(FilePath);
-
+                if (Is32bitFile(reader))
+                {
                 LoadImports(FilePath, true, ImportFunctions, ImportNames);
                 LoadExports(FilePath, true, ExportedFunctions);
+                 }
+                 else
+                  {
+                Service64Proxy.Service64 proxy = new Service64Proxy.Service64();
+                MyObject obj2 = new MyObject();
+                MyObject myobject = proxy.Load64Imports(obj2, FilePath, true);
+                List<ImportFunctionObject> listOfobj = myobject.FunctionObjectList;
+                foreach (ImportFunctionObject importFunctions in listOfobj)
+                {
+                    ImportFunctions.Add(importFunctions);
+                    ImportNames.Add(importFunctions.dependency);
+                }
+                ExportObject exportObject = new ExportObject();
+                ExportObject exports = proxy.Load64Exports(exportObject, FilePath, true);
+                List<FunctionObject> exportList = exports.ExportFunctionObjectList;
+                ExportedFunctions.AddRange(exportList);
+            }
+
                 GetHeader(Headers, reader);
                 GetAssemblyDependencies(FilePath, ImportFunctions, ImportNames);
                 GetDirectories(Directories, reader);
+                GetSections(Sections, reader);
                 LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader,listOfBranch,this);
                 smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
 
@@ -283,7 +309,7 @@ namespace PEDScannerLib.Core
         /// find the section information for a given file
         /// </summary>
         /// <returns></returns>
-        private List<SectionObject> GetSections(List<SectionObject> Sections, PeHeaderReader reader)
+        private void GetSections(List<SectionObject> Sections, PeHeaderReader reader)
         {
             PeHeaderReader.IMAGE_SECTION_HEADER[] sections = reader.ImageSectionHeaders;
             IMAGE_FILE_HEADER fileheader = reader.FileHeader;
@@ -301,10 +327,10 @@ namespace PEDScannerLib.Core
                 UInt16 NumberOfLineNumbers = section.NumberOfLinenumbers;
                 PeHeaderReader.DataSectionFlags dataSectionFlags = section.Characteristics;
                 string nameOfSection = section.Section;
-                System.Diagnostics.Debug.WriteLine(section.Section);
+               
                 Sections.Add(new SectionObject(nameOfSection, virtualAddress, virtualSize, pointerToRawData, sizeOFrawData));
             }
-            return Sections;
+            return;
         }
 
         /// <summary>
@@ -363,8 +389,14 @@ namespace PEDScannerLib.Core
         /// <returns></returns>
         private void LoadImports(string filePath, bool mappedAsImage, List<ImportFunctionObject> ImportFunctions, List<String> ImportNames)
         {
-            var hLib = LoadLibraryEx(filePath, 0,
-                               DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
+            var hLib = LoadLibrary(filePath);
+            if (hLib == null)
+            {
+                var errorCode = GetLastError();
+            }
+            //var hLib = LoadLibraryEx(filePath, 0,
+            //                   DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
+          
             unsafe
             {
                 {
@@ -588,7 +620,7 @@ namespace PEDScannerLib.Core
             {
                 return true;
             }
-            //smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+       //     smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
             return false;
         }
 
