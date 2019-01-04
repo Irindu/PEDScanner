@@ -9,35 +9,37 @@ namespace PEDScannerLib
 {
     public class SmartSuggestionEngine
     {
+        public Dictionary<int, string> error_list = new Dictionary<int, string>();
+
         public void readErrorCode(int error_code)
         {
             if (error_code == 2)
             {
-                Console.WriteLine("The system cannot find the file specified.");
+                error_list.Add(2, "The system cannot find the file specified.");
             }
             else if (error_code == 3)
             {
-                Console.WriteLine("The system cannot find the path specified.");
+                error_list.Add(3, "The system cannot find the path specified.");
             }
-            else if(error_code == 6)
+            else if (error_code == 6)
             {
-                Console.WriteLine("The handle is invalid.");
+                error_list.Add(6, "The handle is invalid.");
             }
             else if (error_code == 5)
             {
-                Console.WriteLine("Access is denied.");
+                error_list.Add(5, "Access is denied.");
             }
             else if (error_code == 23)
             {
-                Console.WriteLine("Data error (cyclic redundancy check).");
+                error_list.Add(23, "Data error (cyclic redundancy check).");
             }
             else if (error_code == 129)
             {
-                Console.WriteLine("The %1 application cannot be run in Win32 mode.");
+                error_list.Add(129, "The %1 application cannot be run in Win32 mode.");
             }
-            else 
+            else
             {
-                Console.WriteLine(error_code + "The dll is not a managed assambly");
+                error_list.Add(error_code, "The dll is not a managed assambly.");
             }
         }
     }
