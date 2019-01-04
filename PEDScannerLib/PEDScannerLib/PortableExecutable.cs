@@ -134,7 +134,7 @@ namespace PEDScannerLib.Core
                 GetDirectories(Directories, reader);
                 GetSections(Sections, reader);
                 LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader,listOfBranch,this);
-                smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+                smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
 
 
         }
@@ -205,7 +205,7 @@ namespace PEDScannerLib.Core
                 }
                 //To catch error in dependencies
                 catch (Exception) { 
-                    smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+                    smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
                 }
                 return;
             }
@@ -269,12 +269,12 @@ namespace PEDScannerLib.Core
                 }
                 else
                 {
-                    smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+                    smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
                 }
             }
             else
             {
-                smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+                smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
             }
             return;
         }
@@ -457,7 +457,7 @@ namespace PEDScannerLib.Core
                                 }
                                 catch (Exception e)
                                 {
-                                    smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+                                    smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
                                     System.Diagnostics.Debug.WriteLine("An Access violation occured\n" +
                                                       "this seems to suggest the end of the imports section\n");
                                     System.Diagnostics.Debug.WriteLine(e);
@@ -506,7 +506,7 @@ namespace PEDScannerLib.Core
                 }
                 else
                 {
-                    smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+                    smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
                 }
             }
             return;
@@ -605,7 +605,7 @@ namespace PEDScannerLib.Core
                 }
             }
             catch (UnauthorizedAccessException) {
-                smartSuggestionEngine.readErrorCode(Marshal.GetLastWin32Error());
+                smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
             }
             return files;
         }
