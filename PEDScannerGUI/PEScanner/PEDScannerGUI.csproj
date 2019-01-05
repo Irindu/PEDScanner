@@ -35,6 +35,9 @@
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NEWCONFIG|AnyCPU'">
+    <OutputPath>bin\NEWCONFIG\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PEDScannerLib">
       <HintPath>..\..\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.dll</HintPath>

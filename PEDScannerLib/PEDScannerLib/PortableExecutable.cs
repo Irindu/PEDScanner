@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.IO;
 using System.Security;
@@ -11,6 +9,7 @@ using PEDScannerLib.Struct;
 using PEDScannerLib.Objects;
 using System.Collections;
 using Objects;
+
 namespace PEDScannerLib.Core
 {
     /// <summary>
@@ -144,7 +143,7 @@ namespace PEDScannerLib.Core
                 foreach (ImportFunctionObject importFunctions in listOfobj)
                 {
                     ImportFunctions.Add(importFunctions);
-                    ImportNames.Add(importFunctions.dependency);
+                    ImportNames.Add(importFunctions.Dependency);
                 }
                 ExportObject exportObject = new ExportObject();
                 ExportObject exports = proxy.Load64Exports(exportObject, FilePath, true);

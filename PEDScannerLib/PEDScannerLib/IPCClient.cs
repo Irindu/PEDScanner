@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
 using Objects;
+using PEDScannerLib.Objects;
 
 namespace Service64Proxy
 {
@@ -77,37 +78,37 @@ namespace Objects
 
 
     }
-    public class FunctionObject
-    {
-        public string function;
-        public FunctionObject()
-        {
+    //public class FunctionObject
+    //{
+    //    public string function;
+    //    public FunctionObject()
+    //    {
             
-        }
-        public FunctionObject(string functionName)
-        {
-            this.function = functionName;
-        }
+    //    }
+    //    public FunctionObject(string functionName)
+    //    {
+    //        this.function = functionName;
+    //    }
         
-    }
+    //}
 
-    public class ImportFunctionObject : FunctionObject
-    {
+    //public class ImportFunctionObject : FunctionObject
+    //{
         
-        public UInt64 baseAddress;
-        public string dependency;
-        public ImportFunctionObject()
-        {
+    //    public UInt64 baseAddress;
+    //    public string dependency;
+    //    public ImportFunctionObject()
+    //    {
             
-        }
+    //    }
        
-        public ImportFunctionObject(string functionName, UInt64 baseAddress, string dependency) : base(functionName)
-        {
-            this.baseAddress = baseAddress;
-            this.dependency = dependency;
-        }
+    //    public ImportFunctionObject(string functionName, UInt64 baseAddress, string dependency) : base(functionName)
+    //    {
+    //        this.baseAddress = baseAddress;
+    //        this.dependency = dependency;
+    //    }
  
-    }
+    //}
    
 }
 

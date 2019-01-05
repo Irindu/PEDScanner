@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NEWCONFIG|AnyCPU'">
+    <OutputPath>bin\NEWCONFIG\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PEDScannerLib">
       <HintPath>D:\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.dll</HintPath>
