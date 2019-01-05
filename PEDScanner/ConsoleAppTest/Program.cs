@@ -10,7 +10,9 @@ using System.IO;
 using PEDScannerLib;
 using PEDScannerLib.Objects;
 
-
+using Objects;
+using static System.Net.Mime.MediaTypeNames;
+using System.Reflection;
 
 namespace PEDScannerConsoleApp
 {
@@ -18,32 +20,42 @@ namespace PEDScannerConsoleApp
     {
         static void Main(string[] args)
         {
-            string path = @"E://Project1.exe";
-
+           
+            string path = @"C:\Program Files\Git\bin\git.exe";
+           
             string fileName = Path.GetFileName(path);
             Console.WriteLine("Hello World!");
+           
+           
             List<string> listWithRoot = new List<string>
             {
                 fileName
             };
             PortableExecutable PE;
-            
-            PE = new PortableExecutable(fileName, path,true, listWithRoot);
+
+            PE = new PortableExecutable(fileName, path, true, listWithRoot);
+            PortableExecutableLoader portableExecutableLoader = new PortableExecutableLoader();
+            portableExecutableLoader.Load(PE);
 
             unsafe
             {
-
-                List<PortableExecutable> pe = PE.Dependencies;
-                foreach (PortableExecutable porte in pe)
+                List<string> importName = PE.ImportNames;
+                foreach (string importname in importName)
                 {
-                    Console.WriteLine("dependency Path={0}, dependency name={1}, is loaded={2}", porte.FilePath, porte.Name, porte.IsLoadable);
+                    Console.WriteLine(importname);
                 }
-                
+
+
 
                 List<ImportFunctionObject> importFunctions = PE.ImportFunctions;
                 foreach (ImportFunctionObject import in importFunctions)
                 {
                     Console.WriteLine("import function= {0}, Address ={1}, dependency = {2}", import.Function, import.BaseAddress, import.Dependency);
+                }
+                List<PortableExecutable> depen = PE.Dependencies;
+                foreach (PortableExecutable dep in depen)
+                {
+                    Console.WriteLine(dep.DependencyNames);
                 }
 
 
@@ -77,6 +89,6 @@ namespace PEDScannerConsoleApp
             Console.ReadKey();
         }
 
-     
+
     }
 }

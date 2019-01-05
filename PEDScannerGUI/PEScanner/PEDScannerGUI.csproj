@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PEDScannerLib">
-      <HintPath>..\..\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.dll</HintPath>
+      <HintPath>..\..\PEDScannerLib\PEDScannerLib\obj\Debug\PEDScannerLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -84,10 +84,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\PEDScanner\ConsoleAppTest\ConsoleAppTest.csproj">
+      <Project>{b21b3c38-acc5-42ca-9856-d7c0904ca06a}</Project>
+      <Name>ConsoleAppTest</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

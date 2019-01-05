@@ -5,6 +5,8 @@ using System.Drawing;
 using PEDScannerLib.Core;
 using PEDScannerLib.Objects;
 using System.Collections;
+using Objects;
+using System.Diagnostics;
 
 namespace PEScanner
 {
@@ -14,9 +16,10 @@ namespace PEScanner
         PortableExecutable portableExecutable;
         //the portable executable selected by the user from the UI
         PortableExecutable SelectedPortableExecutable;
-
+        Process exeProcess;
         public MainWindow()
         {
+             exeProcess= System.Diagnostics.Process.Start("Server64BitConsoleApp.exe");
             InitializeComponent();
             this.portableExecutable = null;
             labelNoImports.Hide();
@@ -468,6 +471,11 @@ namespace PEScanner
         {
             String[] arrayofNames = FilePath.Split('\\');
             return arrayofNames[arrayofNames.Length - 1];
+        }
+
+        private void tabPageDependencies_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

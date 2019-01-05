@@ -124,6 +124,7 @@
             this.tabPageDependencies.TabIndex = 0;
             this.tabPageDependencies.Text = "Dependencies";
             this.tabPageDependencies.UseVisualStyleBackColor = true;
+            this.tabPageDependencies.Click += new System.EventHandler(this.tabPageDependencies_Click);
             // 
             // labelDependecyPath
             // 
