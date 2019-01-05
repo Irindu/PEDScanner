@@ -71,7 +71,7 @@ namespace PEScanner
 
                 foreach (ImportFunctionObject import in imports)
                 {
-                    String nameOfDependecy = import.dependency;
+                    String nameOfDependecy = import.Dependency;
                     List<ImportFunctionObject> ImportsList;
                     if (ImportsDependecyMap.ContainsKey(nameOfDependecy))
                     {
@@ -90,7 +90,7 @@ namespace PEScanner
                     List<ImportFunctionObject> ImportsList = ImportsDependecyMap[Dependecy];
 
                     foreach (ImportFunctionObject import in ImportsList) {
-                        TreeNode ChildNode = treeNode.Nodes.Add(import.function);
+                        TreeNode ChildNode = treeNode.Nodes.Add(import.Function);
                         ChildNode.Tag = import;
                     }
                 }
@@ -122,7 +122,7 @@ namespace PEScanner
 
                 foreach (FunctionObject export in exports)
                 {
-                    listBoxExports.Items.Add(export.function);
+                    listBoxExports.Items.Add(export.Function);
                 }
             }
         }
@@ -139,7 +139,7 @@ namespace PEScanner
 
             foreach (HeaderObject headerObject in headers)
             {
-                string[] row = { headerObject.name, headerObject.value.ToString() };
+                string[] row = { headerObject.Name, headerObject.Value.ToString() };
                 dataGridViewHeaders.Rows.Add(row);
             }
 
@@ -161,8 +161,8 @@ namespace PEScanner
 
             foreach (SectionObject sectionObject in sections)
             {
-                string[] row = { sectionObject.name, sectionObject.virtualAddress.ToString(), sectionObject.virtualsize.ToString() , sectionObject.rawDataOffset.ToString()
-                ,sectionObject.rawDataSize.ToString()};
+                string[] row = { sectionObject.Name, sectionObject.VirtualAddress.ToString(), sectionObject.VirtualSize.ToString() , sectionObject.RawDataOffset.ToString()
+                ,sectionObject.RawDataSize.ToString()};
                 dataGridViewSections.Rows.Add(row);
             }
 
@@ -182,7 +182,7 @@ namespace PEScanner
 
             foreach (DirectoryObject directoryObject in directories)
             {
-                string[] row = { directoryObject.name, directoryObject.RVA.ToString(), directoryObject.Size.ToString() };
+                string[] row = { directoryObject.Name, directoryObject.RVA.ToString(), directoryObject.Size.ToString() };
                 dataGridViewDirectories.Rows.Add(row);
             }
 
@@ -367,7 +367,7 @@ namespace PEScanner
                 {
                     dataGridViewImportExamined.Rows.Clear();
                     dataGridViewImportExamined.Show();
-                    string[] row = { importFunctionObject.function, importFunctionObject.baseAddress.ToString(), importFunctionObject.dependency };
+                    string[] row = { importFunctionObject.Function, importFunctionObject.BaseAddress.ToString(), importFunctionObject.Dependency };
                     dataGridViewImportExamined.Rows.Add(row);
 
                 }

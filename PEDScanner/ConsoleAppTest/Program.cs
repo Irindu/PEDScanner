@@ -43,32 +43,32 @@ namespace PEDScannerConsoleApp
                 List<ImportFunctionObject> importFunctions = PE.ImportFunctions;
                 foreach (ImportFunctionObject import in importFunctions)
                 {
-                    Console.WriteLine("import function= {0}, Address ={1}, dependency = {2}", import.function, import.baseAddress, import.dependency);
+                    Console.WriteLine("import function= {0}, Address ={1}, dependency = {2}", import.Function, import.BaseAddress, import.Dependency);
                 }
 
 
                 List<FunctionObject> exportedFunctions = PE.ExportedFunctions;
                 foreach (FunctionObject export in exportedFunctions)
                 {
-                    Console.WriteLine("exports={0}", export.function);
+                    Console.WriteLine("exports={0}", export.Function);
                 }
                 List<HeaderObject> headers = PE.Headers;
 
                 foreach (HeaderObject header in headers)
                 {
-                    Console.WriteLine("header Name={0}, value={1}", header.name, header.value);
+                    Console.WriteLine("header Name={0}, value={1}", header.Name, header.Value);
                 }
 
                 // List<SectionObject> sections = PE.GetSections();
                 List<DirectoryObject> directories = PE.Directories;
                 foreach (DirectoryObject directory in directories)
                 {
-                    Console.WriteLine("name={0}, virtual ={1}, length={2}", directory.name, directory.RVA, directory.Size);
+                    Console.WriteLine("name={0}, virtual ={1}, length={2}", directory.Name, directory.RVA, directory.Size);
                 }
                 List<SectionObject> sections = PE.Sections;
                 foreach (SectionObject section in sections)
                 {
-                    Console.WriteLine("nameOfSection={0}, virtualAddress={1}, virtualSize={2}, pointerToRawData={3}, sizeOFrawData={4}", section.name, section.virtualAddress, section.virtualsize, section.rawDataOffset, section.rawDataSize);
+                    Console.WriteLine("nameOfSection={0}, virtualAddress={1}, virtualSize={2}, pointerToRawData={3}, sizeOFrawData={4}", section.Name, section.VirtualAddress, section.VirtualSize, section.RawDataOffset, section.RawDataSize);
 
                 }
 

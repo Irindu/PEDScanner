@@ -1,0 +1,240 @@
+﻿<Window x:Class="PEDScanner.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PEDScanner"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+   <Window.CommandBindings>
+     <CommandBinding Command="Open" Executed="OpenCommandBinding_Executed"/>
+     <CommandBinding Command="SaveAs" Executed="SaveAsCommandBinding_Executed"/>
+</Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Control" Command="Open"/>
+        <KeyBinding Key="S" Modifiers="Control" Command="SaveAs"/>
+        <!--<KeyBinding Key="I" Modifiers="Control" Command="Info"/>-->
+
+    </Window.InputBindings>
+
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Height="65">
+            <Menu IsMainMenu="True">
+                <MenuItem Margin="2" Header="_File">
+                    <MenuItem Header="_Open" Command="Open" InputGestureText="Ctrl+O">
+                        <MenuItem.Icon>
+                            <Image Source="Resources/open16.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Name="RecentsMenu"  Header="_Recents" Command="">
+                        <MenuItem.Icon>
+                            <Image Source="Resources/Recent16.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="_Exit" Command=""  Click="Exit_MenuItem_Click">
+                        <MenuItem.Icon>
+                            <Image Source="Resources/iconsClose 16.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Margin="2" Header="_Settings" />
+                <MenuItem Margin="2" Header="_Help" Click="About_Click" >
+                    <MenuItem Header="_About">
+                        <MenuItem.Icon>
+                            <Image Source="Resources/info-icon16.png" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </Menu>
+            <ToolBarTray>
+                <ToolBar>
+                    <Button Margin="5" Command="Open" ToolTip="Open a Portable Execulable for inplection">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Resources/open16.png" />
+                            <TextBlock Margin="3,0,0,0">Open</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="5" Click="About_Click" ToolTip="Information about the Portable Execuable Scanner">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Resources/info-icon16.png" />
+                            <TextBlock Margin="3,0,0,0">Info</TextBlock>
+                        </StackPanel>
+                    </Button>
+                </ToolBar>
+            </ToolBarTray>
+        </StackPanel>
+        
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Name="lblCursorPosition" >Status </TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Height="45" FlowDirection="RightToLeft">
+            <Button  Click="buttonAddFile_Click" HorizontalAlignment="Right"
+                Margin="30, 7, 5, 7" VerticalAlignment="Center" MinWidth="100" MinHeight="30"
+                Padding="2">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="1 1 7 1">Add File</TextBlock>
+                    <Image Source="Resources/open16.png" Stretch="None" />
+                </StackPanel>
+            </Button>
+
+            <Button  Click ="ButtonExamine_Click" HorizontalAlignment="Right"
+                Margin="30, 7, 5, 7" VerticalAlignment="Center" MinWidth="100" MinHeight="30"
+                Padding="2">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="1 1 7 1">Examine</TextBlock>
+                    <Image Source="Resources/ExamineThird16.png" Stretch="None" />
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+        
+        <Grid>
+            <TabControl>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/executable16.png" />
+                            <TextBlock Text="   Dependencies" Foreground="DarkSlateGray" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <TreeView Name="treeViewDependencies" TreeViewItem.Expanded="TreeViewItem_Expanded" Margin="10"  >
+                            <TreeView.Resources>
+                                <SolidColorBrush Color="LightGray" x:Key="{x:Static SystemColors.HighlightBrushKey}"/>
+                            </TreeView.Resources>
+                        </TreeView>
+                        
+                    </Grid>
+                </TabItem>
+                <TabItem >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/import-icon16.png" />
+                            <TextBlock Text="   Imports" Foreground="DarkSeaGreen" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <TabItem.Content>
+                        <Grid>
+                            <TreeView Name="treeViewImports" TreeViewItem.Expanded="TreeViewItem_Expanded" Margin="10" />
+                        </Grid>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/export-icon16.png" />
+                            <TextBlock Text="   Exports" Foreground="IndianRed" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Margin="10">
+                        <DataGrid Name="dataGridExports" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Exported Functions" Binding="{Binding Function}" Width="4*" IsReadOnly="True" />
+                            </DataGrid.Columns>
+                            <!--<DataGrid.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                   Color="#FF0000"/>
+                            </DataGrid.Resources>-->
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/Headers16.png" />
+                            <TextBlock Text="   Headers" Foreground="DarkKhaki" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Margin="10">
+                        <DataGrid Name="dataGridHeaders" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Header="Property" Width="4*" Binding="{Binding Name}" />
+
+                                <DataGridTextColumn Header="Value" Width="6*" Binding="{Binding Value}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+
+                                </DataGridTextColumn>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/Sections16.png" />
+                            <TextBlock Text="   Sections" Foreground="DarkKhaki" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Margin="10">
+                        <DataGrid Name="dataGridSections" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Width="1*" Binding="{Binding Name}" />
+                                <DataGridTextColumn Header="Virtual Address" Width="2*" Binding="{Binding VirtualAddress}" />
+                                <DataGridTextColumn Header="Virtual Size" Width="2*" Binding="{Binding VirtualSize}" />
+                                <DataGridTextColumn Header="Raw Data Offset" Width="2*" Binding="{Binding RawDataOffset}" />
+                                <DataGridTextColumn Header="Raw Data Size" Width="2*" Binding="{Binding RawDataSize}" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+                <TabItem >
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/directory16.png" />
+                            <TextBlock Text="   Directories" Foreground="SteelBlue" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Margin="10">
+                        <DataGrid Name="dataGridDirectories" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Name" Width="4*" Binding="{Binding Name}" />
+                                <DataGridTextColumn Header="Relative Virtual Address"  Width="3*" Binding="{Binding RVA}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Column Size" Width="3*" Binding="{Binding Size}" >
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                    </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+    </DockPanel>
+    
+</Window>

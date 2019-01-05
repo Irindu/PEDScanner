@@ -46,6 +46,28 @@ namespace PEDScannerLib.Core
         static Hashtable filePathsTable = new Hashtable();
       
         public string directoryPath = Directory.GetCurrentDirectory();
+
+        public PortableExecutable(string FilePath) { }
+
+        public PortableExecutable(String Name, string FilePath)
+        {
+            this.Name = Name;
+            this.FilePath = FilePath;
+            this.IsLoadable = true;
+            this.listOfBranch = new List<string>();
+
+            // reader = new PeHeaderReader(FilePath);
+            ExportedFunctions = new List<FunctionObject>();
+            ImportFunctions = new List<ImportFunctionObject>();
+            Headers = new List<HeaderObject>();
+            Sections = new List<SectionObject>();
+            Directories = new List<DirectoryObject>();
+            ImportNames = new List<string>();
+            DependencyNames = new List<DependeciesObject>();
+            Dependencies = new List<PortableExecutable>();
+        }
+
+
         public PortableExecutable(string Name, string FilePath, bool IsLoadable, List<string> listOfBranches)
         {
             this.Name = Name;
@@ -64,13 +86,15 @@ namespace PEDScannerLib.Core
             Dependencies = new List<PortableExecutable>();
         }
     }
+    
         public class PortableExecutableLoader
         {
 
             const uint DONT_RESOLVE_DLL_REFERENCES = 0x00000001;
             const uint LOAD_IGNORE_CODE_AUTHZ_LEVEL = 0x00000010;
-             static Hashtable filePathsTable = new Hashtable();
-        [DllImport("kernel32.dll"), SuppressUnmanagedCodeSecurity]
+            static Hashtable filePathsTable = new Hashtable();
+
+            [DllImport("kernel32.dll"), SuppressUnmanagedCodeSecurity]
             static extern uint LoadLibraryEx(string fileName, uint notUsedMustBeZero, uint flags);
 
             [DllImport("kernel32", SetLastError = true)]
