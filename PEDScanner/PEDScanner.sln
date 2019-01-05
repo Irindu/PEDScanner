@@ -12,7 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PEDScannerLib", "..\PEDScan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppTest", "ConsoleAppTest\ConsoleAppTest.csproj", "{B21B3C38-ACC5-42CA-9856-D7C0904CA06A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PEDScanner", "..\..\PEDScannerTemp\PEDScanner\PEDScanner\PEDScanner.csproj", "{75BA0E6F-8C49-47D6-89C2-A245F045CAA7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PEDScanner", "..\PEDScannerGUIWPF\PEDScanner\PEDScanner\PEDScanner.csproj", "{75BA0E6F-8C49-47D6-89C2-A245F045CAA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
