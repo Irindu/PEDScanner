@@ -54,6 +54,7 @@
     <Compile Include="PEObjects.cs" />
     <Compile Include="PortableExecutable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReverseDependencyDetector.cs" />
     <Compile Include="SmartSuggestionEngine.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
