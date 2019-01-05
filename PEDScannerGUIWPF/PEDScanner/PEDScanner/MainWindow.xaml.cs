@@ -142,7 +142,7 @@ namespace PEDScanner
             {
                 Orientation = Orientation.Horizontal
             };
-            if (!portableExecutable.IsLoadable)
+            if (portableExecutable.IsLoadable)
             {
                  image = new Image
                 {
@@ -251,7 +251,6 @@ namespace PEDScanner
                 {
                     TreeViewItem treeViewItem = CreateImportsTreeLibrary(Dependecy);
                     treeViewImports.Items.Add(treeViewItem);
-
                     List<ImportFunctionObject> ImportsList = ImportsDependecyMap[Dependecy];
                     foreach (ImportFunctionObject import in ImportsList)
                     {
@@ -361,6 +360,20 @@ namespace PEDScanner
             //}
 
             //this.labelDependecyPath.Font = new Font(this.labelDependecyPath.Font, FontStyle.Bold);
+        }
+        
+        // the event handler for imports tree it is used to display information about the import node clicked
+        private void treeViewImports_Selected(object sender, RoutedEventArgs e)
+        {
+            if (((TreeViewItem)((TreeView)sender).SelectedItem).Tag != null) {
+                dataGridImportsTable.Visibility = Visibility.Visible;
+                 object obj = ((TreeViewItem)((TreeView)sender).SelectedItem).Tag;
+                ImportFunctionObject importFunctionObject = (ImportFunctionObject)(obj);
+
+                List<ImportFunctionObject> listOfImportFunctionObjects = new List<ImportFunctionObject>();
+                listOfImportFunctionObjects.Add(importFunctionObject);
+                dataGridImportsTable.ItemsSource = listOfImportFunctionObjects;
+            }
         }
 
         private void SaveAsCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -493,6 +506,8 @@ namespace PEDScanner
             //listBoxExports.Items.Clear();
             //labelDependecyPath.Text = "";
             treeViewDependencies.Items.Clear();
+            dataGridImportsTable.Visibility = Visibility.Hidden;
+
             //treeViewImports.Items.Clear();
             //dataGridExports.Items.Clear();
             //dataGridHeaders.Items.Clear();
@@ -519,7 +534,7 @@ namespace PEDScanner
                 PopulateDirectories(portableExecutable.Directories);
             }
         }
-
+        
         //utility function to extract file name given the file path
         private String ExtractFileNameFromPath(String FilePath)
         {
@@ -533,5 +548,7 @@ namespace PEDScanner
             this.SelectedPortableExecutable = (PortableExecutable)(PortableExecutable)item.Tag;
             e.Handled = true;
         }
+
+        
     }
 }

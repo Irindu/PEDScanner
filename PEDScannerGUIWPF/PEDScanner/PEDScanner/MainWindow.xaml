@@ -120,7 +120,57 @@
                     </TabItem.Header>
                     <TabItem.Content>
                         <Grid>
-                            <TreeView Name="treeViewImports" TreeViewItem.Expanded="TreeViewItem_Expanded" Margin="10" />
+                            <StackPanel Orientation="Horizontal">
+                                <TreeView Name="treeViewImports" TreeViewItem.Expanded="TreeViewItem_Expanded" TreeViewItem.Selected="treeViewImports_Selected" Margin="15,15,15,15" Width="356" />
+                                <DataGrid x:Name="dataGridImportsTable" AutoGenerateColumns="False" IsReadOnly="True" Margin="0,15,15,15" Width="384">
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn Header="Function Name" Width="1*" Binding="{Binding Function}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+
+                                        </DataGridTextColumn>
+
+
+                                        <DataGridTextColumn Header="Base Address" Width="1*" Binding="{Binding BaseAddress}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                            <DataGridTextColumn.HeaderStyle>
+                                                <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                </Style>
+                                            </DataGridTextColumn.HeaderStyle>
+
+                                        </DataGridTextColumn>
+
+                                        <DataGridTextColumn Header="Dependecy" Width="1*" Binding="{Binding Dependency}">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                        <DataGridTextColumn.HeaderStyle>
+                                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridTextColumn.HeaderStyle>
+
+                                        </DataGridTextColumn>
+
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
                         </Grid>
                     </TabItem.Content>
                 </TabItem>
