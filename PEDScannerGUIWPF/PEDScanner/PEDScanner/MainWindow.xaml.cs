@@ -507,7 +507,7 @@ namespace PEDScanner
             //labelDependecyPath.Text = "";
             treeViewDependencies.Items.Clear();
             dataGridImportsTable.Visibility = Visibility.Hidden;
-
+            LabelStatus.Text = "";
             //treeViewImports.Items.Clear();
             //dataGridExports.Items.Clear();
             //dataGridHeaders.Items.Clear();
@@ -546,9 +546,17 @@ namespace PEDScanner
         {
             TreeViewItem item = sender as TreeViewItem;
             this.SelectedPortableExecutable = (PortableExecutable)(PortableExecutable)item.Tag;
+            if (SelectedPortableExecutable.FilePath != null)
+            {
+                LabelStatus.Text = SelectedPortableExecutable.FilePath;
+
+            }
+            else
+            {
+                LabelStatus.Text = "The selected portable executable is missing";
+            }
             e.Handled = true;
         }
 
-        
     }
 }
