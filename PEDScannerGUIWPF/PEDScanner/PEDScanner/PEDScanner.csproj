@@ -38,8 +38,9 @@
     <OutputPath>bin\NEWCONFIG\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PEDScannerLib">
-      <HintPath>D:\Irindu\PEDScanner\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.dll</HintPath>
+    <Reference Include="PEDScannerLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\PEDScannerLib\PEDScannerLib\bin\Debug\PEDScannerLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

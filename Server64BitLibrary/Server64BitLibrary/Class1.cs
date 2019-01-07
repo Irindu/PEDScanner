@@ -14,14 +14,14 @@ namespace Objects
 
     public class FunctionObject
     {
-        public string function;
+        public string Function;
         public FunctionObject()
         {
             this.FunctionList = new List<FunctionObject>();
         }
         public FunctionObject(string functionName)
         {
-            this.function = functionName;
+            this.Function = functionName;
         }
         public List<FunctionObject> FunctionList { get; set; }
 
@@ -31,8 +31,8 @@ namespace Objects
     public class ImportFunctionObject : FunctionObject
     {
 
-        public UInt64 baseAddress;
-        public string dependency;
+        public UInt64 BaseAddress;
+        public string Dependency;
         public ImportFunctionObject()
         {
              this.FunctionObjectList = new List<ImportFunctionObject>();
@@ -40,8 +40,8 @@ namespace Objects
 
         public ImportFunctionObject(string functionName, UInt64 baseAddress, string dependency) : base(functionName)
         {
-            this.baseAddress = baseAddress;
-            this.dependency = dependency;
+            this.BaseAddress = baseAddress;
+            this.Dependency = dependency;
         }
         public List<ImportFunctionObject> FunctionObjectList { get; set; }
 
@@ -239,7 +239,7 @@ namespace Server64
         public void Server()
         {
 
-            Uri baseAddress = new Uri("net.pipe://localhost/Service64");
+            Uri baseAddress = new Uri("net.pipe://localhost/Service64DLLLoader");
 
             // Create the ServiceHost.
             using (ServiceHost host = new ServiceHost(typeof(Service64), baseAddress))
@@ -260,7 +260,7 @@ namespace Server64
                 // one endpoint per base address for each service contract implemented
                 // by the service.
                 host.Open();
-                Console.WriteLine("Service is host at Server 64 the needed server." + DateTime.Now.ToString());
+                Console.WriteLine("Service is host at Server 64 the needed server.............. New" + DateTime.Now.ToString());
                 Console.WriteLine("The service 64 is ready at {0}", baseAddress);
                 Console.WriteLine("Press <Enter> to stop the service.");
                 Console.ReadLine();

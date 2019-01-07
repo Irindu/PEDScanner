@@ -14,27 +14,27 @@ namespace PEDScannerLib.Objects
         }
     }
 
-    public class FunctionObject
-    {
-        public string Function { get; set; }
+    //public class FunctionObject
+    //{
+    //    public string Function { get; set; }
 
-        public FunctionObject(string functionName)
-        {
-            this.Function = functionName;
-        }
-    }
+    //    public FunctionObject(string functionName)
+    //    {
+    //        this.Function = functionName;
+    //    }
+    //}
 
-    public class ImportFunctionObject : FunctionObject
-    {
-        public UInt32 BaseAddress { get; set; }
-        public string Dependency { get; set; }
+    //public class ImportFunctionObject : FunctionObject
+    //{
+    //    public UInt32 BaseAddress { get; set; }
+    //    public string Dependency { get; set; }
 
-        public ImportFunctionObject(string functionName, UInt32 baseAddress, string dependency) : base(functionName)
-        {
-            this.BaseAddress = baseAddress;
-            this.Dependency = dependency;
-        }
-    }
+    //    public ImportFunctionObject(string functionName, UInt32 baseAddress, string dependency) : base(functionName)
+    //    {
+    //        this.BaseAddress = baseAddress;
+    //        this.Dependency = dependency;
+    //    }
+    //}
 
     public class DependeciesObject
     {

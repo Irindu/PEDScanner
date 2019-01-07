@@ -78,38 +78,39 @@ namespace Objects
 
 
     }
-    //public class FunctionObject
-    //{
-    //    public string function;
-    //    public FunctionObject()
-    //    {
-            
-    //    }
-    //    public FunctionObject(string functionName)
-    //    {
-    //        this.function = functionName;
-    //    }
-        
-    //}
+    public class FunctionObject
+    {
 
-    //public class ImportFunctionObject : FunctionObject
-    //{
-        
-    //    public UInt64 baseAddress;
-    //    public string dependency;
-    //    public ImportFunctionObject()
-    //    {
-            
-    //    }
-       
-    //    public ImportFunctionObject(string functionName, UInt64 baseAddress, string dependency) : base(functionName)
-    //    {
-    //        this.baseAddress = baseAddress;
-    //        this.dependency = dependency;
-    //    }
- 
-    //}
-   
+        public string Function { get; set; }
+        public FunctionObject()
+        {
+
+        }
+        public FunctionObject(string functionName)
+        {
+            this.Function = functionName;
+        }
+
+    }
+
+    public class ImportFunctionObject : FunctionObject
+    {
+
+        public UInt64 BaseAddress { get; set; }
+        public string Dependency { get; set; }
+        public ImportFunctionObject()
+        {
+
+        }
+
+        public ImportFunctionObject(string functionName, UInt64 baseAddress, string dependency) : base(functionName)
+        {
+            this.BaseAddress = baseAddress;
+            this.Dependency = dependency;
+        }
+    
+    }
+
 }
 
 

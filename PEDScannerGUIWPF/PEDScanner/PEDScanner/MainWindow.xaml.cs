@@ -9,6 +9,9 @@ using Microsoft.Win32;
 using PEDScannerLib.Core;
 using PEDScannerLib.Objects;
 using System.Windows.Media.Imaging;
+using System.Diagnostics;
+using Objects;
+
 
 namespace PEDScanner
 {
@@ -21,11 +24,15 @@ namespace PEDScanner
         PortableExecutable portableExecutable;
         //the portable executable selected by the user from the UI
         PortableExecutable SelectedPortableExecutable;
+        //the Server Process for 64-bit portable executable loading 
+        Process exeProcess;
 
         public MainWindow()
         {
             InitializeComponent();
             this.portableExecutable = null;
+            exeProcess = System.Diagnostics.Process.Start("Server64BitConsoleApp.exe");
+
         }
 
         public MainWindow(String filePath)
@@ -42,6 +49,14 @@ namespace PEDScanner
             if (portableExecutable != null)
             {
                 UpdateUI(this.portableExecutable);
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(exeProcess != null)
+            {
+                exeProcess.Kill();
             }
         }
 
@@ -262,8 +277,8 @@ namespace PEDScanner
             }
         }
 
-        public void PopulateExports(List<FunctionObject> exports)
-        {
+    public void PopulateExports(List<FunctionObject> exports)
+        {         
             dataGridExports.ItemsSource = exports;
         }
 
@@ -518,6 +533,16 @@ namespace PEDScanner
             dataGridHeaders.ItemsSource = null;
             dataGridSections.ItemsSource = null;
             dataGridDirectories.ItemsSource = null;
+
+            //MessageBox.Show("test");
+            //ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
+            //String FilePath = @"E:\TEST";
+            //String path2 = @"E:\TEST\CppDll.dll";
+            //PortableExecutable testPE = new PortableExecutable(path2);
+            //PortableExecutableLoader loader = new PortableExecutableLoader();
+            //loader.Load(testPE);
+            //MessageBox.Show("test"+ (reverseDependencyDetector.Process(FilePath, testPE)).Count);
+
 
 
             ItemCollection itemCollection = treeViewDependencies.Items;
