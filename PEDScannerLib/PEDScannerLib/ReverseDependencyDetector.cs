@@ -7,15 +7,17 @@ using System.Threading.Tasks;
 
 namespace PEDScannerLib.Core
 {
-    class ReverseDependencyDetector
+public class ReverseDependencyDetector
     {
         private HashSet<PortableExecutable> localPortableExecutables;
 
-        private HashSet<PortableExecutable> globalPortableExecutables;
-
         private List<PortableExecutable> reverseDependecyList;
 
-        private PortableExecutable target;
+        public ReverseDependencyDetector() {
+            reverseDependecyList = new List<PortableExecutable>();
+            localPortableExecutables = new HashSet<PortableExecutable>();
+        }
+
 
         //Method 1
         public bool IsEquals(object obj)
@@ -29,7 +31,7 @@ namespace PEDScannerLib.Core
 
             try
             {
-                string target_filePath = target.FilePath;
+                string target_filePath = pe_obj.FilePath;
                 string peobj_filePath = pe_obj.FilePath;
 
                 byte[] array_1 = File.ReadAllBytes(target_filePath);
@@ -56,7 +58,12 @@ namespace PEDScannerLib.Core
             return false;
         }
 
+        public List<PortableExecutable> Process(String FilePath, PortableExecutable target) {
+            this.LoadLocal(FilePath);
+            this.SearchLocal(target);
 
+            return this.reverseDependecyList;
+        }
 
         private void SearchLocal(PortableExecutable target)
         {
@@ -68,13 +75,14 @@ namespace PEDScannerLib.Core
                 }
             }
         }
-        //Define EQ of PE on baseClass
-        private bool SearchIndividualPE(PortableExecutable portableExecutable, PortableExecutable target)
+
+        private bool SearchIndividualPE(PortableExecutable candidate, PortableExecutable target)
         {
             bool containsTargetAsaDependecy = false;
-            foreach (PortableExecutable dependency in portableExecutable.Dependencies)
+            if (candidate!= null && target != null && candidate.Dependencies.Count > 0) 
+            foreach (PortableExecutable dependency in candidate.Dependencies)
             {
-                if (IsEquals(portableExecutable))
+                if (target.Equals(dependency))
                 {
                     containsTargetAsaDependecy = true;
                     break;
@@ -82,11 +90,6 @@ namespace PEDScannerLib.Core
             }
 
             return containsTargetAsaDependecy;
-        }
-
-        public List<PortableExecutable> getReverseDependecies()
-        {
-            return reverseDependecyList;
         }
 
         public void LoadLocal(String FilePath)
@@ -103,7 +106,7 @@ namespace PEDScannerLib.Core
             }
         }
 
-        public List<String> LoadDirectory(String FilePath)
+        private List<String> LoadDirectory(String FilePath)
         {
             List<String> fileList = new List<String>();
             try

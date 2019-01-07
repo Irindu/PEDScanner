@@ -85,9 +85,20 @@ namespace PEDScannerLib.Core
             Dependencies = new List<PortableExecutable>();
            
         }
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as PortableExecutable;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.Name.Equals(item.Name);
+        }
     }
-    
-        public class PortableExecutableLoader
+    public class PortableExecutableLoader
         {
 
             const uint DONT_RESOLVE_DLL_REFERENCES = 0x00000001;
