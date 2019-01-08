@@ -42,6 +42,7 @@ namespace PEDScannerLib.Core
         public List<string> ImportNames;
         public List<string> listOfBranch;
         public Assembly assembly;
+        public List<String> importMismatchedFiles;
       //  static Hashtable filePathsTable = new Hashtable();
       
         public string directoryPath = Directory.GetCurrentDirectory();
@@ -83,7 +84,7 @@ namespace PEDScannerLib.Core
             ImportNames = new List<string>();
             DependencyNames = new List<DependeciesObject>();
             Dependencies = new List<PortableExecutable>();
-           
+            importMismatchedFiles = new List<string>();
         }
 
         public override bool Equals(object obj)
@@ -137,7 +138,7 @@ namespace PEDScannerLib.Core
                 List<SectionObject> Sections = portableExecutable.Sections;
                 List<DirectoryObject> Directories = portableExecutable.Directories;
                 List<string> ImportNames = portableExecutable.ImportNames;
-
+                List<string> importMismatchedFiles = portableExecutable.importMismatchedFiles;
                 //the PE Header reader to be used 
                 PeHeaderReader reader = new PeHeaderReader(FilePath);
                 if (Is32bitFile(reader))
@@ -166,8 +167,8 @@ namespace PEDScannerLib.Core
                 GetAssemblyDependencies(FilePath, ImportFunctions, ImportNames);
                 GetDirectories(Directories, reader);
                 GetSections(Sections, reader);
-                LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader,listOfBranch,this);
-                smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
+            LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader, listOfBranch, this, ImportFunctions, importMismatchedFiles);
+            smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
 
 
         }
@@ -187,10 +188,11 @@ namespace PEDScannerLib.Core
         /// Load each of the dependencies as a Portable Executable Object
         /// </summary>
         /// <returns> The Dependencies in a Portable Executable File Format </returns>
-        private void LoadDependencies(List<string> ImportNames, List<PortableExecutable> Dependencies, String currentDirectory, String FilePath, PeHeaderReader reader, List<string> listOfBranch, PortableExecutableLoader portableExecutableLoader)
+        private void LoadDependencies(List<string> ImportNames, List<PortableExecutable> Dependencies, String currentDirectory, String FilePath, PeHeaderReader reader, List<string> listOfBranch, PortableExecutableLoader portableExecutableLoader, List<ImportFunctionObject> importFunctions,List<string> importMismatchedFiles)
         {
             PortableExecutable PE;
             string filePath;
+           
             unsafe
             {
                 try
@@ -198,19 +200,55 @@ namespace PEDScannerLib.Core
                     ImportNames = ImportNames.Distinct().ToList();
                     foreach (string name in ImportNames)
                     {
+                        filePath = null;
+                       
                         if (!filePathsTable.ContainsKey(name))
                         {
-                            filePath = GetModulePath(name, currentDirectory, FilePath, reader);
-                            if (filePath != null)
+                            var importedFunction = from import in importFunctions
+                                                   where import.Dependency == name
+                                                   select import.Function;
+                            List<String> importedFunctionNames = new List<string>();
+                            importedFunctionNames.AddRange(importedFunction);
+
+                           
+
+                            foreach (String path in GetModulePath(name, currentDirectory, FilePath, reader))
                             {
-                                filePathsTable.Add(name, filePath);
+
+                                List<FunctionObject> exportsOfFile = new List<FunctionObject>();
+                               
+                                List<string> exportsFunctionNames = new List<string>();
+                                if (path != null)
+                                {
+                                    LoadExports(path, true, exportsOfFile);
+                                    foreach (FunctionObject exports in exportsOfFile)
+                                    {
+                                        exportsFunctionNames.Add(exports.Function);
+                                    }
+                                    var firstNotSecond = importedFunctionNames.Except(exportsFunctionNames).ToList();
+                                    //   filePath = path;
+                                    if (string.Equals(name, "kernel32.dll", StringComparison.OrdinalIgnoreCase) || string.Equals(name, "msvcrt.dll", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        filePath = GetModulePath(name, currentDirectory, FilePath, reader).First();
+                                        break;
+                                    }
+                                    else if (!importedFunctionNames.Except(exportsFunctionNames).Any())
+                                    {
+                                        filePath = path;
+                                        break;
+                                    }
+                                }
                             }
                         }
+
                         else
                         {
                             filePath = filePathsTable[name].ToString();
                         }
-
+                        if (filePath == null && GetModulePath(name, currentDirectory, FilePath, reader).Count>0)
+                        {
+                            importMismatchedFiles.Add(name);
+                        }
                         var hLib2 = LoadLibraryEx(filePath, 0,
                                               DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
                         if (listOfBranch.Contains(name))
@@ -552,21 +590,21 @@ namespace PEDScannerLib.Core
         /// <param name="moduleName"></param>
         /// <param name="currentDirectory"></param>
         /// <returns></returns>
-        private String GetModulePath(String moduleName, String currentDirectory, String FilePath, PeHeaderReader reader)
+     
+
+        private List<String> GetModulePath(String moduleName, String currentDirectory, String FilePath, PeHeaderReader reader)
         {
+            List<string> files = new List<string>();
             // iteratedDirectoryPath.Clear();
             // 0. Look in well-known dlls list
 
             // 1. Look in application folder
             string applicationFolder = Path.GetDirectoryName(FilePath);
-            List<string> files = GetFiles(applicationFolder, moduleName);
-            if (files.Count > 0)
-            {
-                return files.First();
-            }
+            files.AddRange(GetFiles(applicationFolder, moduleName));
+
             Environment.SpecialFolder WindowsSystemFolder;
 
-            //try 32-bit,64-bit 
+            // try 32 - bit,64 - bit
             if (Is32bitFile(reader))
             {
                 WindowsSystemFolder = Environment.SpecialFolder.SystemX86;
@@ -575,19 +613,16 @@ namespace PEDScannerLib.Core
             {
                 WindowsSystemFolder = Environment.SpecialFolder.System;
             }
+          
             string WindowsSystemFolderPath = Environment.GetFolderPath(WindowsSystemFolder);
-            files = GetFiles(WindowsSystemFolderPath, moduleName);
-            if (files.Count > 0)
-            {
-                return files.First();
-            }
+            files.AddRange(GetFiles(WindowsSystemFolderPath, moduleName));
+
+           
+
             //try windows folder
             WindowsSystemFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Windows);
-            files = GetFiles(WindowsSystemFolderPath, moduleName);
-            if (files.Count > 0)
-            {
-                return files.First();
-            }
+            files.AddRange(GetFiles(WindowsSystemFolderPath, moduleName));
+
             //try the folders inside PATH Environmental variable
             string PATH = Environment.GetEnvironmentVariable("PATH");
             List<String> PATHFolders = new List<string>(PATH.Split(';'));
@@ -595,22 +630,16 @@ namespace PEDScannerLib.Core
             {
                 if (SystePath != "" && !SystePath.Contains(WindowsSystemFolderPath))
                 {
-                    files = GetFiles(SystePath, moduleName);
-                    if (files.Count > 0)
-                    {
-                        return files.First();
-                    }
+                    files.AddRange(GetFiles(SystePath, moduleName));
+
                 }
             }
 
             //check in current directory
-            files = GetFiles(currentDirectory, moduleName);
+            files.AddRange(GetFiles(currentDirectory, moduleName));
 
-            if (files.Count > 0)
-            {
-                return files.First();
-            }
-            return null;
+
+            return files;
         }
 
         /// <summary>
