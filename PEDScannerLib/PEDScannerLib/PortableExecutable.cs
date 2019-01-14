@@ -43,8 +43,9 @@ namespace PEDScannerLib.Core
         public List<string> listOfBranch;
         public Assembly assembly;
         public List<String> importMismatchedFiles;
+        public List<string> circularDependencyFiles;
       //  static Hashtable filePathsTable = new Hashtable();
-      
+
         public string directoryPath = Directory.GetCurrentDirectory();
 
         public PortableExecutable(string FilePath) { }
@@ -85,6 +86,7 @@ namespace PEDScannerLib.Core
             DependencyNames = new List<DependeciesObject>();
             Dependencies = new List<PortableExecutable>();
             importMismatchedFiles = new List<string>();
+            circularDependencyFiles = new List<string>();
         }
 
         public override bool Equals(object obj)
@@ -139,6 +141,7 @@ namespace PEDScannerLib.Core
                 List<DirectoryObject> Directories = portableExecutable.Directories;
                 List<string> ImportNames = portableExecutable.ImportNames;
                 List<string> importMismatchedFiles = portableExecutable.importMismatchedFiles;
+                List<string> circularDependencyFiles = portableExecutable.circularDependencyFiles;      
                 //the PE Header reader to be used 
                 PeHeaderReader reader = new PeHeaderReader(FilePath);
                 if (Is32bitFile(reader))
@@ -167,7 +170,7 @@ namespace PEDScannerLib.Core
                 GetAssemblyDependencies(FilePath, ImportFunctions, ImportNames);
                 GetDirectories(Directories, reader);
                 GetSections(Sections, reader);
-            LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader, listOfBranch, this, ImportFunctions, importMismatchedFiles);
+            LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader, listOfBranch, this, ImportFunctions, importMismatchedFiles, circularDependencyFiles);
             smartSuggestionEngine.GetSystemMessage(Marshal.GetLastWin32Error());
 
 
@@ -188,7 +191,7 @@ namespace PEDScannerLib.Core
         /// Load each of the dependencies as a Portable Executable Object
         /// </summary>
         /// <returns> The Dependencies in a Portable Executable File Format </returns>
-        private void LoadDependencies(List<string> ImportNames, List<PortableExecutable> Dependencies, String currentDirectory, String FilePath, PeHeaderReader reader, List<string> listOfBranch, PortableExecutableLoader portableExecutableLoader, List<ImportFunctionObject> importFunctions,List<string> importMismatchedFiles)
+        private void LoadDependencies(List<string> ImportNames, List<PortableExecutable> Dependencies, String currentDirectory, String FilePath, PeHeaderReader reader, List<string> listOfBranch, PortableExecutableLoader portableExecutableLoader, List<ImportFunctionObject> importFunctions,List<string> importMismatchedFiles, List<string> circularDependencyFiles)
         {
             PortableExecutable PE;
             string filePath;
@@ -253,6 +256,7 @@ namespace PEDScannerLib.Core
                                               DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
                         if (listOfBranch.Contains(name))
                         {
+                            circularDependencyFiles.Add(name);
                             continue;
                         }
                         else
