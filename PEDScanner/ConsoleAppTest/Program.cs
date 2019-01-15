@@ -21,7 +21,7 @@ namespace PEDScannerConsoleApp
         static void Main(string[] args)
         {
            
-            string path = @"C:\Program Files\Git\bin\git.exe";
+            string path = @"C:\Program Files\system32\kernel32.dll";
            
             string fileName = Path.GetFileName(path);
             Console.WriteLine("Hello World!");
@@ -45,7 +45,11 @@ namespace PEDScannerConsoleApp
                     Console.WriteLine(importname);
                 }
 
-
+                List<string> circulra = PE.circularDependencyFiles;
+                foreach (string cir in circulra)
+                {
+                    Console.WriteLine("cir----------------------={0}", cir);
+                }
 
                 List<ImportFunctionObject> importFunctions = PE.ImportFunctions;
                 foreach (ImportFunctionObject import in importFunctions)
