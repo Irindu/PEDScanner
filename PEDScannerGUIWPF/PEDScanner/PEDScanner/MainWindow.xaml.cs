@@ -11,7 +11,7 @@ using PEDScannerLib.Objects;
 using System.Windows.Media.Imaging;
 using System.Diagnostics;
 using Objects;
-
+using PEDScannerLib;
 
 namespace PEDScanner
 {
@@ -534,23 +534,21 @@ namespace PEDScanner
             dataGridSections.ItemsSource = null;
             dataGridDirectories.ItemsSource = null;
 
-            //MessageBox.Show("test");
-            //ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
-            //String FilePath = @"E:\TEST";
-            //String path2 = @"E:\TEST\CppDll.dll";
-            //PortableExecutable testPE = new PortableExecutable(path2);
-            //PortableExecutableLoader loader = new PortableExecutableLoader();
-            //loader.Load(testPE);
-            //MessageBox.Show("test"+ (reverseDependencyDetector.Process(FilePath, testPE)).Count);
-
-
+            MessageBox.Show("test");
+            ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
+            String FilePath = @"E:\TEST";
+            String path2 = @"E:\TEST\CppDll.dll";
+            PortableExecutable testPE = new PortableExecutable(ExtractFileNameFromPath(path2),path2);
+            PortableExecutableLoader loader = new PortableExecutableLoader();
+            loader.Load(testPE);
+            MessageBox.Show("test" + ((PortableExecutable)((reverseDependencyDetector.Process(FilePath, testPE))[0])).FilePath);
 
             ItemCollection itemCollection = treeViewDependencies.Items;
 
             if (portableExecutable != null)
             {
                 PortableExecutableLoader portableExecutableLoader = new PortableExecutableLoader();
-                portableExecutableLoader.Load(portableExecutable);
+                portableExecutableLoader.Load(portableExecutable); 
                 RecursivelyPopulateTheTree(portableExecutable, itemCollection);
                 PopulateHeaders(portableExecutable.Headers);
                 PopulateImports(portableExecutable.ImportFunctions);

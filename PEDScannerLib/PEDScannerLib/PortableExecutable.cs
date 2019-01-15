@@ -45,9 +45,7 @@ namespace PEDScannerLib.Core
       //  static Hashtable filePathsTable = new Hashtable();
       
         public string directoryPath = Directory.GetCurrentDirectory();
-
-        public PortableExecutable(string FilePath) { }
-
+       
         public PortableExecutable(String Name, string FilePath)
         {
             this.Name = Name;
