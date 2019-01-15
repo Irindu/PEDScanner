@@ -324,7 +324,6 @@ namespace PEDScanner
 
         private void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "DLL files (*.dll)|*.dll|EXE files (*.exe)|*.exe";
@@ -534,15 +533,6 @@ namespace PEDScanner
             dataGridSections.ItemsSource = null;
             dataGridDirectories.ItemsSource = null;
 
-            MessageBox.Show("test");
-            ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
-            String FilePath = @"E:\TEST";
-            String path2 = @"E:\TEST\CppDll.dll";
-            PortableExecutable testPE = new PortableExecutable(ExtractFileNameFromPath(path2),path2);
-            PortableExecutableLoader loader = new PortableExecutableLoader();
-            loader.Load(testPE);
-            MessageBox.Show("test" + ((PortableExecutable)((reverseDependencyDetector.Process(FilePath, testPE))[0])).FilePath);
-
             ItemCollection itemCollection = treeViewDependencies.Items;
 
             if (portableExecutable != null)
@@ -581,5 +571,17 @@ namespace PEDScanner
             e.Handled = true;
         }
 
+        
+        private void Reverse_Dependencies_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("test");
+            ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
+            String FilePath = @"E:\TEST";
+            String path2 = @"E:\TEST\CppDll.dll";
+            PortableExecutable testPE = new PortableExecutable(ExtractFileNameFromPath(path2), path2);
+            PortableExecutableLoader loader = new PortableExecutableLoader();
+            loader.Load(testPE);
+            MessageBox.Show("test" + ((PortableExecutable)((reverseDependencyDetector.Process(FilePath, testPE))[0])).FilePath);
+        }
     }
 }
