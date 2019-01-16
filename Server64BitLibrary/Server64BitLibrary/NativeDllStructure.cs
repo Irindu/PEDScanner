@@ -343,7 +343,8 @@ namespace ClassLibraryServer.Struct
         public static readonly ushort IMAGE_DIRECTORY_ENTRY_IMPORT32 = 1;
         public static readonly ulong IMAGE_DIRECTORY_ENTRY_IMPORT = 1;
 
-        public static readonly ushort IMAGE_DIRECTORY_ENTRY_EXPORT = 0;
+        public static readonly ushort IMAGE_DIRECTORY_ENTRY_EXPORT32 = 0;
+        public static readonly ulong IMAGE_DIRECTORY_ENTRY_EXPORT = 0;
 
         #endregion
         #region Private Constants

@@ -107,21 +107,26 @@ namespace Server64
         {
            
             List<FunctionObject> exportList = myObject.ExportFunctionObjectList;
-           
+
+            //var hLib = LoadLibraryEx(filePath, 0,
+            //                   DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
             var hLib = LoadLibrary(filePath);
             unsafe
             {
                 void* hMod = (void*)hLib;
-                uint BaseAddress = (uint)hMod;
+                ulong BaseAddress = (ulong)hMod;
+               
                 if (hMod != null)
                 {
-                    IMAGE_EXPORT_DIRECTORY* pExportDir = (IMAGE_EXPORT_DIRECTORY*)Interop.ImageDirectoryEntryToData((void*)hLib, true, Interop.IMAGE_DIRECTORY_ENTRY_EXPORT, out uint size);
+                    ulong size;
+                    IMAGE_EXPORT_DIRECTORY* pExportDir = (IMAGE_EXPORT_DIRECTORY*)Interop.ImageDirectoryEntryToData((void*)hLib, true, Interop.IMAGE_DIRECTORY_ENTRY_EXPORT, out size);
                     if (pExportDir != null)
                     {
-                        uint* pFuncNames = (uint*)(BaseAddress + pExportDir->AddressOfNames);
+                        ulong* pFuncNames = (ulong*)(BaseAddress + pExportDir->AddressOfNames);
                         for (uint i = 0; i < pExportDir->NumberOfNames; i++)
                         {
-                            uint funcNameRva = pFuncNames[i];
+                            ulong funcNameRva = pFuncNames[i];
+                           // ulong funcNameRva = pFuncNames[i];
                             if (funcNameRva != 0)
                             {
                                 char* funcName = (char*)(BaseAddress + funcNameRva);
