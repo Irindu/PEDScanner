@@ -183,6 +183,16 @@ namespace PEDScanner.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap iconSmall {
+            get {
+                object obj = ResourceManager.GetObject("iconSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Image {
             get {
                 object obj = ResourceManager.GetObject("Image", resourceCulture);
@@ -296,6 +306,16 @@ namespace PEDScanner.Properties {
         internal static System.Drawing.Bitmap Recent16 {
             get {
                 object obj = ResourceManager.GetObject("Recent16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ReverseDependency16 {
+            get {
+                object obj = ResourceManager.GetObject("ReverseDependency16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

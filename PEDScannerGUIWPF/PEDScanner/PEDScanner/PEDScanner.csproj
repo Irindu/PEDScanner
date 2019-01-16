@@ -103,6 +103,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\ReverseDependency16.png" />
     <Resource Include="Resources\sample.JPG" />
   </ItemGroup>
   <ItemGroup>
@@ -179,6 +180,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Recent16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\iconSmall.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

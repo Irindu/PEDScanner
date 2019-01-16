@@ -1,101 +1,197 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 using System.Runtime.InteropServices;
+using PEDScannerLib.Core;
 
 namespace PEDScannerLib
 {
     public class SmartSuggestionEngine
     {
 
-        #region definitions
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern IntPtr LocalFree(IntPtr hMem);
+        //public List<Suggestions> suggestionObjects()
+        //{
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern int FormatMessage(FormatMessageFlags dwFlags, IntPtr lpSource, uint dwMessageId, uint dwLanguageId, ref IntPtr lpBuffer, uint nSize, IntPtr Arguments);
+        //    return suggestions_list;
+        //}        
 
-        [Flags]
-        private enum FormatMessageFlags : uint
+
+        //}
+
+        //public class Suggestions
+        //{
+
+        ////Suggestions suggestions = new Suggestions();
+        //public Dictionary<uint, string> suggestion_list = new Dictionary<uint, string>();
+
+        //#region definitions
+        //[DllImport("kernel32.dll", SetLastError = true)]
+        //static extern IntPtr LocalFree(IntPtr hMem);
+
+        //[DllImport("kernel32.dll", SetLastError = true)]
+        //static extern int FormatMessage(FormatMessageFlags dwFlags, IntPtr lpSource, uint dwMessageId, uint dwLanguageId, ref IntPtr lpBuffer, uint nSize, IntPtr Arguments);
+
+        //[Flags]
+        //private enum FormatMessageFlags : uint
+        //{
+        //    FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100,
+        //    FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200,
+        //    FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
+        //    FORMAT_MESSAGE_ARGUMENT_ARRAY = 0x00002000,
+        //    FORMAT_MESSAGE_FROM_HMODULE = 0x00000800,
+        //    FORMAT_MESSAGE_FROM_STRING = 0x00000400,
+        //}
+        //#endregion
+
+        //// Gets a user friendly string message for a system error code
+
+        //public void GetSystemMessage(uint errorCode)
+        //{
+        //    try
+        //    {
+        //        IntPtr lpMsgBuf = IntPtr.Zero;
+
+        //        int dwChars = FormatMessage(
+        //            FormatMessageFlags.FORMAT_MESSAGE_ALLOCATE_BUFFER | FormatMessageFlags.FORMAT_MESSAGE_FROM_SYSTEM | FormatMessageFlags.FORMAT_MESSAGE_IGNORE_INSERTS,
+        //            IntPtr.Zero,
+        //            (uint)errorCode,
+        //            0,
+        //            ref lpMsgBuf,
+        //            0,
+        //            IntPtr.Zero);
+        //        if (dwChars == 0)
+        //        {
+        //            int le = Marshal.GetLastWin32Error();
+        //            suggestion_list.Add(0, "Unable to get error code string from System - Error " + le.ToString());
+        //        }
+
+        //        string sRet = Marshal.PtrToStringAnsi(lpMsgBuf);
+
+        //        lpMsgBuf = LocalFree(lpMsgBuf);
+        //        suggestion_list.Add(errorCode, sRet);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        suggestion_list.Add(0, "Unable to get error code string from System -> " + e.ToString());
+        //    }
+        //}
+
+        public Dictionary<string, List<string>> error_list = new Dictionary<string, List<string>>();
+
+        public void readErrorCode(string name, int error_code)
         {
-            FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100,
-            FORMAT_MESSAGE_IGNORE_INSERTS = 0x00000200,
-            FORMAT_MESSAGE_FROM_SYSTEM = 0x00001000,
-            FORMAT_MESSAGE_ARGUMENT_ARRAY = 0x00002000,
-            FORMAT_MESSAGE_FROM_HMODULE = 0x00000800,
-            FORMAT_MESSAGE_FROM_STRING = 0x00000400,
-        }
-        #endregion
-
-        // Gets a user friendly string message for a system error code
-
-        public string GetSystemMessage(int errorCode)
-        {
-            try
+            if (error_code == 2)
             {
-                IntPtr lpMsgBuf = IntPtr.Zero;
-
-                int dwChars = FormatMessage(
-                    FormatMessageFlags.FORMAT_MESSAGE_ALLOCATE_BUFFER | FormatMessageFlags.FORMAT_MESSAGE_FROM_SYSTEM | FormatMessageFlags.FORMAT_MESSAGE_IGNORE_INSERTS,
-                    IntPtr.Zero,
-                    (uint)errorCode,
-                    0,
-                    ref lpMsgBuf,
-                    0,
-                    IntPtr.Zero);
-                if (dwChars == 0)
+                if (!error_list.ContainsKey(name))
                 {
-                    int le = Marshal.GetLastWin32Error();
-                    return "Unable to get error code string from System - Error " + le.ToString();
+                    List<string> errors = new List<string>();
+                    errors.Add("Try to load unmanaged assembly.");
+                    error_list.Add(name, errors);
                 }
-
-                string sRet = Marshal.PtrToStringAnsi(lpMsgBuf);
-
-                lpMsgBuf = LocalFree(lpMsgBuf);
-                return sRet;
+                else
+                {
+                    List<string> errorExisting = new List<string>();
+                    error_list.TryGetValue(name, out errorExisting);
+                    errorExisting.Add("Try to load unmanaged assembly.");
+                    error_list.Add(name, errorExisting);
+                }
             }
-            catch (Exception e)
+            else if (error_code == 3)
             {
-                return "Unable to get error code string from System -> " + e.ToString();
+                if (!error_list.ContainsKey(name))
+                {
+                    List<string> errors = new List<string>();
+                    errors.Add("File path is null when  get assembly dependencies.");
+                    error_list.Add(name, errors);
+                }
+                else
+                {
+                    List<string> errorExisting = new List<string>();
+                    error_list.TryGetValue(name, out errorExisting);
+                    errorExisting.Add("File path is null when  get assembly dependencies.");
+                    error_list.Add(name, errorExisting);
+                }
+            }
+            else if (error_code == 4)
+            {
+                if (!error_list.ContainsKey(name))
+                {
+                    List<string> errors = new List<string>();
+                    errors.Add("Import, Export mismatch error in " + name);
+                    error_list.Add(name, errors);
+                }
+                else
+                {
+                    List<string> errorExisting = new List<string>();
+                    error_list.TryGetValue(name, out errorExisting);
+                    errorExisting.Add("Import, Export mismatch error" + name);
+                    error_list.Add(name, errorExisting);
+                }
+            }
+            else if (error_code == 5)
+            {
+                if (!error_list.ContainsKey(name))
+                {
+                    List<string> errors = new List<string>();
+                    errors.Add("The file path is null in " + name);
+                    error_list.Add(name, errors);
+                }
+                else
+                {
+                    List<string> errorExisting = new List<string>();
+                    error_list.TryGetValue(name, out errorExisting);
+                    errorExisting.Add("The file path is null in " + name);
+                    error_list.Add(name, errorExisting);
+                }
+            }
+            else if (error_code == 6)
+            {
+                if (!error_list.ContainsKey(name))
+                {
+                    List<string> errors = new List<string>();
+                    errors.Add("Circular dependency triggered in " + name);
+                    error_list.Add(name, errors);
+                }
+                else
+                {
+                    List<string> errorExisting = new List<string>();
+                    error_list.TryGetValue(name, out errorExisting);
+                    errorExisting.Add("Erro occured when loading imports in " + name);
+                    error_list.Add(name, errorExisting);
+                }
+            }
+            else if (error_code == 7)
+            {
+                if (!error_list.ContainsKey(name))
+                {
+                    List<string> errors = new List<string>();
+                    errors.Add("Error occured when loading imports in " + name);
+                    error_list.Add(name, errors);
+                }
+                else
+                {
+                    List<string> errorExisting = new List<string>();
+                    error_list.TryGetValue(name, out errorExisting);
+                    errorExisting.Add("Error occured when loading imports in " + name);
+                    error_list.Add(name, errorExisting);
+                }
+            }
+            else if(error_code == 8)
+            {
+                if (!error_list.ContainsKey(name))
+                {
+                    List<string> errors = new List<string>();
+                    errors.Add("Error occured when loading exports in " + name);
+                    error_list.Add(name, errors);
+                }
+                else
+                {
+                    List<string> errorExisting = new List<string>();
+                    error_list.TryGetValue(name, out errorExisting);
+                    errorExisting.Add("Error occured when loading exports in " + name);
+                    error_list.Add(name, errorExisting);
+                }
             }
         }
     }
 
-    //    public Dictionary<int, string> error_list = new Dictionary<int, string>();
-
-    //    public void readErrorCode(int error_code)
-    //    {
-    //        if (error_code == 2)
-    //        {
-    //            error_list.Add(2, "The system cannot find the file specified.");
-    //        }
-    //        else if (error_code == 3)
-    //        {
-    //            error_list.Add(3, "The system cannot find the path specified.");
-    //        }
-    //        else if (error_code == 6)
-    //        {
-    //            error_list.Add(6, "The handle is invalid.");
-    //        }
-    //        else if (error_code == 5)
-    //        {
-    //            error_list.Add(5, "Access is denied.");
-    //        }
-    //        else if (error_code == 23)
-    //        {
-    //            error_list.Add(23, "Data error (cyclic redundancy check).");
-    //        }
-    //        else if (error_code == 129)
-    //        {
-    //            error_list.Add(129, "The %1 application cannot be run in Win32 mode.");
-    //        }
-    //        else
-    //        {
-    //            error_list.Add(error_code, "The dll is not a managed assambly.");
-    //        }
-    //    }
-    //}
 }

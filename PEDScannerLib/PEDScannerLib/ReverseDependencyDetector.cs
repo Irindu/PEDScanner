@@ -97,7 +97,9 @@ public class ReverseDependencyDetector
             List<String> fileList = LoadDirectory(FilePath);
             foreach (String Path in fileList)
             {
-                PortableExecutable portableExecutable = new PortableExecutable(Path);
+                PortableExecutable portableExecutable = new PortableExecutable(ExtractFileNameFromPath(Path),Path);
+                PortableExecutableLoader loader = new PortableExecutableLoader();
+                loader.Load(portableExecutable);
                 localPortableExecutables.Add(portableExecutable);
             }
             foreach (string d in Directory.GetDirectories(FilePath))
@@ -135,6 +137,14 @@ public class ReverseDependencyDetector
             }
             return fileList;
         }
+
+        //utility function to extract file name given the file path
+        private static String ExtractFileNameFromPath(String FilePath)
+        {
+            String[] arrayofNames = FilePath.Split('\\');
+            return arrayofNames[arrayofNames.Length - 1];
+        }
+
     }
 }
 

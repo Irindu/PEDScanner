@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PEDScanner"
         mc:Ignorable="d"
+        Icon="Resources/iconSmall.png"
         Title="MainWindow" Height="450" Width="800">
 
     <Window.CommandBindings>
@@ -53,13 +54,19 @@
                     <Button Margin="5" Command="Open" ToolTip="Open a Portable Execulable for inplection">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Resources/open16.png" />
-                            <TextBlock Margin="3,0,0,0">Open</TextBlock>
+                            <TextBlock Margin="3,0,0,1">Open</TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="5" Click="Reverse_Dependencies_Click"  ToolTip="Reverse Dependency Detector">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Resources/ReverseDependency16.png" />
+                            <TextBlock Margin="5,0,0,1">Reverse Dependencies</TextBlock>
                         </StackPanel>
                     </Button>
                     <Button Margin="5" Click="About_Click" ToolTip="Information about the Portable Execuable Scanner">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="Resources/info-icon16.png" />
-                            <TextBlock Margin="3,0,0,0">Info</TextBlock>
+                            <TextBlock Margin="3,0,0,1">Info</TextBlock>
                         </StackPanel>
                     </Button>
                 </ToolBar>
