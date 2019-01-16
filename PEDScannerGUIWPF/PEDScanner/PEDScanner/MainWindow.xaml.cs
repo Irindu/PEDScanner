@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Diagnostics;
 using Objects;
 using PEDScannerLib;
+using System.Data;
 
 namespace PEDScanner
 {
@@ -305,7 +306,37 @@ namespace PEDScanner
         }
 
 
- 
+        class Issues
+        {
+            public Issues(String PortableExecutableName, String Issue) {
+                this.PortableExecutableName = PortableExecutableName;
+                this.Issue = Issue;
+            }
+
+            public String PortableExecutableName { get; set; }
+            public String Issue { get; set; }
+
+        }
+
+        // populate the Issues tab given the list of Issues 
+        private void PopulateIssues(Dictionary<string, List<string>> issueMap)
+        {
+            List<Issues> issues = new List<Issues>();
+
+            foreach (String Key in issueMap.Keys) {
+              //  List<string> listOfErrors = new List<string>();
+            //    issueMap.TryGetValue(Key, out listOfErrors);
+                foreach (String Issue in issueMap[Key]) {
+                    Issues issue = new Issues(Key, Issue);
+                    issues.Add(issue);
+                }
+            }
+            dataGridIssues.ItemsSource = issues;
+
+        }
+
+
+
         private void New_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Hello, world!", "My App", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -468,7 +499,7 @@ namespace PEDScanner
             }
             catch(ArrayTypeMismatchException e)
             {
-
+                MessageBox.Show(e.Message);
             }
             //catch (Exception e)
             //{
@@ -545,6 +576,7 @@ namespace PEDScanner
                 PopulateExports(portableExecutable.ExportedFunctions);
                 PopulateSections(portableExecutable.Sections);
                 PopulateDirectories(portableExecutable.Directories);
+                PopulateIssues(portableExecutableLoader.smartSuggestionEngine.error_list);
             }
         }
         

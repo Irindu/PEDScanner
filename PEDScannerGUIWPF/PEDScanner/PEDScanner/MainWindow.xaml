@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PEDScanner"
         mc:Ignorable="d"
         Icon="Resources/iconSmall.png"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="650" Width="1200">
 
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="OpenCommandBinding_Executed"/>
@@ -351,6 +351,38 @@
                         </DataGrid>
                     </Grid>
                 </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Resources/IssuesIcon16.png" />
+                            <TextBlock Text="   Issues" Foreground="Red" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Margin="10">
+                        <DataGrid Name="dataGridIssues" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Header="Portable Executable " Width="4*" Binding="{Binding PortableExecutableName}" />
+
+                                <DataGridTextColumn Header="Value" Width="6*" Binding="{Binding Issue}">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="DataGridColumnHeader">
+                                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+
+                                </DataGridTextColumn>
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
             </TabControl>
         </Grid>
 
