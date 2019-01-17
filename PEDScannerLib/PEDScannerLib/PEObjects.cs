@@ -13,6 +13,16 @@ namespace PEDScannerLib.Objects
             this.Value = value;
         }
     }
+    public class ErrorObject
+    {
+        public string DependencyName { get; set; }
+        public string Error { get; set; }
+        public ErrorObject(string dependencyName, string error)
+        {
+            this.DependencyName = dependencyName;
+            this.Error = error;
+        }
+    }
 
     //public class FunctionObject
     //{

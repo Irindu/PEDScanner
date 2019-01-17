@@ -79,23 +79,24 @@ namespace PEDScannerLib
 
         public void readErrorCode(string name, int error_code)
         {
-            if (error_code == 2)
-            {
-                if (!error_list.ContainsKey(name))
-                {
-                    List<string> errors = new List<string>();
-                    errors.Add("Try to load unmanaged assembly.");
-                    error_list.Add(name, errors);
-                }
-                else
-                {
-                    List<string> errorExisting = new List<string>();
-                    error_list.TryGetValue(name, out errorExisting);
-                    errorExisting.Add("Try to load unmanaged assembly.");
-                    error_list.Add(name, errorExisting);
-                }
-            }
-            else if (error_code == 3)
+            //if (error_code == 2)
+            //{
+            //    if (!error_list.ContainsKey(name))
+            //    {
+            //        List<string> errors = new List<string>();
+            //        errors.Add("Try to load unmanaged assembly.");
+            //        error_list.Add(name, errors);
+            //    }
+            //    else
+            //    {
+            //        List<string> errorExisting = new List<string>();
+            //        error_list.TryGetValue(name, out errorExisting);
+            //        errorExisting.Add("Try to load unmanaged assembly.");
+            //        //error_list.Add(name, errorExisting);
+            //    }
+            //}
+            //else
+        if (error_code == 3)
             {
                 if (!error_list.ContainsKey(name))
                 {

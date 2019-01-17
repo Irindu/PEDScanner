@@ -323,10 +323,12 @@ namespace PEDScanner
         {
             List<Issues> issues = new List<Issues>();
 
-            foreach (String Key in issueMap.Keys) {
-              //  List<string> listOfErrors = new List<string>();
-            //    issueMap.TryGetValue(Key, out listOfErrors);
-                foreach (String Issue in issueMap[Key]) {
+            foreach (String Key in issueMap.Keys)
+            {
+                //  List<string> listOfErrors = new List<string>();
+                //    issueMap.TryGetValue(Key, out listOfErrors);
+                foreach (String Issue in issueMap[Key])
+                {
                     Issues issue = new Issues(Key, Issue);
                     issues.Add(issue);
                 }
@@ -335,7 +337,15 @@ namespace PEDScanner
 
         }
 
-
+        //private void PopulateIssues(List<ErrorObject> issues) 
+        //{
+        //    List<Issues> issueList = new List<Issues>();
+        //    foreach (ErrorObject Issue in issues) {
+        //        Issues issue = new Issues(Issue.DependencyName, Issue.Error);
+        //        issueList.Add(issue);
+        //    }
+        //    dataGridIssues.ItemsSource = issueList;
+        //}
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
@@ -577,6 +587,7 @@ namespace PEDScanner
                 PopulateSections(portableExecutable.Sections);
                 PopulateDirectories(portableExecutable.Directories);
                 PopulateIssues(portableExecutableLoader.smartSuggestionEngine.error_list);
+                //PopulateIssues(portableExecutable.issues);
             }
         }
         
