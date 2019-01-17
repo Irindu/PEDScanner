@@ -165,7 +165,8 @@ namespace PEDScannerLib.Core
             }
 
                 GetHeader(Headers, reader);
-                GetAssemblyDependencies(FilePath, ImportFunctions, ImportNames);
+                GetAssemblyDependencies(FilePath, ImportFunctions, ImportNames); 
+                GetAssemblyExports(FilePath, ExportedFunctions);
                 GetDirectories(Directories, reader);
                 GetSections(Sections, reader);
                 LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader, listOfBranch, this, ImportFunctions, importMismatchedFiles, circularDependencyFiles);
@@ -294,12 +295,40 @@ namespace PEDScannerLib.Core
             }
         }
 
+        private void GetAssemblyExports(string FilePath, List<FunctionObject> Exports)
+        {
+            Assembly assembly;
+            if (FilePath != null)
+            {
+                if (IsManagedAssembly(FilePath))
+                {
+                    assembly = Assembly.LoadFrom(FilePath);
+
+                    var exports =
+                    assembly.GetExportedTypes()
+                            .SelectMany(type => type.GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                                                    .Select(member => new
+                                                    {
+                                                        // type.FullName
+                                                        Member = member.ToString()
+                                                    }))
+                            .ToList();
+                    for (int i = 0; i < exports.Count; i++)
+                    {
+                        Exports.Add(new FunctionObject(exports[i].Member.ToString()));
+                    }
+                }
+
+
+            }
+        }
         /// <summary>
         /// find the .Net dependencies for managed dlls.
         /// input is file path of the file and output is .Net dependencies as ImportFunctionObject 
         /// </summary>
         /// <param name="FilePath"></param>
         /// <returns></returns>
+
         private void GetAssemblyDependencies(string FilePath, List<ImportFunctionObject> ImportFunctions, List<string> ImportNames)
         {
             Assembly assembly;
