@@ -1,0 +1,63 @@
+﻿<PageFunction 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Wizard" 
+    x:Class="Wizard.PageFunctionSelectDirectory"
+    x:TypeArguments="local:WizardResult"
+    KeepAlive="True"
+    WindowTitle="Select the target Directory">
+    <!--xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+    x:Class="Wizard.PageFunctionSelectDirectory"
+    x:TypeArguments="sys:String"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Wizard"
+    mc:Ignorable="d"
+    d:DesignHeight="450" d:DesignWidth="800"
+    Title="PageFunctionSelectDirectory">-->
+
+    <Grid Height="400" Width="550">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="10" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75" />
+            <RowDefinition Height="180"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="10" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="1" Grid.Row="0">
+            <Viewbox   Margin="4" VerticalAlignment="Stretch" Height="Auto" Width="300">
+                <!-- The textblock and its contents are 
+                              stretched to fill its parent -->
+                <TextBlock Text="Please Select the target Folder" />
+            </Viewbox>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="2" Width="309" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label>Target Folder:</Label>
+                <!--<Label Name="TargetDirectoryPathLabel"  MaxWidth="250">"C:\Users\Irindu\Desktop\WPF\WPF-Samples-master\Windows\Wizard"</Label>-->
+                <Label Name="TargetDirectoryPathLabel"  MaxWidth="250">"..."</Label>
+
+            </StackPanel>
+            <Button Click="SelectDirectroyButton_Click" Style="{DynamicResource RoundedButtonStyle}" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Width="100" Margin="0,0,19,0" Content="Select Folder"/>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
+            <Image Height="305" Width="200" VerticalAlignment="Center" HorizontalAlignment="Left" Source="Resources/wizardImage350.jpg" Stretch="Fill" Margin="0,0,0,0" />
+
+        </StackPanel>
+        <StackPanel Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="2" Height="40"  HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Style="{DynamicResource RoundCorner}"  Click="backButton_Click" Height="25" VerticalAlignment="Top" Content="&lt; Back" Width="100" Margin="5" />
+            <Button Style="{DynamicResource RoundCorner}"  Click="nextButton_Click" Height="25" VerticalAlignment="Top" Content="Next &gt;"  IsDefault="True" Width="100" Margin="5" />
+            <Button Style="{DynamicResource RoundCorner}"  Click="cancelButton_Click" Height="25" VerticalAlignment="Top" Content="Cancel" IsCancel="True" Width="100" Margin="5" />
+            <Button Style="{DynamicResource RoundCorner}"  IsEnabled="False" Height="25" VerticalAlignment="Top" Content="Finish" Width="100" Margin="5" />
+
+
+        </StackPanel>
+    </Grid>
+</PageFunction>

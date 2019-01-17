@@ -14,7 +14,7 @@ using Objects;
 using PEDScannerLib;
 using System.Data;
 
-namespace PEDScanner
+namespace Wizard
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -607,13 +607,20 @@ namespace PEDScanner
         private void Reverse_Dependencies_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("test");
-            ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
-            String FilePath = @"E:\TEST";
-            String path2 = @"E:\TEST\CppDll.dll";
-            PortableExecutable testPE = new PortableExecutable(ExtractFileNameFromPath(path2), path2);
-            PortableExecutableLoader loader = new PortableExecutableLoader();
-            loader.Load(testPE);
-            MessageBox.Show("test" + ((PortableExecutable)((reverseDependencyDetector.Process(FilePath, testPE))[0])).FilePath);
+            //ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
+            //String FilePath = @"E:\TEST";
+            //String path2 = @"E:\TEST\CppDll.dll";
+            //PortableExecutable testPE = new PortableExecutable(ExtractFileNameFromPath(path2), path2);
+            //PortableExecutableLoader loader = new PortableExecutableLoader();
+            //loader.Load(testPE);
+            //MessageBox.Show("test" + ((PortableExecutable)((reverseDependencyDetector.Process(FilePath, testPE))[0])).FilePath);
+            var wizard = new WizardDialogBox();
+            var showDialog = wizard.ShowDialog();
+            var dialogResult = showDialog != null && (bool)showDialog;
+            MessageBox.Show(
+                dialogResult
+                    ? $"{wizard.WizardData.DataItem1}\n{wizard.WizardData.DataItem2}\n{wizard.WizardData.DataItem3}"
+                    : "Canceled.");
         }
     }
 }

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PEDScanner.Properties {
+namespace Wizard.Properties {
     using System;
     
     
