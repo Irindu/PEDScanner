@@ -44,6 +44,7 @@ namespace PEDScannerLib.Core
         public Assembly assembly;
         public List<String> importMismatchedFiles;
         public List<string> circularDependencyFiles;
+        public List<ErrorObject> issues;
       //  static Hashtable filePathsTable = new Hashtable();
 
         public string directoryPath = Directory.GetCurrentDirectory();
@@ -64,6 +65,7 @@ namespace PEDScannerLib.Core
             ImportNames = new List<string>();
             DependencyNames = new List<DependeciesObject>();
             Dependencies = new List<PortableExecutable>();
+            issues = new List<ErrorObject>();
         }
 
 
@@ -85,6 +87,7 @@ namespace PEDScannerLib.Core
             Dependencies = new List<PortableExecutable>();
             importMismatchedFiles = new List<string>();
             circularDependencyFiles = new List<string>();
+            issues = new List<ErrorObject>();
         }
 
         public override bool Equals(object obj)
@@ -139,9 +142,10 @@ namespace PEDScannerLib.Core
                 List<DirectoryObject> Directories = portableExecutable.Directories;
                 List<string> ImportNames = portableExecutable.ImportNames;
                 List<string> importMismatchedFiles = portableExecutable.importMismatchedFiles;
-                List<string> circularDependencyFiles = portableExecutable.circularDependencyFiles;      
-                //the PE Header reader to be used 
-                PeHeaderReader reader = new PeHeaderReader(FilePath);
+                List<string> circularDependencyFiles = portableExecutable.circularDependencyFiles;
+                List<ErrorObject> issues = portableExecutable.issues;
+            //the PE Header reader to be used 
+            PeHeaderReader reader = new PeHeaderReader(FilePath);
                 if (Is32bitFile(reader))
                 {
                 LoadImports(FilePath, true, ImportFunctions, ImportNames);
@@ -162,14 +166,14 @@ namespace PEDScannerLib.Core
                 ExportObject exports = proxy.Load64Exports(exportObject, FilePath, true);
                 List<FunctionObject> exportList = exports.ExportFunctionObjectList;
                 ExportedFunctions.AddRange(exportList);
-            }
+                    }
 
                 GetHeader(Headers, reader);
                 GetAssemblyDependencies(FilePath, ImportFunctions, ImportNames); 
                 GetAssemblyExports(FilePath, ExportedFunctions);
                 GetDirectories(Directories, reader);
                 GetSections(Sections, reader);
-                LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader, listOfBranch, this, ImportFunctions, importMismatchedFiles, circularDependencyFiles);
+                LoadDependencies(ImportNames, Dependencies, currentDirectory, FilePath, reader, listOfBranch, this, ImportFunctions, importMismatchedFiles, circularDependencyFiles,issues);
               
 
 
@@ -190,7 +194,7 @@ namespace PEDScannerLib.Core
         /// Load each of the dependencies as a Portable Executable Object
         /// </summary>
         /// <returns> The Dependencies in a Portable Executable File Format </returns>
-        private void LoadDependencies(List<string> ImportNames, List<PortableExecutable> Dependencies, String currentDirectory, String FilePath, PeHeaderReader reader, List<string> listOfBranch, PortableExecutableLoader portableExecutableLoader, List<ImportFunctionObject> importFunctions,List<string> importMismatchedFiles, List<string> circularDependencyFiles)
+        private void LoadDependencies(List<string> ImportNames, List<PortableExecutable> Dependencies, String currentDirectory, String FilePath, PeHeaderReader reader, List<string> listOfBranch, PortableExecutableLoader portableExecutableLoader, List<ImportFunctionObject> importFunctions,List<string> importMismatchedFiles, List<string> circularDependencyFiles, List<ErrorObject> issues)
         {
             PortableExecutable PE;
             string filePath;
@@ -248,22 +252,28 @@ namespace PEDScannerLib.Core
                             filePath = filePathsTable[name].ToString();
                         }
 
-                        if (filePath == null && GetModulePath(name, currentDirectory, FilePath, reader).Count>0)
-                        {
-                            importMismatchedFiles.Add(name);
-                            //Suggestion for import export mismatch error
-                            smartSuggestionEngine.readErrorCode(name, 4);
-                        }
                         if (filePath == null)
                         {
-                            //Suggestion for null file path
-                            smartSuggestionEngine.readErrorCode(name, 5);
+                            if (GetModulePath(name, currentDirectory, FilePath, reader).Count > 0)
+                            {
+                             //   importMismatchedFiles.Add(name);
+                                issues.Add(new ErrorObject(name,"Imports and Export mismatch found"));
+                                //Suggestion for import export mismatch error
+                                 smartSuggestionEngine.readErrorCode(name, 4);
+                            }
+                            else
+                            {
+                                issues.Add(new ErrorObject(name, "File path not found"));
+                                //Suggestion for null file path
+                                 smartSuggestionEngine.readErrorCode(name, 5);
+                            }
                         }
                         var hLib2 = LoadLibraryEx(filePath, 0,
                                               DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
                         if (listOfBranch.Contains(name))
                         {
-                            circularDependencyFiles.Add(name);
+                          //  circularDependencyFiles.Add(name);
+                            issues.Add(new ErrorObject(name, "Circular dependency is detected"));
                             //Suggestion for circular dependency
                             smartSuggestionEngine.readErrorCode(name, 6);
                             continue;
@@ -281,6 +291,7 @@ namespace PEDScannerLib.Core
                                 PE = new PortableExecutable(name, filePath, false, newBranchList);
 
                             }
+                           // Dependencies.Add(PE);
                             portableExecutableLoader.Load(PE);
                             Dependencies.Add(PE);
                         }
@@ -379,15 +390,15 @@ namespace PEDScannerLib.Core
                         }
                     }
                 }
-                else
-                {
-                    smartSuggestionEngine.readErrorCode("basic error 1", 2);
-                }
+                //else
+                //{
+                //    smartSuggestionEngine.readErrorCode("basic error 1", 2);
+                //}
             }
-            else
-            {
-                smartSuggestionEngine.readErrorCode("basic error 2", 3);
-            }
+            //else
+            //{
+            //    smartSuggestionEngine.readErrorCode("basic error 2", 3);
+            //}
             return;
         }
 
@@ -566,10 +577,10 @@ namespace PEDScannerLib.Core
                                             pThunkOrg++;
                                         }
                                     }
-                                    else
-                                    {
-                                        smartSuggestionEngine.readErrorCode(name, 7);
-                                    }
+                                    //else
+                                    //{
+                                    //    smartSuggestionEngine.readErrorCode(name, 7);
+                                    //}
                                 }
                                 catch (Exception e)
                                 {
@@ -619,10 +630,10 @@ namespace PEDScannerLib.Core
                         }
                     }
                 }
-                else
-                {
-                    smartSuggestionEngine.readErrorCode("basic error 3", 8);
-                }
+                //else
+                //{
+                //    smartSuggestionEngine.readErrorCode("basic error 3", 8);
+                //}
             }
             return;
         }
