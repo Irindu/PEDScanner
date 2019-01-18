@@ -630,7 +630,7 @@ namespace Wizard
             var dialogResult = showDialog != null && (bool)showDialog;
             MessageBox.Show(
                 dialogResult
-                    ? $"{wizard.WizardData.DataItem1}\n{wizard.WizardData.DataItem2}\n{wizard.WizardData.DataItem3}"
+                    ? $"Succesfully Detected Reverse Dependencies in {wizard.WizardData.FolderPath} for {ExtractFileNameFromPath(wizard.WizardData.FilePath)}\n"
                     : "Canceled.");
         }
     }

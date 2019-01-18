@@ -21,12 +21,14 @@ namespace Wizard
     /// </summary>
     public partial class PageFunctionDisplayReverseDependencies : PageFunction<WizardResult>
     {
+        WizardData wizardDataRef;
         public PageFunctionDisplayReverseDependencies(WizardData wizardData)
         {
             InitializeComponent();
 
             // Bind wizard state to UI
             DataContext = wizardData;
+            wizardDataRef = wizardData;
             displayDependencies();
         }
 
@@ -61,6 +63,14 @@ namespace Wizard
             list.Add(testPE);
             list.Add(testPE);
             list.Add(testPE);
+
+            //ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
+            //String FolderPath = wizardDataRef.FolderPath;
+            //String targetPath = wizardDataRef.FilePath;
+            //PortableExecutable targetPE = new PortableExecutable(ExtractFileNameFromPath(targetPath), targetPath);
+            //PortableExecutableLoader loader = new PortableExecutableLoader();
+            //loader.Load(targetPE);
+            //List<PortableExecutable> list = reverseDependencyDetector.Process(FolderPath, targetPE);
 
             ReverseDependenciesList.ItemsSource = list;
         }
