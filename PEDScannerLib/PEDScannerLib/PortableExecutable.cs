@@ -28,7 +28,7 @@ namespace PEDScannerLib.Core
         [DllImport("kernel32", SetLastError = true)]
         static extern IntPtr LoadLibrary(string lpFileName);
 
-        public string Name;
+        public string Name { get; set; }
         public string FilePath;
         public PeHeaderReader reader;
         public bool IsLoadable;
