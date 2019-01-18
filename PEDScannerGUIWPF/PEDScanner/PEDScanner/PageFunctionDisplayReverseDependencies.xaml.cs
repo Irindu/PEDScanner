@@ -51,26 +51,26 @@ namespace Wizard
         }
 
         private void displayDependencies() {
-            ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
-            String FilePath = @"E:\TEST";
-            String path2 = @"E:\TEST\CppDll.dll";
-            PortableExecutable testPE = new PortableExecutable(ExtractFileNameFromPath(path2), path2);
-            PortableExecutableLoader loader = new PortableExecutableLoader();
-            loader.Load(testPE);
-            //        MessageBox.Show("test" + ((PortableExecutable)((reverseDependencyDetector.Process(FilePath, testPE))[0])).FilePath);
-
-            List<PortableExecutable> list = new List<PortableExecutable>();
-            list.Add(testPE);
-            list.Add(testPE);
-            list.Add(testPE);
-
             //ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
-            //String FolderPath = wizardDataRef.FolderPath;
-            //String targetPath = wizardDataRef.FilePath;
-            //PortableExecutable targetPE = new PortableExecutable(ExtractFileNameFromPath(targetPath), targetPath);
+            //String FilePath = @"E:\TEST";
+            //String path2 = @"E:\TEST\CppDll.dll";
+            //PortableExecutable testPE = new PortableExecutable(ExtractFileNameFromPath(path2), path2);
             //PortableExecutableLoader loader = new PortableExecutableLoader();
-            //loader.Load(targetPE);
-            //List<PortableExecutable> list = reverseDependencyDetector.Process(FolderPath, targetPE);
+            //loader.Load(testPE);
+            // MessageBox.Show("test" + ((PortableExecutable)((reverseDependencyDetector.Process(FilePath, testPE))[0])).FilePath);
+
+            //List<PortableExecutable> list = new List<PortableExecutable>();
+            //list.Add(testPE);
+            //list.Add(testPE);
+            //list.Add(testPE);
+
+            ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
+            String FolderPath = wizardDataRef.FolderPath;
+            String targetPath = wizardDataRef.FilePath;
+            PortableExecutable targetPE = new PortableExecutable(ExtractFileNameFromPath(targetPath), targetPath);
+            PortableExecutableLoader loader = new PortableExecutableLoader();
+            loader.Load(targetPE);
+            List<PortableExecutable> list = reverseDependencyDetector.Process(FolderPath, targetPE);
 
             ReverseDependenciesList.ItemsSource = list;
         }
@@ -82,5 +82,6 @@ namespace Wizard
             return arrayofNames[arrayofNames.Length - 1];
         }
 
+       
     }
 }

@@ -617,7 +617,6 @@ namespace Wizard
         
         private void Reverse_Dependencies_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("test");
             //ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
             //String FilePath = @"E:\TEST";
             //String path2 = @"E:\TEST\CppDll.dll";
