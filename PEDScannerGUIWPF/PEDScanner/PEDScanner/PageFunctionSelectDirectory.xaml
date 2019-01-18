@@ -42,7 +42,8 @@
             <StackPanel Orientation="Horizontal">
                 <Label>Target Folder:</Label>
                 <!--<Label Name="TargetDirectoryPathLabel"  MaxWidth="250">"C:\Users\Irindu\Desktop\WPF\WPF-Samples-master\Windows\Wizard"</Label>-->
-                <Label Name="TargetDirectoryPathLabel"  MaxWidth="250">"..."</Label>
+                <!--<Label Name="TargetDirectoryPathLabel"  MaxWidth="250">"..."</Label>-->
+                <TextBox Name="TargetDirectoryPathTextBox" Width="220" VerticalAlignment="Center" IsReadOnly="True" Padding="5,0,0,0" Text="{Binding Path=FolderPath, UpdateSourceTrigger=PropertyChanged}" />
 
             </StackPanel>
             <Button Click="SelectDirectroyButton_Click" Style="{DynamicResource RoundedButtonStyle}" HorizontalAlignment="Right" Height="25" VerticalAlignment="Top" Width="100" Margin="0,0,19,0" Content="Select Folder"/>

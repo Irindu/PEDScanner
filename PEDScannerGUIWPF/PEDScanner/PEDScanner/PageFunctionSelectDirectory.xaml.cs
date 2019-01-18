@@ -69,8 +69,9 @@ namespace Wizard
                 filePath = openFileDialog.SelectedPath;
                 if (System.IO.Directory.Exists(filePath))
                 {
-                    TargetDirectoryPathLabel.Content = filePath;
-                    wizardDataRef.FolderPath = filePath;
+                    //TargetDirectoryPathLabel.Content = filePath;
+                    TargetDirectoryPathTextBox.Text = filePath;
+                   // wizardDataRef.FolderPath = filePath;
                 }
 
             }

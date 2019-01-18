@@ -43,7 +43,8 @@
             <StackPanel Orientation="Horizontal">
                 <Label>Target DLL:</Label>
                 <!--<Label Name="TargetDLLPathLabel" MaxWidth="230">"C:\Users\Irindu\Desktop\WPF\WPF-Samples-master\Windows\Wizard"</Label>-->
-                <Label Name="TargetDLLPathLabel" MaxWidth="230">"..."</Label>
+                <!--<Label Name="TargetDLLPathLabel" MaxWidth="230">"..."</Label>-->
+                <TextBox Name="TargetDLLPatTextBox" Width="220" VerticalAlignment="Center" IsReadOnly="True" Padding="5,0,0,0" Text="{Binding Path=FilePath, UpdateSourceTrigger=PropertyChanged}" />
 
             </StackPanel>
             <Button Click="FilePick_Click" Style="{DynamicResource RoundedButtonStyle}" HorizontalAlignment="Right" Margin="0,0,19,0" Height="25" Width="100">

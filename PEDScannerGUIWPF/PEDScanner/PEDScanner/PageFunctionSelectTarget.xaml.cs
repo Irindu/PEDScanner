@@ -41,9 +41,9 @@ namespace Wizard
         private void nextButton_Click(object sender, RoutedEventArgs e)
         {
             // Go to next wizard page
-            //var wizardPage3 = new WizardPage3((WizardData)DataContext);
-        //    wizardPage3.Return += wizardPage_Return;
-       //     NavigationService?.Navigate(wizardPage3);
+            var ReverseDependenciesDisplayPage = new PageFunctionDisplayReverseDependencies((WizardData)DataContext);
+            ReverseDependenciesDisplayPage.Return += wizardPage_Return;
+            NavigationService?.Navigate(ReverseDependenciesDisplayPage);
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
@@ -74,8 +74,8 @@ namespace Wizard
                 //    label.FontSize = 5;
                 //    label.Content = filePath;
                 //  TargetDLLPath.Child = label;
-                TargetDLLPathLabel.Content = filePath;
-                wizardDataRef.FilePath = filePath;
+                TargetDLLPatTextBox.Text = filePath;
+              //  wizardDataRef.FilePath = filePath;
             }
         }
     }
