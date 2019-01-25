@@ -23,6 +23,8 @@ namespace Wizard
     public partial class PageFunctionSelectTarget : PageFunction<WizardResult>
     {
         WizardData wizardDataRef;
+        Boolean isValidInput;
+
 
         public PageFunctionSelectTarget(WizardData wizardData)
         {
@@ -30,6 +32,8 @@ namespace Wizard
             DataContext = wizardData;
             wizardDataRef = wizardData;
             ShowsNavigationUI = false;
+            isValidInput = false;
+
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
@@ -40,10 +44,18 @@ namespace Wizard
 
         private void nextButton_Click(object sender, RoutedEventArgs e)
         {
-            // Go to next wizard page
-            var ReverseDependenciesDisplayPage = new PageFunctionDisplayReverseDependencies((WizardData)DataContext);
-            ReverseDependenciesDisplayPage.Return += wizardPage_Return;
-            NavigationService?.Navigate(ReverseDependenciesDisplayPage);
+            if (isValidInput)
+            {
+                // Go to next wizard page
+                var ReverseDependenciesDisplayPage = new PageFunctionDisplayReverseDependencies((WizardData)DataContext);
+                ReverseDependenciesDisplayPage.Return += wizardPage_Return;
+                NavigationService?.Navigate(ReverseDependenciesDisplayPage);
+            }
+            else
+            {
+                MessageBox.Show("Please Select a valid Target!");
+            }
+
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
@@ -69,13 +81,8 @@ namespace Wizard
             {
                 string filePath;
                 filePath = openFileDialog.FileName;
-
-                //  Label label = new Label();
-                //    label.FontSize = 5;
-                //    label.Content = filePath;
-                //  TargetDLLPath.Child = label;
                 TargetDLLPatTextBox.Text = filePath;
-              //  wizardDataRef.FilePath = filePath;
+                isValidInput = true;
             }
         }
     }

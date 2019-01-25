@@ -23,6 +23,7 @@ namespace Wizard
     public partial class PageFunctionSelectDirectory : PageFunction<WizardResult>
     {
         WizardData wizardDataRef;
+        Boolean isValidInput;
 
         public PageFunctionSelectDirectory(WizardData wizardData)
         {
@@ -30,6 +31,7 @@ namespace Wizard
             DataContext = wizardData;
             ShowsNavigationUI = false;
             wizardDataRef = wizardData;
+            isValidInput = false;
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
@@ -40,10 +42,17 @@ namespace Wizard
 
         private void nextButton_Click(object sender, RoutedEventArgs e)
         {
-            // Go to next wizard page
-            var pageFunctionSelectTarget = new PageFunctionSelectTarget((WizardData)DataContext);
-            pageFunctionSelectTarget.Return += wizardPage_Return;
-            NavigationService?.Navigate(pageFunctionSelectTarget);
+            if (isValidInput)
+            {
+                // Go to next wizard page
+                var pageFunctionSelectTarget = new PageFunctionSelectTarget((WizardData)DataContext);
+                pageFunctionSelectTarget.Return += wizardPage_Return;
+                NavigationService?.Navigate(pageFunctionSelectTarget);
+            }
+            else {
+                MessageBox.Show("Please Select a valid Directory!");
+            }
+            
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)
@@ -69,9 +78,11 @@ namespace Wizard
                 filePath = openFileDialog.SelectedPath;
                 if (System.IO.Directory.Exists(filePath))
                 {
-                    //TargetDirectoryPathLabel.Content = filePath;
                     TargetDirectoryPathTextBox.Text = filePath;
-                   // wizardDataRef.FolderPath = filePath;
+                    isValidInput = true;
+                }
+                else {
+                    isValidInput = false;
                 }
 
             }

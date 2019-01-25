@@ -89,6 +89,7 @@
     <Compile Include="PageFunctionSelectTarget.xaml.cs">
       <DependentUpon>PageFunctionSelectTarget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WaitCursor.cs" />
     <Compile Include="WelcomePageFunction.xaml.cs">
       <DependentUpon>WelcomePageFunction.xaml</DependentUpon>
     </Compile>

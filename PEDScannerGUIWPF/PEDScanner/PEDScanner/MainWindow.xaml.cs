@@ -13,6 +13,7 @@ using System.Diagnostics;
 using Objects;
 using PEDScannerLib;
 using System.Data;
+using PEDScanner;
 
 namespace Wizard
 {
@@ -578,16 +579,18 @@ namespace Wizard
 
             if (portableExecutable != null)
             {
-                PortableExecutableLoader portableExecutableLoader = new PortableExecutableLoader();
-                portableExecutableLoader.Load(portableExecutable); 
-                RecursivelyPopulateTheTree(portableExecutable, itemCollection);
-                PopulateHeaders(portableExecutable.Headers);
-                PopulateImports(portableExecutable.ImportFunctions);
-                PopulateExports(portableExecutable.ExportedFunctions);
-                PopulateSections(portableExecutable.Sections);
-                PopulateDirectories(portableExecutable.Directories);
-                PopulateIssues(portableExecutableLoader.smartSuggestionEngine.error_list);
-                //PopulateIssues(portableExecutable.issues);
+                using (new WaitCursor())
+                {
+                    PortableExecutableLoader portableExecutableLoader = new PortableExecutableLoader();
+                    portableExecutableLoader.Load(portableExecutable);
+                    RecursivelyPopulateTheTree(portableExecutable, itemCollection);
+                    PopulateHeaders(portableExecutable.Headers);
+                    PopulateImports(portableExecutable.ImportFunctions);
+                    PopulateExports(portableExecutable.ExportedFunctions);
+                    PopulateSections(portableExecutable.Sections);
+                    PopulateDirectories(portableExecutable.Directories);
+                    PopulateIssues(portableExecutableLoader.smartSuggestionEngine.error_list);
+                }        
             }
         }
         

@@ -1,4 +1,5 @@
-﻿using PEDScannerLib.Core;
+﻿using PEDScanner;
+using PEDScannerLib.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,9 +70,14 @@ namespace Wizard
             String targetPath = wizardDataRef.FilePath;
             PortableExecutable targetPE = new PortableExecutable(ExtractFileNameFromPath(targetPath), targetPath);
             PortableExecutableLoader loader = new PortableExecutableLoader();
-            loader.Load(targetPE);
-            List<PortableExecutable> list = reverseDependencyDetector.Process(FolderPath, targetPE);
+            List<PortableExecutable> list;
 
+            using (new WaitCursor())
+            {
+                loader.Load(targetPE);
+                list = reverseDependencyDetector.Process(FolderPath, targetPE);
+            }
+          
             ReverseDependenciesList.ItemsSource = list;
         }
 
