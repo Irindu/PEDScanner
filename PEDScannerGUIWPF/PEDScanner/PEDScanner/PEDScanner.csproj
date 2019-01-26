@@ -14,6 +14,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,10 +28,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -52,6 +52,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'NEWCONFIG|AnyCPU'">
     <OutputPath>bin\NEWCONFIG\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>iconSmall.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PEDScannerLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
@@ -261,6 +264,48 @@
     <Resource Include="Resources\wizardImage.jpg" />
     <Resource Include="Resources\wizardImage350.jpg" />
     <Resource Include="Resources\wizardImage350png.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\executable64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\executable32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\import-icon32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\export-icon32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\directory32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Headers32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Sections32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\IssuesIcon32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\info-icon32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\open24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\info-icon24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ReverseDependency24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="iconSmall.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

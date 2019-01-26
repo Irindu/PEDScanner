@@ -338,20 +338,6 @@ namespace Wizard
 
         }
 
-        //private void PopulateIssues(List<ErrorObject> issues) 
-        //{
-        //    List<Issues> issueList = new List<Issues>();
-        //    foreach (ErrorObject Issue in issues) {
-        //        Issues issue = new Issues(Issue.DependencyName, Issue.Error);
-        //        issueList.Add(issue);
-        //    }
-        //    dataGridIssues.ItemsSource = issueList;
-        //}
-
-        private void New_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Hello, world!", "My App", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
 
         private void About_Click(object sender, RoutedEventArgs e)
         {
@@ -396,7 +382,6 @@ namespace Wizard
         private void RecetntsItem_Click(object sender, RoutedEventArgs e)
         {
             MenuItem Sender = (MenuItem)sender;
-            MessageBox.Show(Sender.Header + "");
             String filePath = (String)Sender.Header;
             this.UpdateState(filePath);
 
@@ -431,12 +416,7 @@ namespace Wizard
                 dataGridImportsTable.ItemsSource = listOfImportFunctionObjects;
             }
         }
-
-        private void SaveAsCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            MessageBox.Show("You clicked 'SaveAs...'");
-        }
-
+        
         // handle the "Add File" button click event
         private void buttonAddFile_Click(object sender, RoutedEventArgs e)
         {
@@ -456,18 +436,6 @@ namespace Wizard
 
 
                  this.UpdateState(filePath);
-
-                ////    ToolStripItem item = new ToolStripMenuItem();
-                //Name that will apear on the menu
-                ////    item.Text = filePath;
-                //Put in the Name property whatever neccessery to retrive your data on click event
-                /*  item.Name = this.ExtractFileNameFromPath(filePath); */
-                ////   item.Name = filePath;
-                //On-Click event
-                //Attaching and Event handler for each of the recent items on menu
-                ////   item.Click += new EventHandler(item_Click); 
-                //Add the submenu to the parent menu
-                //  fileToolStripMenuItemRecent.DropDownItems.Add(item); 
 
                 AddRecentMenuItem(filePath);
 
@@ -532,11 +500,6 @@ namespace Wizard
 
             treeViewItem = CreateDependecyTreeItem(portableExecutable);
 
-            //treeNode.Name = portableExecutable.FilePath;
-            //treeNode.Tag = portableExecutable;
-            //treeNode.ImageIndex = (portableExecutable.FilePath != null) ? 1 : 0;
-            //treeNode.SelectedImageIndex = 2;
-            // MessageBox.Show(treeNode.ImageIndex + "tree" + treeNode.Name);
             itemCollection.Add(treeViewItem);
             if (portableExecutable.Dependencies.Count == 0)
             {
@@ -556,19 +519,9 @@ namespace Wizard
 
         void UpdateUI(PortableExecutable portableExecutable)
         {
-            //dataGridViewImportExamined.Hide();
-            //treeViewDependencies.Nodes.Clear();
-            //treeViewImports.Nodes.Clear();
-            //listBoxExports.Items.Clear();
-            //labelDependecyPath.Text = "";
             treeViewDependencies.Items.Clear();
             dataGridImportsTable.Visibility = Visibility.Hidden;
             LabelStatus.Text = "";
-            //treeViewImports.Items.Clear();
-            //dataGridExports.Items.Clear();
-            //dataGridHeaders.Items.Clear();
-            //dataGridSections.Items.Clear();
-            //dataGridDirectories.Items.Clear();
             treeViewImports.ItemsSource = null;
             dataGridExports.ItemsSource = null;
             dataGridHeaders.ItemsSource = null;
@@ -620,20 +573,18 @@ namespace Wizard
         
         private void Reverse_Dependencies_Click(object sender, RoutedEventArgs e)
         {
-            //ReverseDependencyDetector reverseDependencyDetector = new ReverseDependencyDetector();
-            //String FilePath = @"E:\TEST";
-            //String path2 = @"E:\TEST\CppDll.dll";
-            //PortableExecutable testPE = new PortableExecutable(ExtractFileNameFromPath(path2), path2);
-            //PortableExecutableLoader loader = new PortableExecutableLoader();
-            //loader.Load(testPE);
-            //MessageBox.Show("test" + ((PortableExecutable)((reverseDependencyDetector.Process(FilePath, testPE))[0])).FilePath);
             var wizard = new WizardDialogBox();
             var showDialog = wizard.ShowDialog();
             var dialogResult = showDialog != null && (bool)showDialog;
-            MessageBox.Show(
-                dialogResult
-                    ? $"Succesfully Detected Reverse Dependencies in {wizard.WizardData.FolderPath} for {ExtractFileNameFromPath(wizard.WizardData.FilePath)}\n"
-                    : "Canceled.");
+            //MessageBox.Show(
+            //    dialogResult
+            //        ? $"Succesfully Detected Reverse Dependencies in {wizard.WizardData.FolderPath} for {ExtractFileNameFromPath(wizard.WizardData.FilePath)}\n"
+            //        : "Canceled.");
+        }
+
+        private void ExitCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
         }
     }
 }

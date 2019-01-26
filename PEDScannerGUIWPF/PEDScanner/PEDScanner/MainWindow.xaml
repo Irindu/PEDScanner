@@ -10,7 +10,9 @@
 
     <Window.CommandBindings>
         <CommandBinding Command="Open" Executed="OpenCommandBinding_Executed"/>
-        <CommandBinding Command="SaveAs" Executed="SaveAsCommandBinding_Executed"/>
+        <!--<CommandBinding Command="SaveAs" Executed="SaveAsCommandBinding_Executed"/>-->
+        <CommandBinding Command="SaveAs" Executed= "ExitCommandBinding_Executed"/>
+
     </Window.CommandBindings>
 
     <Window.InputBindings>
@@ -53,20 +55,20 @@
                 <ToolBar>
                     <Button Margin="5" Command="Open" ToolTip="Open a Portable Execulable for inplection">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="Resources/open16.png" />
-                            <TextBlock Margin="3,0,0,1">Open</TextBlock>
+                            <Image Source="Resources/open24.png" />
+                            <TextBlock Margin="3,0,0,1" VerticalAlignment="Center">Open</TextBlock>
                         </StackPanel>
                     </Button>
                     <Button Margin="5" Click="Reverse_Dependencies_Click"  ToolTip="Reverse Dependency Detector">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="Resources/ReverseDependency16.png" />
-                            <TextBlock Margin="5,0,0,1">Reverse Dependencies</TextBlock>
+                            <Image Source="Resources/ReverseDependency24.png" />
+                            <TextBlock Margin="5,0,0,1" VerticalAlignment="Center">Reverse Dependencies</TextBlock>
                         </StackPanel>
                     </Button>
                     <Button Margin="5" Click="About_Click" ToolTip="Information about the Portable Execuable Scanner">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="Resources/info-icon16.png" />
-                            <TextBlock Margin="3,0,0,1">Info</TextBlock>
+                            <Image Source="Resources/info-icon24.png" />
+                            <TextBlock Margin="3,0,0,1" VerticalAlignment="Center">Info</TextBlock>
                         </StackPanel>
                     </Button>
                 </ToolBar>
@@ -105,8 +107,8 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/executable16.png" />
-                            <TextBlock Text="   Dependencies" Foreground="DarkSlateGray" />
+                            <Image Source="/Resources/executable32.png" />
+                            <TextBlock Text="   Dependencies" Foreground="SaddleBrown" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>
@@ -127,8 +129,8 @@
                 <TabItem >
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/import-icon16.png" />
-                            <TextBlock Text="   Imports" Foreground="DarkSeaGreen" />
+                            <Image Source="/Resources/import-icon32.png" />
+                            <TextBlock Text="   Imports" Foreground="ForestGreen" />
                         </StackPanel>
                     </TabItem.Header>
                     <TabItem.Content>
@@ -190,8 +192,8 @@
                 <TabItem >
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/export-icon16.png" />
-                            <TextBlock Text="   Exports" Foreground="IndianRed" />
+                            <Image Source="/Resources/export-icon32.png" />
+                            <TextBlock Text="   Exports" Foreground="Red" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid Margin="10">
@@ -209,8 +211,8 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/Headers16.png" />
-                            <TextBlock Text="   Headers" Foreground="DarkKhaki" />
+                            <Image Source="/Resources/Headers32.png" />
+                            <TextBlock Text="   Headers" Foreground="DarkOliveGreen" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid Margin="10">
@@ -240,8 +242,8 @@
                 <TabItem >
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/Sections16.png" />
-                            <TextBlock Text="   Sections" Foreground="DarkKhaki" />
+                            <Image Source="/Resources/Sections32.png" />
+                            <TextBlock Text="   Sections" Foreground="DarkRed" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid Margin="10">
@@ -315,7 +317,7 @@
                 <TabItem >
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/directory16.png" />
+                            <Image Source="/Resources/directory32.png" />
                             <TextBlock Text="   Directories" Foreground="SteelBlue" />
                         </StackPanel>
                     </TabItem.Header>
@@ -354,7 +356,7 @@
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="/Resources/IssuesIcon16.png" />
+                            <Image Source="/Resources/IssuesIcon32.png" />
                             <TextBlock Text="   Issues" Foreground="Red" />
                         </StackPanel>
                     </TabItem.Header>
